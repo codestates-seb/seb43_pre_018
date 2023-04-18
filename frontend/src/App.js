@@ -24,9 +24,6 @@ const TempBody = styled.div`
   }
 `
 
-// const TempFooter = styled.div`
-//   border: 1px solid black;
-// `
 function App() {
   return (
     <div>
