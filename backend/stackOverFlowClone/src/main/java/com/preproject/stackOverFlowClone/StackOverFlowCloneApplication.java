@@ -9,5 +9,4 @@ public class StackOverFlowCloneApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StackOverFlowCloneApplication.class, args);
 	}
-
 }
