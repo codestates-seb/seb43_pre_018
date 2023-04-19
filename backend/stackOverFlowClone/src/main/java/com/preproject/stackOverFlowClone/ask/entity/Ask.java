@@ -1,4 +1,4 @@
-package com.preproject.stackOverFlowClone.question.entity;
+package com.preproject.stackOverFlowClone.ask.entity;
 
 import com.preproject.stackOverFlowClone.member.entity.Member;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Question {
+public class Ask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class Question {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Question(String title, String content, Member member) {
+    public Ask(String title, String content, Member member) {
         this.title = title;
         this.content = content;
         this.member = member;

@@ -1,4 +1,4 @@
-package com.preproject.stackOverFlowClone.question.dto;
+package com.preproject.stackOverFlowClone.ask.dto;
 
 import com.preproject.stackOverFlowClone.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-public class QuestionDto {
+public class AskDto {
     // post -> save
     @Getter
     @AllArgsConstructor
