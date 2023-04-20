@@ -1,17 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import {HiOutlinePencilSquare} from "react-icons/hi2"
+import { IconContext } from "react-icons/lib";
 
 const Container = styled.div`
-	width: 88%;
+	width: calc(1216px - 48px);
+	padding: 0 24px;
 	margin: 0 auto;
-
 `
 
 const HeadTextBox = styled.div`
+ padding: 40px 0;
 	>h1 {
 		font-size: 1.5rem;
 		font-weight: bold;
-		margin: 40px 0;
 	}
 `
 
@@ -20,7 +22,7 @@ const InformationWindow = styled.div`
 	border: 1px solid rgb(174, 205, 234);
 	border-radius: 3px;
 	padding: 20px 20px;
-	width: 70%;
+	width: 65%;
 	>ul {
 		margin-left: 2rem;
 		>li {
@@ -38,22 +40,66 @@ const InformationWindow = styled.div`
 		margin-bottom: 10px;
 	}
 	>p span {
-		color: rgb(65, 125, 202);
+		color: rgb(50, 125, 202);
+		font-weight: 500;
 	}
 `
 
-const FormContainer = styled.form`
+const FormContainer = styled.div`
 	width: 100%;
 	margin-top: 20px;
+`
+
+const InputContainer = styled.div`
+	width: 100%;
+	display: flex;
+	padding: 10px 0;
+`
+
+const WriteGuide = styled.div`
+	display: ${props=>props.block?'block':'none'};
+	border: 1px solid rgb(213, 217, 221);
+	border-radius: 2px;
+	box-shadow: 0 0 10px 1px rgb(232, 234, 235);
+	overflow: hidden;
+	height: 149px;
+	margin-left: 15px;
+`
+
+const GuideName = styled.div`
+	background-color: rgb(247, 249, 250);
+	border-bottom: 1px solid rgb(213, 217, 221);
+	padding: 12px;
+`
+
+const GuideLine = styled.div`
+	display: flex;
+	background-color: rgb(255, 255, 255);
+	height: 71%;
+	justify-content: center;
+	align-items: start;
+	padding: 20px 20px;
+	>.icon {
+		margin-top: -7px;
+	}
+`
+
+const GuideText = styled.div`
+	margin-left: 10px;
+	>.first {
+		margin-bottom: 1rem;
+	}
+	>p {
+		font-size: 0.1rem;
+	}
 `
 
 const AskInputBox = styled.div`
 	border: 1px solid rgb(228, 229, 231);
 	background-color: rgb(255, 255, 255);
 	border-radius: 3px;
-	width: 70%;
+	width: 65%;
 	padding: 20px 20px;
-	margin: 10px 0;
 	>label {
 		font-weight: 600;
 		>p{
@@ -62,6 +108,12 @@ const AskInputBox = styled.div`
 			margin: 6px 0 10px 0;
 		}
 	}
+	${props=>{
+			if(props.disabled) return `
+			opacity: 0.4;
+			pointer-events: none;
+		`
+	}}
 `
 
 const Label = styled.label`
@@ -102,8 +154,10 @@ const ContentArea = styled.textarea`
 	}
 `
 
+
 // display: ${props=>props.show?'block':'none'}
 const NextBnt = styled.button`
+	display: ${props=>props.block?'block':'none'};
 	border: none !important;
 	border-radius: 2px;
 	background-color: rgb(67, 147, 247);
@@ -120,25 +174,47 @@ const NextBnt = styled.button`
 `
 
 export default function AskQuestion() {
-	const [titleVaild, setTitleVaild] = useState(false)
+	const [nextVaild, setNextVaild] = useState(false)
+	const [submitVaild, setSubmitVaild] = useState(false)
 	const [title, setTitle] = useState('')
 	const [content, setContent] = useState('')
 	const [contentVaild, setContentVaild] = useState(false)
-	const titleRef = useRef(null)
-	const contentRef = useRef(null)
+	const inputRef = useRef([])
+	const [isBlock, setIsBlock] = useState(false);
+	// const contentRef = useRef(null)
+
+	useEffect(()=>{
+		inputRef.current[0].focus();
+		setIsBlock(true);
+	},[])
 
 	// handler
-	const Titlehandle =e=>{
-		const text = e.target.value;
-		setTitle(text);
-		console.log(title.length)
-		if(text.length>=15) {
-			setTitleVaild(true)
-		} else {
-			setTitleVaild(false)
-		}
+	const Titlehandle = e =>{
+		setTitle(e.target.value);
 	}
-	console.log(titleRef.current.focus)
+
+	const TitleonFocusHandle = () => {
+		if(!contentVaild) setNextVaild(true);
+		setSubmitVaild(false);
+		setIsBlock(true)
+	}
+
+	const ContentonFocusHandle = () => {
+		setSubmitVaild(true);
+		setNextVaild(false);
+		setIsBlock(false);
+	}
+
+	const ContentChange = e =>{
+		setContent(e.target.value)
+	}
+
+	const NextClick = () => {
+		setContentVaild(true);
+		setNextVaild(false);
+		inputRef.current[1].focus();
+	}
+
 	return (
 		<Container>
 			<HeadTextBox>
@@ -158,26 +234,83 @@ export default function AskQuestion() {
 				</ul>
 			</InformationWindow>
 			<FormContainer>
-				<AskInputBox>
-					<Label for='title'>
-						Title
-						<p>Be specific and imagine you’re asking a question to another person.</p>
-					</Label>
-					<TitleInput id="title" name="title" onChange={Titlehandle} ref={titleRef}/>
-					<NextBnt disabled={title.length>=15?false:true}>
-						Next
-					</NextBnt>
-				</AskInputBox>
-				<AskInputBox>
-					<Label for='content'>
-						What are the details of your problem?
-						<p>Introduce the problem and expand on what you put in the title. Minimum 20 characters.</p>
-					</Label>
-					<ContentArea id="content" name="content"/>
-					<NextBnt disabled={true}>
-						Submit
-					</NextBnt>
-				</AskInputBox>
+				<InputContainer>
+					<AskInputBox>
+						<Label for='title'>
+							Title
+							<p>Be specific and imagine you’re asking a question to another person.</p>
+						</Label>
+						<TitleInput 
+							id="title"
+							name="title"
+							value={title}
+							onChange={Titlehandle}
+							ref={el=>inputRef.current[0]=el}
+							onFocus={TitleonFocusHandle}
+						/>
+						<NextBnt 
+							disabled={title.length>=5?false:true}
+							block={nextVaild}
+							onClick={NextClick}
+						>
+							Next
+						</NextBnt>
+					</AskInputBox>
+					<WriteGuide block={isBlock}>
+						<GuideName>
+							Writing a good title
+						</GuideName>
+						<GuideLine>
+							<IconContext.Provider value={{size: '3rem'}}>
+								<HiOutlinePencilSquare className={'icon'}/>
+							</IconContext.Provider>
+							<GuideText>
+								<p className="first">Your title should summarize the problem.</p>
+								<p>You might find that you have a better</p>
+								<p>idea of your title after writing out the rest</p>
+								<p>of the question.</p>
+							</GuideText>
+						</GuideLine>
+					</WriteGuide>
+				</InputContainer>
+				<InputContainer>
+					<AskInputBox disabled={contentVaild===false?true:false}>
+						<Label for='content'>
+							What are the details of your problem?
+							<p>Introduce the problem and expand on what you put in the title. Minimum 20 characters.</p>
+						</Label>
+						<ContentArea 
+							id="content"
+							name="content"
+							value={content}
+							ref={el=>inputRef.current[1]=el}
+							onChange={ContentChange}
+							onFocus={ContentonFocusHandle}
+						/>
+						<NextBnt 
+							disabled={content.length>=15?true:false}
+							block={submitVaild}
+						>
+							Submit
+						</NextBnt>
+					</AskInputBox>
+					<WriteGuide block={submitVaild}>
+						<GuideName>
+							Introduce the problem
+						</GuideName>
+						<GuideLine>
+							<IconContext.Provider value={{size: '3rem'}}>
+								<HiOutlinePencilSquare className={'icon'}/>
+							</IconContext.Provider>
+							<GuideText>
+								<p>Explain how you encountered the problem</p>
+								<p>you’re trying to solve, and any difficulties</p>
+								<p>that have prevented you from solving it</p>
+								<p>yourself.</p>
+							</GuideText>
+						</GuideLine>
+					</WriteGuide>
+				</InputContainer>
 			</FormContainer>
 		</Container>
 	)
