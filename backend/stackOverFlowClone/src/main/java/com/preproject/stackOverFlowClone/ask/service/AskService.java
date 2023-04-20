@@ -20,29 +20,31 @@ public class AskService {
 
     // post -> save
     public String saveAsk(AskDto.SaveDto saveDto) {
-        Ask ask = mapper.saveDtoToQuestion(saveDto);
+        // 멤버 존재 여부 확인 필요
+        Ask ask = mapper.saveDtoToAsk(saveDto);
         ask = repository.save(ask);
-
         String uri = "http://localhost:8080/ask/" + ask.getId();
         return uri;
     }
 
     // patch -> update
-    public String updateAsk(AskDto.UpdateDto updateDto) {
-        Ask ask = mapper.updateDtoToQuestion(updateDto);
-        ask = repository.save(ask);
+    public String updateAsk(Long askId, AskDto.UpdateDto updateDto) {
+        Optional<Ask> findAsk = repository.findById(askId);
+        // 예외 추가 필요
+        //findAsk.orElseThrow();
 
-        String uri = "http://localhost:8080/ask/" + ask.getId();
+        Ask updateAsk = findAsk.get();
+        updateAsk.setTitle(updateDto.getTitle());
+        updateAsk.setContent(updateDto.getContent());
+
+        repository.save(updateAsk);
+
+        String uri = "http://localhost:8080/ask/" + updateAsk.getId();
         return uri;
     }
 
     public String deleteAsk(Long askId) {
-        Optional<Ask> ask = repository.findById(askId);
-        if(ask.isPresent() == false) {
-            // 예외처리 추가 필요
-        }
-
-        repository.delete(ask.get());
+        repository.deleteById(askId);
         String uri = "http://localhost:8080/";
         return uri;
     }
