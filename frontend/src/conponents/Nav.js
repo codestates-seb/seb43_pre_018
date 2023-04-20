@@ -2,9 +2,10 @@ import styled from "styled-components";
 
 const NavContainer = styled.div`
 	height: 100%;
-	width: 13%;
+	width: 11%;
 	border-right: 1px solid #D7D9DC;
 	padding-top: 10px;
+	position: relative;
 `
 
 // BookMark 추후에 vote순으로 정렬할 때 NavLink로 변경필요
@@ -25,19 +26,27 @@ const BookMark = styled.button`
 	}
 `
 
+const StickyBox = styled.div`
+	position: sticky;
+	width: 100%;
+	top: 25px;
+`
+
 export default function Nav() {
 	return (
 		<NavContainer>
-			<BookMark>
-				<span>
-					Home
-				</span>
-			</BookMark>
-			<BookMark>
-				<span>
-					Vote
-				</span>
-			</BookMark>
+			<StickyBox>
+				<BookMark>
+					<span>
+						Home
+					</span>
+				</BookMark>
+				<BookMark>
+					<span>
+						Vote
+					</span>
+				</BookMark>
+			</StickyBox>
 		</NavContainer>
 	)
 }
