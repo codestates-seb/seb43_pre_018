@@ -10,7 +10,7 @@ const Container = styled.footer`
 
 const Centering = styled.div`
 	height: 100%;
-	width: 1100px;
+	width: 1050px;
 	display: flex;
 	padding: 18px 12px 12px;
 	margin: 0 auto;

@@ -6,7 +6,7 @@ import {RiNumber7} from "react-icons/ri"
 
 const Container = styled.div`
 	height: 100%;
-	width: 24%;
+	width: 28%;
 `
 
 const Post = styled.ul`
@@ -20,8 +20,8 @@ const Post = styled.ul`
 
 const Title = styled.li`
 	background-color: rgb(249, 243, 219);
-	font-weight: 500;
-	padding: 8px 10px;
+	font-weight: bold;
+	padding: 12px 13px;
 	border-top: 1px solid rgb(237, 229, 196);
 	border-bottom: 1px solid rgb(237, 229, 196);
 	font-size: 0.6rem;
@@ -30,7 +30,7 @@ const Title = styled.li`
 const Items = styled.li`
 	background-color: rgb(251, 247, 230);
 	display: flex;
-	padding: 5px 3px 3px; 5px;
+	padding: 5px 3px 3px 10px;
 	>span {
 		padding: 3px;
 		font-size: 0.6rem;

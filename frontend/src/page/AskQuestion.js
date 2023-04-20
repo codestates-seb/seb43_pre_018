@@ -4,7 +4,7 @@ import {HiOutlinePencilSquare} from "react-icons/hi2"
 import { IconContext } from "react-icons/lib";
 
 const Container = styled.div`
-	width: 1100px;
+	width: 1000px;
 	padding: 10px 24px 30px;
 	margin: 0 auto;
 `
