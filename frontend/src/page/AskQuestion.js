@@ -137,6 +137,10 @@ const TitleInput = styled.input`
 		border-radius: 2px;
 		box-shadow: 0 0 0 3px rgb(222, 234, 247);
 	}
+	&::placeholder {
+		color: rgb(188, 191, 197);
+		font-size: 0.8rem;
+	}
 `
 
 // 추후에 Be에서 준비 됬을 때 ReactQuill로 변경
@@ -247,6 +251,7 @@ export default function AskQuestion() {
 							onChange={Titlehandle}
 							ref={el=>inputRef.current[0]=el}
 							onFocus={TitleonFocusHandle}
+							placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
 						/>
 						<NextBnt 
 							disabled={title.length>=5?false:true}
