@@ -4,8 +4,8 @@ import {HiOutlinePencilSquare} from "react-icons/hi2"
 import { IconContext } from "react-icons/lib";
 
 const Container = styled.div`
-	width: calc(1216px - 48px);
-	padding: 0 24px;
+	width: 1100px;
+	padding: 10px 24px 30px;
 	margin: 0 auto;
 `
 
@@ -47,13 +47,13 @@ const InformationWindow = styled.div`
 
 const FormContainer = styled.div`
 	width: 100%;
-	margin-top: 20px;
+	margin-top: 10px;
 `
 
 const InputContainer = styled.div`
 	width: 100%;
 	display: flex;
-	padding: 10px 0;
+	padding: 5px 0;
 `
 
 const WriteGuide = styled.div`

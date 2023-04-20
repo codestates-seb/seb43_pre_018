@@ -6,7 +6,7 @@ import {RiNumber7} from "react-icons/ri"
 
 const Container = styled.div`
 	height: 100%;
-	width: 20%;
+	width: 24%;
 `
 
 const Post = styled.ul`
@@ -15,7 +15,7 @@ const Post = styled.ul`
 	overflow: hidden;
 	list-style: none;
 	margin-top: 10px;
-	margin-left: 10px;
+	margin-left: 24px;
 `
 
 const Title = styled.li`

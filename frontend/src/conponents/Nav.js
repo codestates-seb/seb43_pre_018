@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const NavContainer = styled.div`
 	height: 100%;
-	width: 11%;
+	width: 164px;
 	border-right: 1px solid #D7D9DC;
 	padding-top: 10px;
 	position: relative;
