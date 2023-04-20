@@ -5,14 +5,14 @@ const Container = styled.footer`
 	width: 100vw;
 	background-color: rgb(36, 38, 41);
 	padding-top: 10px;
+	letter-spacing: 0px;
 `
 
 const Centering = styled.div`
 	height: 100%;
-	width: 88%;
+	width: calc(1216px - 48px);
 	display: flex;
-	justify-content: space-between;
-	padding: 18px 12px 12px 0px;
+	padding: 18px 12px 12px;
 	margin: 0 auto;
 `
 
@@ -23,13 +23,13 @@ const Logo = styled.div`
 
 const ListContainer = styled.div`
 	display: flex;
-	flex: 2 1 auto;
+	flex: 1.5 1 auto;
 `
 
 const FooterList = styled.ul`
 	list-style: none;
 	flex: 1 0 auto;
-  padding: 0 12px 24px 0;
+  padding: 0 0 24px 0;
 `
 
 const ListTatle = styled.li`
@@ -49,26 +49,27 @@ const ListItem = styled.li`
 
 const CopyrightContainer = styled.div`
 	height: 220px;
-	color: rgb(141, 149, 155);
+	color: hsl(210,8%,70%);
 	display: flex;
 	justify-content: space-between;
   flex-direction: column;
-  flex: 1 1 150px;
-  font-size: 11px;
+  flex: 0.8 1 150px;
 `
 
 const SNS = styled.div`
 	>span {
-		font-size: 2px;
+		font-size: 1px;
+		letter-spacing: 0px;
 		margin-right: 10px;
 	}
 `
 
 const Copyright = styled.div`
-	margin: auto 0 24px;
+	margin: auto 0 20px;
 	list-style: none;
 	>li {
-		font-size: 2px;
+		letter-spacing: 0px;
+		font-size: 1px;
 	}
 `
 
@@ -89,7 +90,7 @@ export default function Footer() {
 						<ListItem>Help</ListItem>
 					</FooterList>
 					<FooterList>
-						<ListTatle>RODUCTS</ListTatle>
+						<ListTatle>PRODUCTS</ListTatle>
 						<ListItem>Teams</ListItem>
 						<ListItem>Advertising</ListItem>
 						<ListItem>Collectives</ListItem>

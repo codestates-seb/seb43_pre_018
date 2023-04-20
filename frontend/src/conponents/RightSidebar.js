@@ -6,7 +6,7 @@ import {RiNumber7} from "react-icons/ri"
 
 const Container = styled.div`
 	height: 100%;
-	width: 25%;
+	width: 20%;
 `
 
 const Post = styled.ul`
