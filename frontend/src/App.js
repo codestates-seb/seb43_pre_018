@@ -3,10 +3,19 @@ import styled from 'styled-components'
 import Nav from './conponents/Nav';
 import RightSidebar from './conponents/RightSidebar';
 import Footer from './conponents/Footer';
+import AskPage from './page/AskPage';
+
+// 임시
+import {BrowserRouter, Routes, Route} from "react-router-dom"
+
+const Top = styled.div`
+  background-color: rgb(248, 249, 249);
+  height: 100vh;
+`
 
 const TempHeader = styled.div`
   border: 1px solid black;
-  position: sticky;
+  position: fixed;
   top: 0;
   width: 100vw;
 `
@@ -26,15 +35,22 @@ const TempBody = styled.div`
 
 function App() {
   return (
-    <div>
+    <BrowserRouter>
+    <Top>
       <TempHeader>Header</TempHeader>
-      <TempBody>
-        <Nav />
-          <div className='temp'>Main</div>
-        <RightSidebar />
-      </TempBody>
+      <Routes>
+        <Route path='/' element={
+          <TempBody>
+            <Nav />
+              <div className='temp'>Main</div>
+            <RightSidebar />
+          </TempBody>
+        }/>
+        <Route path='/ask' element={<AskPage />}/>
+      </Routes>
       <Footer />
-    </div>
+    </Top>
+    </BrowserRouter>
   );
 }
 
