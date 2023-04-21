@@ -40,6 +40,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/:postId" element={<QuestionDetail />} />
         </Routes>
+        <RightSidebar />
       </TempBody>
       <Footer />
     </BrowserRouter>
