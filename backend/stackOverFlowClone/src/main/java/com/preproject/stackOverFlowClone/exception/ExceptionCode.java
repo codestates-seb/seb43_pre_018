@@ -8,8 +8,10 @@ public enum ExceptionCode {
     ANSWER_NOT_FOUND(404, "Answer not found"),
     
     // 추가
-    ASK_NOT_FOUND(404, "Ask not found");
+    ASK_NOT_FOUND(404, "Ask not found"),
 
+    // 추가
+    COMMENT_NOT_FOUND(404, "Comment not found");
 
     @Getter
     private int status;

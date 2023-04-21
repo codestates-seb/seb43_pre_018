@@ -21,7 +21,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
@@ -31,22 +31,22 @@ public class Comment {
     private Long answerId;
 
     @Column(nullable = false)
-    private Long questionId;
+    private Long askId;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public static Comment of(Long answerId, Long memberId, Long questionId, CommentSaveDto commentSaveDto) {
+    public static Comment of(CommentSaveDto commentSaveDto) {
 
         Comment comment = new Comment();
 
         comment.setContent(commentSaveDto.getContent());
 
-        comment.setMemberId(memberId);
+        comment.setMemberId(commentSaveDto.getMemberId());
 
-        comment.setAnswerId(answerId);
+        comment.setAnswerId(commentSaveDto.getAnswerId());
 
-        comment.setQuestionId(questionId);
+        comment.setAskId(commentSaveDto.getAskId());
 
         return comment;
 

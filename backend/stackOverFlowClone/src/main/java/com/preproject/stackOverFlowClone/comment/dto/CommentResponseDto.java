@@ -12,13 +12,14 @@ import lombok.Setter;
 public class CommentResponseDto {
     private String content;
 
-    public static CommentResponseDto of(Comment comment) {
+    private String memberName;
+
+    public static CommentResponseDto of(String memberName, Comment comment) {
 
         CommentResponseDto dto = new CommentResponseDto();
 
         dto.setContent(comment.getContent());
-
+        dto.setMemberName(memberName);
         return dto;
-
     }
 }
