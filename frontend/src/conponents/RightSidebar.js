@@ -30,7 +30,7 @@ const Title = styled.li`
 const Items = styled.li`
 	background-color: rgb(251, 247, 230);
 	display: flex;
-	padding: 5px 3px 3px; 5px;
+	padding: 5px 3px 3px 5px;
 	>span {
 		padding: 3px;
 		font-size: 0.6rem;
