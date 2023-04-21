@@ -5,7 +5,10 @@ import lombok.Getter;
 public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
-    ANSWER_NOT_FOUND(404, "Answer not found");
+    ANSWER_NOT_FOUND(404, "Answer not found"),
+    
+    // 추가
+    ASK_NOT_FOUND(404, "Ask not found");
 
 
     @Getter
