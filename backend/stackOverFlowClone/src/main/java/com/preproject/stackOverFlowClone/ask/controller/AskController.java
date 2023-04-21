@@ -2,7 +2,7 @@ package com.preproject.stackOverFlowClone.ask.controller;
 
 import com.preproject.stackOverFlowClone.ask.dto.AskDto;
 import com.preproject.stackOverFlowClone.ask.service.AskService;
-import com.preproject.stackOverFlowClone.util.UriCreator;
+import com.preproject.stackOverFlowClone.utils.UriCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

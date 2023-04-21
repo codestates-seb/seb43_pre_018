@@ -1,6 +1,6 @@
 package com.preproject.stackOverFlowClone.comment.service;
 
-import com.preproject.stackOverFlowClone.answer.Answer;
+import com.preproject.stackOverFlowClone.answer.entity.Answer;
 import com.preproject.stackOverFlowClone.comment.dto.CommentResponseDto;
 import com.preproject.stackOverFlowClone.comment.dto.CommentSaveDto;
 import com.preproject.stackOverFlowClone.comment.dto.CommentUpdateDto;
@@ -23,7 +23,7 @@ public class CommentService {
 
         Answer findAnswer = commentRepository.findByAnswerId(answerId);
 
-        Comment comment = Comment.of(findAnswer.getId(), findAnswer.getMemberId(), findAnswer.getQuestionId(), commentSaveDto);
+        Comment comment = Comment.of(findAnswer.getId(), findAnswer.getMemberId(), findAnswer.getAskId(), commentSaveDto);
 
         return CommentResponseDto.of(comment);
 

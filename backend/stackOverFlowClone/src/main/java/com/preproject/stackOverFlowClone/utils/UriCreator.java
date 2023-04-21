@@ -1,9 +1,11 @@
 package com.preproject.stackOverFlowClone.utils;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+@Component
 public class UriCreator {
     public static URI createUri(String defaultUrl, long resourceId) {
         return UriComponentsBuilder
