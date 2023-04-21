@@ -15,7 +15,7 @@ const Post = styled.ul`
 	border-radius: 5px;
 	overflow: hidden;
 	list-style: none;
-	margin-top: 10px;
+	margin-top: 25px;
 	margin-left: 24px;
 `
 
