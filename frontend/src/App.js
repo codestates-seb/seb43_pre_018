@@ -1,40 +1,27 @@
-import './App.css';
-import styled from 'styled-components'
-import Nav from './conponents/Nav';
-import RightSidebar from './conponents/RightSidebar';
-import Footer from './conponents/Footer';
-
-const TempHeader = styled.div`
-  border: 1px solid black;
-  position: sticky;
-  top: 0;
-  width: 100vw;
-`
-// 높이 너비는 임시값
-const TempBody = styled.div`
-  margin: 0 auto;
-  height: 800px;
-  width: 88%;
-  min-width: 500px;
-  border: 1px solid black;
-  display: flex;
-  >.temp {
-    border: 1px solid red;
-    margin: 0 3px;
-  }
-`
+// import logo from "./logo.svg";
+import { ThemeProvider } from "styled-components";
+import "./App.css";
+import Header from "./Component/Header/Header";
+import theme from "./Component/style/theme";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Login from "./Component/Header/Login";
+import Signup from "./Component/Header/Signup";
+import PasswordPopup from "./Component/Header/PasswordPopup";
+import LogoHomeButton from "./Component/Header/LogoHomeButton";
 
 function App() {
   return (
-    <div>
-      <TempHeader>Header</TempHeader>
-      <TempBody>
-        <Nav />
-          <div className='temp'>Main</div>
-        <RightSidebar />
-      </TempBody>
-      <Footer />
-    </div>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/header" element={<LogoHomeButton />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/passwordPopup" element={<PasswordPopup />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
