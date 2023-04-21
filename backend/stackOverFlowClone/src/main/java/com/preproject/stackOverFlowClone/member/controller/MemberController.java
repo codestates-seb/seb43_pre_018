@@ -6,6 +6,9 @@ import com.preproject.stackOverFlowClone.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.net.URI;
+
 @RestController
 public class MemberController {
 
@@ -16,17 +19,19 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberResponseLoginDto> login(@RequestBody MemberSaveLoginDto loginDto) {
-        MemberResponseLoginDto response = memberService.loginMember(loginDto);
+    public ResponseEntity<Void> login(@RequestBody MemberSaveLoginDto loginDto) {
 
-        return ResponseEntity.ok(response);
+        URI location = memberService.loginMember(loginDto);
+
+        return ResponseEntity.ok().location(location).build();
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<MemberResponseSignUpDto> signUp(@RequestBody MemberSaveSignUpDto signUpDto) {
-        MemberResponseSignUpDto response = memberService.saveMember(signUpDto);
+    public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSaveSignUpDto signUpDto) {
 
-        return ResponseEntity.ok(response);
+        URI location = memberService.saveMember(signUpDto);
+
+        return ResponseEntity.created(location).build();
     }
 
     @PatchMapping
@@ -36,13 +41,19 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{memberId}")
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<MemberFindResponseDto> findMember(@PathVariable("memberId") Long memberId) {
+
+        MemberFindResponseDto response = memberService.findMember(memberId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/member/{memberId}")
     public ResponseEntity<Void> deleteMember(@PathVariable("memberId") Long memberId) {
 
         memberService.deleteMember(memberId);
 
         return ResponseEntity.noContent().build();
     }
-
-
 }
