@@ -9,7 +9,7 @@ import AskQuestion from './page/AskQuestion';
 import {Routes, Route, useLocation} from "react-router-dom"
 
 const Top = styled.div`
-  height: ${props=>props.isAsk?'100%':'100vh'};
+  height: ${props=>props.isAsk?'100vh':'100vh'};
   width: 100%;
   background-color: ${props=>props.isAsk?'rgb(248, 249, 249)':'rgb(255,255,255)'};
   display: flex;
@@ -27,13 +27,13 @@ const TempHeader = styled.div`
 const TempBody = styled.div`
   margin: 0 auto;
   height: max-content;
-  max-width: 1000px;
+  max-width: 1264px;
   padding-top: 20px;
   border: 1px solid black;
   display: flex;
   >.temp {
     border: 1px solid red;
-    width: 690px;
+    width: 751px;
     height: 2000px;
   }
 `

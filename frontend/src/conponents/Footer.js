@@ -10,20 +10,20 @@ const Container = styled.footer`
 
 const Centering = styled.div`
 	height: 100%;
-	width: 1050px;
+	width: 1216px;
 	display: flex;
-	padding: 18px 12px 12px;
+	padding: 20px 10px 12px;
 	margin: 0 auto;
 `
 
 const Logo = styled.div`
 	flex: 0 0 54px;
-	margin: -12px 0 32px;
+	margin: -12px 10px 32px 0;
 `
 
 const ListContainer = styled.div`
 	display: flex;
-	flex: 1.5 1 auto;
+	flex: 2 1 auto;
 `
 
 const FooterList = styled.ul`
@@ -33,8 +33,8 @@ const FooterList = styled.ul`
 `
 
 const ListTatle = styled.li`
-	font-weight: 800;
-	font-size: 0.5rem;
+	font-weight: 700;
+	font-size: 1rem;
 	color: rgb(187, 191, 195);
 	margin: 0 0 9px;
 `
@@ -43,12 +43,12 @@ const ListItem = styled.li`
 	font-weight: 600;
 	color: ${(props)=>props.isEmpty===true?'rgba(0, 0, 0, 0);':'rgb(141, 149, 155)'};
 	line-height: 2;
-  font-size: 10px;
+  font-size: 1rem;
   list-style: none;
 `
 
 const CopyrightContainer = styled.div`
-	height: 220px;
+	height: 280px;
 	color: hsl(210,8%,70%);
 	display: flex;
 	justify-content: space-between;
@@ -58,7 +58,7 @@ const CopyrightContainer = styled.div`
 
 const SNS = styled.div`
 	>span {
-		font-size: 10px;
+		font-size: 0.9rem;
 		letter-spacing: 0px;
 		margin-right: 10px;
 	}
@@ -69,7 +69,7 @@ const Copyright = styled.div`
 	list-style: none;
 	>li {
 		letter-spacing: 0px;
-		font-size: 10px;
+		font-size: 11px;
 	}
 `
 
@@ -78,7 +78,7 @@ export default function Footer() {
 		<Container>
 			<Centering>
 				<Logo>
-					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" className="bi bi-stack-overflow" viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" fill="currentColor" className="bi bi-stack-overflow" viewBox="0 0 16 16">
 						<path d="M12.412 14.572V10.29h1.428V16H1v-5.71h1.428v4.282h9.984z" color="rgb(188, 187, 187)"/>
 						<path d="M3.857 13.145h7.137v-1.428H3.857v1.428zM10.254 0 9.108.852l4.26 5.727 1.146-.852L10.254 0zm-3.54 3.377 5.484 4.567.913-1.097L7.627 2.28l-.914 1.097zM4.922 6.55l6.47 3.013.603-1.294-6.47-3.013-.603 1.294zm-.925 3.344 6.985 1.469.294-1.398-6.985-1.468-.294 1.397z" color="rgb(229, 134, 61)"/>
 					</svg>	

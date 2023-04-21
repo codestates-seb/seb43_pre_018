@@ -4,15 +4,15 @@ import {HiOutlinePencilSquare} from "react-icons/hi2"
 import { IconContext } from "react-icons/lib";
 
 const Container = styled.div`
-	width: 1000px;
+	width: 1264px;
 	padding: 10px 24px 30px;
 	margin: 0 auto;
 `
 
 const HeadTextBox = styled.div`
- padding: 40px 0;
+ padding: 60px 0;
 	>h1 {
-		font-size: 1.5rem;
+		font-size: 2rem;
 		font-weight: bold;
 	}
 `
@@ -21,27 +21,31 @@ const InformationWindow = styled.div`
 	background-color: rgb(236, 244, 251);
 	border: 1px solid rgb(174, 205, 234);
 	border-radius: 3px;
-	padding: 20px 20px;
-	width: 65%;
+	padding: 25px 25px;
+	width: 69%;
 	>ul {
 		margin-left: 2rem;
+		list-style: square;
 		>li {
-			font-size: 0.5rem;
+			font-size: 1rem;
 		}
 	}
 	>h5 {
 		font-weight: 600;
 		margin: 10px 0;
-		font-size: 0.8rem;
+		font-size: 1rem;
 	}
 	>h2 {
-		font-size: 1.2rem;
+		font-size: 1.6rem;
 		font-weight: 445;
 		margin-bottom: 10px;
 	}
-	>p span {
-		color: rgb(50, 125, 202);
-		font-weight: 500;
+	>p {
+		font-size: 1.1rem;
+		span {
+			color: rgb(50, 125, 202);
+			font-weight: 500;
+		}
 	}
 `
 
@@ -62,7 +66,7 @@ const WriteGuide = styled.div`
 	border-radius: 2px;
 	box-shadow: 0 0 10px 1px rgb(232, 234, 235);
 	overflow: hidden;
-	height: 149px;
+	height: 181px;
 	margin-left: 15px;
 `
 
@@ -70,27 +74,29 @@ const GuideName = styled.div`
 	background-color: rgb(247, 249, 250);
 	border-bottom: 1px solid rgb(213, 217, 221);
 	padding: 12px;
+	font-size: 1.2rem;
+	font-weight: 400;
 `
 
 const GuideLine = styled.div`
 	display: flex;
 	background-color: rgb(255, 255, 255);
-	height: 71%;
+	height: 100%;
 	justify-content: center;
 	align-items: start;
-	padding: 20px 20px;
+	padding: 28px 20px;
 	>.icon {
 		margin-top: -7px;
 	}
 `
 
 const GuideText = styled.div`
-	margin-left: 10px;
+	margin-left: 15px;
 	>.first {
 		margin-bottom: 1rem;
 	}
 	>p {
-		font-size: 0.1rem;
+		font-size: 1rem;
 	}
 `
 
@@ -98,16 +104,9 @@ const AskInputBox = styled.div`
 	border: 1px solid rgb(228, 229, 231);
 	background-color: rgb(255, 255, 255);
 	border-radius: 3px;
-	width: 65%;
-	padding: 20px 20px;
-	>label {
-		font-weight: 600;
-		>p{
-			font-weight: 300;
-			font-size: 0.3rem;
-			margin: 6px 0 10px 0;
-		}
-	}
+	width: 69%;
+	padding: 23px 25px;
+	
 	${props=>{
 			if(props.disabled) return `
 			opacity: 0.4;
@@ -118,9 +117,10 @@ const AskInputBox = styled.div`
 
 const Label = styled.label`
 	font-weight: 600;
+	font-size: 1.2rem;
 	>p{
-		font-weight: 300;
-		font-size: 0.3rem;
+		font-weight: 400;
+		font-size: 1rem;
 		margin: 6px 0 10px 0;
 	}
 `
@@ -128,7 +128,7 @@ const Label = styled.label`
 const TitleInput = styled.input`
 	width: 100%;
 	height: 2rem;
-	padding: 0 0.5rem;
+	padding: 1.3rem 0.7rem;
 	border: 1px solid rgb(186, 191, 197);
 	border-radius: 2px;
 	&:focus {
@@ -139,7 +139,7 @@ const TitleInput = styled.input`
 	}
 	&::placeholder {
 		color: rgb(188, 191, 197);
-		font-size: 0.8rem;
+		font-size: 1rem;
 	}
 `
 
@@ -163,16 +163,17 @@ const ContentArea = styled.textarea`
 const NextBnt = styled.button`
 	display: ${props=>props.block?'block':'none'};
 	border: none !important;
-	border-radius: 2px;
+	border-radius: 3px;
 	background-color: rgb(67, 147, 247);
 	color: rgb(255, 255, 255);
-	padding: 8px;
+	padding: 11px;
 	margin-top: 10px;
-	font-size: 0.8rem;
+	font-size: 1rem;
+	font-weight: 600;
 	&:disabled {
 		background-color: rgb(161, 201, 251)
 	}
-	&:hover {
+	&::hover {
 		backgroud-color: rgb(49, 114, 198);
 	}
 `
@@ -266,7 +267,7 @@ export default function AskQuestion() {
 							Writing a good title
 						</GuideName>
 						<GuideLine>
-							<IconContext.Provider value={{size: '3rem'}}>
+							<IconContext.Provider value={{size: '4rem'}}>
 								<HiOutlinePencilSquare className={'icon'}/>
 							</IconContext.Provider>
 							<GuideText>
@@ -304,7 +305,7 @@ export default function AskQuestion() {
 							Introduce the problem
 						</GuideName>
 						<GuideLine>
-							<IconContext.Provider value={{size: '3rem'}}>
+							<IconContext.Provider value={{size: '4rem'}}>
 								<HiOutlinePencilSquare className={'icon'}/>
 							</IconContext.Provider>
 							<GuideText>

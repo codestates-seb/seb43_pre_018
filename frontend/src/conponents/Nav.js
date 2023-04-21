@@ -29,7 +29,7 @@ const BookMark = styled.button`
 const StickyBox = styled.div`
 	position: sticky;
 	width: 100%;
-	top: 25px;
+	top: 30px;
 `
 
 export default function Nav() {
