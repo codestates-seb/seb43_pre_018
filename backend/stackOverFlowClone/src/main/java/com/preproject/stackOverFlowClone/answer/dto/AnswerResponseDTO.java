@@ -9,8 +9,9 @@ import java.time.LocalDateTime;
 @Getter
 public class AnswerResponseDTO {
     private long id;
-    private String content;
-    private LocalDateTime created_at;
     private long memberId;
     private long askId;
+    private String content;
+    private LocalDateTime created_at;
+
 }
