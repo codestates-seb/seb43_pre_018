@@ -1,5 +1,6 @@
 package com.preproject.stackOverFlowClone.answer.controller;
 
+import com.preproject.stackOverFlowClone.answer.dto.AnswerResponseDTO;
 import com.preproject.stackOverFlowClone.answer.dto.AnswerUpdateDTO;
 import com.preproject.stackOverFlowClone.answer.dto.AnswerSaveDTO;
 import com.preproject.stackOverFlowClone.answer.entity.Answer;
@@ -37,11 +38,10 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity saveAnswer(@Valid @RequestBody AnswerSaveDTO answerSaveDTO){
         Answer answer = mapper.answerSaveDtoToAnswer(answerSaveDTO);
-
         Answer createdAnswer = answerService.createAnswer(answer);
-        URI location = UriCreator.createUri(ANSWER_DEFAULT_URL, createdAnswer.getId());
+        AnswerResponseDTO answerResponseDTO = mapper.answerToAnswerResponseDto(createdAnswer);
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{answer-id}")
@@ -50,9 +50,7 @@ public class AnswerController {
         answerUpdateDTO.setId(id);
         Answer answer = answerService.updateAnswer(mapper.answerUpdateDtoToAnswer(answerUpdateDTO));
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.answerToAnswerResponseDto(answer)),
-                HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{answer-id}")

@@ -1,7 +1,7 @@
 package com.preproject.stackOverFlowClone.answer.entity;
 
-import com.preproject.stackOverFlowClone.member.entity.Member;
 import com.preproject.stackOverFlowClone.ask.entity.Ask;
+import com.preproject.stackOverFlowClone.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Answer {   // 객체 말고 id 를 엮고, 레포지토리 딴에서 쿼리를 던져주자.
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,15 +22,9 @@ public class Answer {   // 객체 말고 id 를 엮고, 레포지토리 딴에�
     @Column(nullable = false)
     private LocalDateTime created_at = LocalDateTime.now();
 
-    private Long MemberId;
+    @Column(nullable = false)
+    private Long askId;
 
-    private Long AskId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "ASK_ID")
-//    private Ask ask;
+    @Column(nullable = false)
+    private Long memberId;
 }
