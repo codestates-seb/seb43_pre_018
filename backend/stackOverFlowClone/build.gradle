@@ -23,11 +23,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'mysql:mysql-connector-java:8.0.32' // 추가
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final' // 추가
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
