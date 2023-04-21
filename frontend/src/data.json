@@ -1,0 +1,47 @@
+[
+  {
+    "title": "첫번째 게시글",
+    "content": "첫번째 게시글 내용입니다.",
+    "author": "홍길동",
+    "date": "2022-04-15",
+    "likes": "0",
+    "answers": "2",
+    "views": "58"
+  },
+  {
+    "title": "두번째 게시글",
+    "content": "두번째 게시글 내용입니다.",
+    "author": "김철수",
+    "date": "2022-04-16",
+    "likes": "4",
+    "answers": "9",
+    "views": "528"
+  },
+  {
+    "title": "세번째 게시글",
+    "content": "세번째 게시글 내용입니다.",
+    "author": "이영희",
+    "date": "2022-04-17",
+    "likes": "0",
+    "answers": "0",
+    "views": "3"
+  },
+  {
+    "title": "How to use Visual Studio Code's short cuts?",
+    "content": ".",
+    "author": "김갑수",
+    "date": "2022-04-18",
+    "likes": "4",
+    "answers": "1",
+    "views": "33"
+  },
+  {
+    "title": "다섯번째 게시글",
+    "content": "다섯번째 게시글 내용입니다.",
+    "author": "만경재",
+    "date": "2022-04-15",
+    "likes": "4",
+    "answers": "3",
+    "views": "3"
+  }
+]

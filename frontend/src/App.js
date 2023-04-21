@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Nav from './conponents/Nav';
 import RightSidebar from './conponents/RightSidebar';
 import Footer from './conponents/Footer';
+import Main from './conponents/Main';
 
 const TempHeader = styled.div`
   border: 1px solid black;
@@ -30,7 +31,7 @@ function App() {
       <TempHeader>Header</TempHeader>
       <TempBody>
         <Nav />
-          <div className='temp'>Main</div>
+        <Main />
         <RightSidebar />
       </TempBody>
       <Footer />
