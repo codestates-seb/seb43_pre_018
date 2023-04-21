@@ -4,6 +4,9 @@ import Nav from './conponents/Nav';
 import RightSidebar from './conponents/RightSidebar';
 import Footer from './conponents/Footer';
 import Main from './conponents/Main';
+import QuestionDetail from './conponents/QuestionDetail';
+
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 const TempHeader = styled.div`
   border: 1px solid black;
@@ -13,11 +16,13 @@ const TempHeader = styled.div`
 `
 // 높이 너비는 임시값
 const TempBody = styled.div`
-  margin: 0 auto;
-  height: 800px;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  height: min-content;
   width: 88%;
   min-width: 500px;
-  border: 1px solid black;
   display: flex;
   >.temp {
     border: 1px solid red;
@@ -27,15 +32,18 @@ const TempBody = styled.div`
 
 function App() {
   return (
-    <div>
+    <BrowserRouter>
       <TempHeader>Header</TempHeader>
       <TempBody>
         <Nav />
-        <Main />
-        <RightSidebar />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/:postId" element={<QuestionDetail />} />
+        </Routes>
+        {/* <RightSidebar /> */}
       </TempBody>
       <Footer />
-    </div>
+    </BrowserRouter>
   );
 }
 

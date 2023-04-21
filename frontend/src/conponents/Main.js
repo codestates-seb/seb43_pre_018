@@ -1,17 +1,42 @@
 import styled from "styled-components"
 import data from "../data.json"
+import { Link } from 'react-router-dom';
+
+const MainWrapper = styled.div`
+  width: 727px;
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .no-under-line {
+    text-decoration: none;
+    color: inherit;
+  }
+`;
 
 const MainHeaderWrapper = styled.div`
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  padding-bottom: 10px;
 `;
 
 const MainHeaderUpWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-left: 20px;
+
+  .AskQuestionButton {
+      background-color: #4393F7;
+      width: 103px;
+      height: 38px;
+      color: white;
+      border: none;
+      font-weight: bolder;
+      border-radius: 3px; 
+      cursor: pointer;
+
+      &:hover {
+        background-color: #3172C6;
+      }
+    }
 
   .MainHeaderTitle {
     font-size: 30px;
@@ -22,53 +47,46 @@ const MainHeaderDownWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 25px;
-  margin-left: 20px;
+  margin-bottom: 8px;
 
   .DescriptionNumberQuestions {
     font-size: 18px;
-    width:300px;
+    width: 300px;
+    line-height: 30px;
   }
 
   .buttons {
     display:flex;
 
     .FilterLeftButton {
-      border-left: 1px solid gray;
-      border-top: 1px solid gray;
-      border-bottom: 1px solid gray;
+      border-left: 1px solid #808080;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #808080;
       border-right: none;
       background-color: white;
       height: 30px;
-      line-height: 30px;
+      line-height: 28px;
       width: 60px;
       text-align: center;
-      background-color: lightgrey;
+      background-color: #e1e1e3;
     }
 
     .FilterRightButton {
-      border-left: 1px solid gray;
-      border-top: 1px solid gray;
-      border-bottom: 1px solid gray;
-      border-right: 1px solid gray;
-      background-color: white;
+      border-left: 1px solid #808080;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #808080;
+      border-right: 1px solid #808080;
       height: 30px;
-      line-height: 30px;
+      line-height: 28px;
       width: 80px;
       text-align: center;
     }
   }
 `;
 
-const AskQuestionButton = styled.button`
-  background-color: #3fb7eb;
-  color: white;
-  border: none;
-  border-radius: 1px;
-`;
-
 const ArticleBoxSelector = styled.div`
   width: 100%;
-  border-top: 1px solid black;
+  border-top: 1px solid #d7d9dc;
   padding-top: 20px;
   display: flex;
   margin-top: 5px;
@@ -79,15 +97,11 @@ const ArticleStatus = styled.div`
   width: min-content;
   text-align: end;
   font-size: 14px;
-  margin-left: 20px;
 
   .articleAnswers {
     margin-top: 10px;
-    border: 1px solid black;
-    border-radius: 3px;
     text-align: center;
     white-space: nowrap;
-    padding: 2px;
   }
 
   .articleViews {
@@ -102,40 +116,59 @@ const ArticleDescription = styled.div`
   .ArticleTitle {
     color: blue;
     font-size: 18px;
+    opacity: 80%;
+    cursor: pointer;;
+    
+    &:hover {
+      opacity: 50%;
+    }
   }
 
   .ArticleSummary {
     margin-top: 8px;
     font-size: 15px;
   }
+
   .AuthorProfile {
     text-align: end;
     margin-top: 20px;
     margin-right: 10px;
+    display: flex;
+    justify-content: end;
+
+    .author {
+      color: blue;
+    }
+
+    .createdAt {
+      margin-left: 5px;
+      color: grey;
+    }
   }
 `;
 
 function Main() {
   return(
-    <div>
+    <MainWrapper>
       <MainHeaderWrapper>
         <MainHeaderUpWrapper>
           <div className='MainHeaderTitle'>All Questions</div>
-          <AskQuestionButton>Ask Question</AskQuestionButton>
+            <button className="AskQuestionButton">
+              Ask Question
+            </button>
         </MainHeaderUpWrapper>
         <MainHeaderDownWrapper>
           <div className='DescriptionNumberQuestions'>
-          7,247,319 questions with no upvoted or accepted answers
+            23,666,091 questions
           </div>
           <div className='buttons'>
             <div className='FilterLeftButton'>Newest</div>
-            <div className='FilterRightButton'>Most Likes</div>
+            <div className='FilterRightButton'>Most Voted</div>
           </div>
         </MainHeaderDownWrapper>
-      </MainHeaderWrapper>
-      <div>
-        {data.map((post, index) => (
-        <div key={index}>
+      </MainHeaderWrapper> 
+        {data.slice().reverse().map((post, index) => (
+        <div key={index}>  
           <ArticleBoxSelector>
             <ArticleStatus>
               <div className='articleVotes'><strong>{post.likes} Votes</strong></div>
@@ -143,21 +176,27 @@ function Main() {
               <div className='articleViews'>{post.views} views</div>
             </ArticleStatus>
             <ArticleDescription>
-              <div className='ArticleTitle'>
-                {post.title}
-              </div>
+              <Link to={`/${post.id}`} className="no-under-line">
+                <div className='ArticleTitle'>
+                  {post.title}
+                </div>
+              </Link>
               <div className='ArticleSummary'>
                 {post.content}
               </div>
               <div className='AuthorProfile'>
-                {post.author} {post.date}
+                <div className="author">
+                {post.author}
+                </div> 
+                <div className="createdAt">
+                {post.date}
+                </div>
               </div>
             </ArticleDescription>
           </ArticleBoxSelector>
         </div>
         ))}
-      </div>
-    </div>
+    </MainWrapper>
   )
 }
 
