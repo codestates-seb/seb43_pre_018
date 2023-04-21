@@ -45,7 +45,7 @@ public class AskController {
     }
 
     // 질문 검색
-    @GetMapping("/ask")
+    @GetMapping("/search")
     public ResponseEntity getSearchAskList(@RequestParam String searchWord) {
         SingleResponseDto singleResponseDto = service.getSearchAskList(searchWord);
         return new ResponseEntity(singleResponseDto, HttpStatus.OK);

@@ -11,6 +11,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 //    @Query("SELECT m.nickName FROM Review r JOIN Member m ON r.memberId = m.id WHERE r.memberId = :memberId")
 //    String findNickNamesByMemberId(Long memberId);
 
-    @Query("SELECT * FROM Answer WHERE Answer.id = :askId")
+    @Query("SELECT a FROM Answer a WHERE a.id = :askId")
     List<Answer> findAnswersByAskId(Long askId);
+
 }

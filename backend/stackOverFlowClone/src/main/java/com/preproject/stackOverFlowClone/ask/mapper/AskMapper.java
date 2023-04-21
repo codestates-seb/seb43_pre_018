@@ -89,9 +89,8 @@ public class AskMapper {
             findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
             Member member = findMember.get();
 
-            // 머지하고 나면 comment.getQuestionId() -> comment.getAskId() 변경 필요
             AskDto.AskDetailCommentResponseDto askDetailCommentResponseDto = new AskDto.AskDetailCommentResponseDto(
-                    comment.getId(), comment.getQuestionId(), comment.getAnswerId(), comment.getMemberId(), member.getName(), comment.getContent(), comment.getCreatedAt()
+                    comment.getId(), comment.getAskId(), comment.getAnswerId(), comment.getMemberId(), member.getName(), comment.getContent(), comment.getCreatedAt()
             );
             askDetailCommentResponseDtoList.add(askDetailCommentResponseDto);
         }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AskRepository extends JpaRepository<Ask, Long> {
-    @Query("SELECT * FROM Ask WHERE Ask.title LIKE %:searchWord%")
+    @Query("SELECT a FROM Ask a WHERE a.title LIKE :searchWord")
     List<Ask> findSearchAskList(String searchWord);
+
 }
