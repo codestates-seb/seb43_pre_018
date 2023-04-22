@@ -31,6 +31,15 @@ public class CommentService {
 
     public void saveComment(CommentSaveDto commentSaveDto) {
 
+        boolean validMember = commentRepository.existsByMemberId(commentSaveDto.getMemberId());
+        boolean validAsk = commentRepository.existsByAskId(commentSaveDto.getAskId());
+        boolean validAnswer = commentRepository.existsByAnswerId(commentSaveDto.getAnswerId());
+
+        if(!validMember || !validAsk || !validAnswer) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
+
         Comment comment = Comment.of(commentSaveDto);
 
         commentRepository.save(comment);
@@ -44,7 +53,8 @@ public class CommentService {
 
         findComment.update(commentUpdateDto);
 
-        String memberName = commentRepository.findMemberNameByMemberId(findComment.getMemberId());
+        String memberName = commentRepository.findMemberNameByMemberId(findComment.getMemberId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));;
         return CommentResponseDto.of(memberName, findComment);
     }
 
@@ -59,7 +69,8 @@ public class CommentService {
         Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
-        String memberName = commentRepository.findMemberNameByMemberId(findComment.getMemberId());
+        String memberName = commentRepository.findMemberNameByMemberId(findComment.getMemberId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));;
         CommentResponseDto responseDto = CommentResponseDto.of(memberName, findComment);
 
         return new SingleResponseDto<>(responseDto);
@@ -73,7 +84,8 @@ public class CommentService {
 
         List<CommentResponseDto> responseDtos = commentList.stream()
                 .map(comment -> {
-                    String memberName = commentRepository.findMemberNameByMemberId(comment.getMemberId());
+                    String memberName = commentRepository.findMemberNameByMemberId(comment.getMemberId())
+                            .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));;
                     return CommentResponseDto.of(memberName, comment);
                 })
                 .collect(Collectors.toList());

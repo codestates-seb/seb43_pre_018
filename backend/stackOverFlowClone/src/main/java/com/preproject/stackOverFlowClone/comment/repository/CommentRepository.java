@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
@@ -16,5 +17,15 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentsByAskId(Long askId);
 
     @Query("SELECT m.name FROM Member m WHERE m.id = :memberId")
-    String findMemberNameByMemberId(Long memberId);
+    Optional<String> findMemberNameByMemberId(Long memberId);
+
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Member m WHERE m.id = :memberId")
+    boolean existsByMemberId(Long memberId);
+
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Ask m WHERE m.id = :askId")
+    boolean existsByAskId(Long askId);
+
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Answer m WHERE m.id = :answerId")
+    boolean existsByAnswerId(Long answerId);
+
 }
