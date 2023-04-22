@@ -108,6 +108,10 @@ public class AskService {
 
     // 질문 삭제
     public String deleteAsk(Long askId) {
+
+        askRepository.deleteAnswersByAskId(askId);
+        askRepository.deleteCommentsByAskId(askId);
+
         askRepository.deleteById(askId);
         String uri = "http://localhost:8080/";
         return uri;
