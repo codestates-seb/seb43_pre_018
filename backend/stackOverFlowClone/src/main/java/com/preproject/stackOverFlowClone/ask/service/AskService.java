@@ -9,6 +9,7 @@ import com.preproject.stackOverFlowClone.ask.repository.AskRepository;
 import com.preproject.stackOverFlowClone.comment.entity.Comment;
 import com.preproject.stackOverFlowClone.comment.repository.CommentRepository;
 import com.preproject.stackOverFlowClone.dto.MultiResponseDto;
+import com.preproject.stackOverFlowClone.dto.PageInfo;
 import com.preproject.stackOverFlowClone.dto.SingleResponseDto;
 import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
 import com.preproject.stackOverFlowClone.exception.ExceptionCode;
@@ -39,7 +40,8 @@ public class AskService {
     }
 
     // 질문 상세 내용 조회
-    public AskDto.AskDetailResponseDto getAskDetail(Long askId) {
+    public MultiResponseDto getAskDetail(Long askId) {
+
         // 질문 존재 여부 확인
         Optional<Ask> findAsk = askRepository.findById(askId);
         findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
@@ -52,9 +54,26 @@ public class AskService {
 
         List<Comment> commentList = commentRepository.findCommentsByAskId(askId);
         List<AskDto.AskDetailCommentResponseDto> askDetailCommentResponseDtoList = mapper.commentListToAskDetailCommentResponseDtoList(commentList);
+        /*-------------------------------------------------------------------------------------*/
+
+        int answerListSize = answerList.size();
+        int commentListSize = commentList.size();
+
+        int totalSize = answerListSize + commentListSize + 1;
+        int totalPage = 0;
+
+        if(totalSize/30 <= 0) totalPage = 1;
+
+        else totalPage = totalSize/30;
+
+
+        PageInfo pageInfo = new PageInfo(1, 30, totalSize, totalPage);
 
         AskDto.AskDetailResponseDto askDetailResponseDto = new AskDto.AskDetailResponseDto(responseDto, askDetailAnswerResponseDtoList, askDetailCommentResponseDtoList);
-        return askDetailResponseDto;
+        List<AskDto.AskDetailResponseDto> list = List.of(askDetailResponseDto);
+        MultiResponseDto multiResponseDto = new MultiResponseDto(list, pageInfo);
+
+        return multiResponseDto;
     }
 
     // 질문 리스트 조회

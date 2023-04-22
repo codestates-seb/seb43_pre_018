@@ -24,9 +24,11 @@ public class AskController {
     // 질문 상세 내용 조회
     @GetMapping("/ask/{ask-id}")
     public ResponseEntity getAskDetail(@PathVariable("ask-id") Long askId) {
-        AskDto.AskDetailResponseDto askDetailResponseDto = service.getAskDetail(askId);
-        SingleResponseDto singleResponseDto = new SingleResponseDto(askDetailResponseDto);
-        return new ResponseEntity(singleResponseDto, HttpStatus.OK);
+        MultiResponseDto multiResponseDto = service.getAskDetail(askId);
+
+//        SingleResponseDto singleResponseDto = new SingleResponseDto(askDetailResponseDto);
+
+        return new ResponseEntity(multiResponseDto, HttpStatus.OK);
     }
 
     // 메인 페이지 기본 질문 목록 조회
