@@ -49,9 +49,9 @@ public class AnswerService {
         return findVerifiedAnswer(id);
     }
 
-    public Page<Answer> findAnswers(int page, int size){
+    public Page<Answer> findAnswers(Long askId, int page, int size){
 
-        return answerRepository.findAll(PageRequest.of(page, size,
+        return answerRepository.findAllByAskId(askId, PageRequest.of(page, size,
                 Sort.by("id").descending()));
     }
 
