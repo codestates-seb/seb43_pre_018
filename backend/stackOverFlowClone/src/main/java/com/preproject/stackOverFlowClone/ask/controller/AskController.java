@@ -33,14 +33,14 @@ public class AskController {
     // 메인 페이지에서 요청이 온 경우 page = 1, size = 10 고정
     @GetMapping("/")
     public ResponseEntity getMainDefaultAskList() {
-        MultiResponseDto multiResponseDto = service.getAskList(1, 10);
+        MultiResponseDto multiResponseDto = service.getAskList(0, 10); //페이지번호 0부터 시작이여서 0으로 수정
         return new ResponseEntity(multiResponseDto, HttpStatus.OK);
     }
 
     // 질문 목록 조회
     @GetMapping("/ask")
     public ResponseEntity getAskList(@RequestParam int page, @RequestParam int size) {
-        MultiResponseDto multiResponseDto = service.getAskList(page, size);
+        MultiResponseDto multiResponseDto = service.getAskList(page-1, size); //페이지번호 0부터 시작이여서 -1 함
         return new ResponseEntity(multiResponseDto, HttpStatus.OK);
     }
 
