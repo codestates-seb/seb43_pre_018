@@ -20,9 +20,18 @@ public class AnswerService {
     public final AnswerRepository answerRepository;
 
     public Answer createAnswer(Answer answer){
-        Answer savedAnswer = answerRepository.save(answer);
+        boolean existsByMemberId =
+                answerRepository.existsByMemberId(answer.getMemberId());
+        boolean existsByAskId =
+                answerRepository.existsByAskId(answer.getAskId());
 
-        return savedAnswer;
+        if (!existsByMemberId) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        else if (!existsByAskId) throw new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND);
+        else {
+            Answer savedAnswer = answerRepository.save(answer);
+
+            return savedAnswer;
+        }
     }
 
     public Answer updateAnswer(Answer answer){
