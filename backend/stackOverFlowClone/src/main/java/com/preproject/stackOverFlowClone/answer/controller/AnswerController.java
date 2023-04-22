@@ -26,7 +26,6 @@ import java.util.List;
 @Validated
 @Slf4j
 public class AnswerController {
-    private final static String ANSWER_DEFAULT_URL = "http://localhost:8080/answer";
     private final AnswerService answerService;
     private final AnswerMapper mapper;
 
