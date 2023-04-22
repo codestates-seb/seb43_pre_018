@@ -10,10 +10,7 @@ import java.util.Optional;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
-//    @Query("SELECT m.nickName FROM Review r JOIN Member m ON r.memberId = m.id WHERE r.memberId = :memberId")
-//    String findNickNamesByMemberId(Long memberId);
-
-    @Query("SELECT a FROM Answer a WHERE a.id = :askId")
+    @Query("SELECT a FROM Answer a WHERE a.askId = :askId")
     List<Answer> findAnswersByAskId(Long askId);
 
     @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Member m WHERE m.id = :memberId")
