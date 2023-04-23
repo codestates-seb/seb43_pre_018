@@ -67,7 +67,6 @@ const SignupContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  box-sizing: border-box;
   margin-left: 50px;
 `;
 
@@ -75,12 +74,13 @@ const SignupContainer = styled.div`
 const GoogleLogin = styled.a`
   width: 290px;
   margin-bottom: 10px;
-  height: 30px;
+  height: 37px;
   background-color: white;
   border: 1px solid #cccccc;
   border-radius: 5px;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 3px;
   font-size: 14px;
   color: #3b4045;
@@ -91,9 +91,10 @@ const GoogleLogin = styled.a`
   }
 `;
 const GoogleLoginIcon = styled.img`
+  align-self: end;
   width: 26px;
   height: 26px;
-  margin: 0;
+  margin: 0 2px 0 0;
 `;
 
 const GoogleLoginText = styled.p`
@@ -107,7 +108,7 @@ const GoogleLoginText = styled.p`
 const GithubLogin = styled.a`
   width: 290px;
   margin-bottom: 10px;
-  height: 30px;
+  height: 37px;
   background-color: black;
   border: 1px solid #cccccc;
   border-radius: 5px;
@@ -145,7 +146,7 @@ const GithubLoginText = styled.p`
 const FacebookLogin = styled.a`
   width: 290px;
   margin-bottom: 10px;
-  height: 30px;
+  height: 37px;
   background-color: #385499;
   border: 1px solid #cccccc;
   border-radius: 5px;
@@ -155,7 +156,7 @@ const FacebookLogin = styled.a`
   padding: 3px;
   font-size: 14px;
   cursor: pointer;
-
+  
   &:hover {
     background-color: #314a86;
   }
