@@ -9,47 +9,49 @@ import { Link } from "react-router-dom";
 const Background = styled.div`
   background-color: #f6f6f6;
   width: 100vw;
-  /* height: calc(100vh - 54px); */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   height: 100vh;
 `;
 
 // 로그인 폼 전체 스타일 지정
 const Container = styled.div`
-  width: 100%;
-  /* height: 70%; */
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  margin: auto auto;
   height: max-content;
-  /* flex-direction: row; */
-  flex-wrap: wrap;
+  min-height: 70%;
 `;
 
-const DetailInfo = styled.div`
+const WelcomeText = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  font-weight: 500;
-  font-size: large;
+  font-weight: 400;
+  font-size: 2.2rem;
   justify-content: center;
   text-align: center;
 `;
 
+
 const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
+  >p {
+    margin-bottom: 10px;
+  }
 `;
 
 const DetailContent = styled.div`
   display: flex;
+  align-items: center;
+  margin: 5px 0;
+  >p {
+    font-weight: 500;
+    font-size: 1.2rem;
+  }
 `;
 const SignupIcon = styled.div`
   color: #0a95ff;
@@ -66,14 +68,13 @@ const SignupContainer = styled.div`
   align-items: center;
   flex-direction: column;
   box-sizing: border-box;
-  margin-left: none;
+  margin-left: 50px;
 `;
 
 // 구글로 로그인 스타일 지정
 const GoogleLogin = styled.a`
   width: 290px;
   margin-bottom: 10px;
-  /* height: max-content; */
   height: 30px;
   background-color: white;
   border: 1px solid #cccccc;
@@ -189,14 +190,13 @@ const FormContainer = styled.div`
   width: 295px;
   height: max-content;
   background-color: white;
-  box-shadow: 0 0 1px 1px #e4e4e4;
+  box-shadow: 0 0 8px 2px #e4e4e4;
   padding: 10px 0 25px 0;
   margin-top: 15px;
 `;
 
 // 로그인 입력창의 스타일 지정
 const SignupInputContainer = styled.div`
-  margin: 0 auto;
   margin-top: 20px;
   width: 80%;
   display: flex;
@@ -259,6 +259,9 @@ export default function Signup() {
   return (
     <>
       <Background>
+        <WelcomeText>
+          Create your Stack Overflow account. It’s free and only takes a minute.
+        </WelcomeText>
         <Container>
           <DetailContainer>
             <p style={{ fontWeight: "500", fontSize: "28px" }}>
@@ -321,21 +324,17 @@ export default function Signup() {
           </DetailContainer>
 
           <SignupContainer>
-            <DetailInfo>
-              Create your Stack Overflow account. It’s free and only takes a
-              minute.
-            </DetailInfo>
             <GoogleLogin>
               <GoogleLoginIcon
                 img
                 src="http://stackoverflowpre.p-e.kr/static/media/Google.960c670a7a8d952eba35.png"
                 alt="구글 로고"
               ></GoogleLoginIcon>
-              <GoogleLoginText>Login in with Google</GoogleLoginText>
+              <GoogleLoginText>Sign up with Google</GoogleLoginText>
             </GoogleLogin>
             <GithubLogin>
               <GithubIcon img src={GithubLogo} alt="깃헙 로고"></GithubIcon>
-              <GithubLoginText>Login in with Github</GithubLoginText>
+              <GithubLoginText>Sign up with Github</GithubLoginText>
             </GithubLogin>
             <FacebookLogin>
               <FacebookIcon
@@ -343,9 +342,9 @@ export default function Signup() {
                 src={FacebookLogo}
                 ail="페북 로고"
               ></FacebookIcon>
-              <FacebookLoginText>Login in with Facebook</FacebookLoginText>
+              <FacebookLoginText>Sign up with Facebook</FacebookLoginText>
             </FacebookLogin>
-          </SignupContainer>
+          
           <FormContainer>
             <SignupInputContainer>
               <SignupLabel>Display name</SignupLabel>
@@ -385,6 +384,7 @@ export default function Signup() {
               <Link to="/login">Log in</Link>
             </span>
           </div>
+          </SignupContainer>
         </Container>
       </Background>
     </>

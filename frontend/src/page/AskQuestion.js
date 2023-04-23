@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {HiOutlinePencilSquare} from "react-icons/hi2"
 import { IconContext } from "react-icons/lib";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 	width: 1264px;
@@ -186,7 +187,27 @@ export default function AskQuestion() {
 	const [contentVaild, setContentVaild] = useState(false)
 	const inputRef = useRef([])
 	const [isBlock, setIsBlock] = useState(false);
-	// const contentRef = useRef(null)
+	// 임시
+	const [isLogin, setIsLogin] = useState(false);
+	const navigate = useNavigate();
+	const location = useLocation();
+	
+	// useEffect(()=>{
+	// 	if(!isLogin) {
+	// 			window.alert('This service requires login.');
+	// 			navigate('/');
+	// 	}
+	// 	if(location.pathname==='/edit/:id') {
+	// 		const headers = {
+	// 			'Authorization' : `Bearer ${'accessToken'}`,
+  //     	'Content-Type' : 'Application/json',
+	// 			'Accept' : '*/*'
+	// 		}
+	// 		// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
+	// 	}
+	// 	inputRef.current[0].focus();
+	// 	setIsBlock(true);
+	// },[])
 
 	useEffect(()=>{
 		inputRef.current[0].focus();

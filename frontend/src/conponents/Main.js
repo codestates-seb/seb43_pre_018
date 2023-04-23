@@ -1,13 +1,22 @@
 import styled from "styled-components"
 import data from "../data.json"
 import { Link } from 'react-router-dom';
+import Nav from "./Nav";
+import RightSidebar from "./RightSidebar";
+
+const BodyContainer = styled.div`
+  margin: 33px auto 0px;
+  height: 100vh;
+  min-height: calc(100vh - 378px);
+  max-width: 1264px;
+  padding: 20px 0 0;
+  display: flex;
+`
 
 const MainWrapper = styled.div`
-  width: 727px;
+  width: 751px;
+  height: 100%;
   margin-top: 25px;
-  margin-left: auto;
-  margin-right: auto;
-
   .no-under-line {
     text-decoration: none;
     color: inherit;
@@ -17,6 +26,7 @@ const MainWrapper = styled.div`
 const MainHeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 24px;
 `;
 
 const MainHeaderUpWrapper = styled.div`
@@ -24,12 +34,12 @@ const MainHeaderUpWrapper = styled.div`
   justify-content: space-between;
 
   .AskQuestionButton {
-      background-color: #4393F7;
+      background-color: rgb(10, 149, 255);
       width: 103px;
       height: 38px;
       color: white;
       border: none;
-      font-weight: bolder;
+      font-weight: 400;
       border-radius: 3px; 
       cursor: pointer;
 
@@ -87,10 +97,10 @@ const MainHeaderDownWrapper = styled.div`
 const ArticleBoxSelector = styled.div`
   width: 100%;
   border-top: 1px solid #d7d9dc;
-  padding-top: 20px;
+  padding: 20px 0 0 60px;
   display: flex;
-  margin-top: 5px;
 `;
+// 답변 일정 갯수 있는 애들만 색 지정  background-color: rgb(252, 248, 229);
 
 const ArticleStatus = styled.div`
   flex-direction: column;
@@ -114,7 +124,7 @@ const ArticleDescription = styled.div`
   width: 100%;
 
   .ArticleTitle {
-    color: blue;
+    color: rgb(49, 114, 198);
     font-size: 18px;
     opacity: 80%;
     cursor: pointer;;
@@ -127,6 +137,8 @@ const ArticleDescription = styled.div`
   .ArticleSummary {
     margin-top: 8px;
     font-size: 15px;
+    font-weight: 400;
+    color: rgb(60, 64, 69);
   }
 
   .AuthorProfile {
@@ -137,7 +149,7 @@ const ArticleDescription = styled.div`
     justify-content: end;
 
     .author {
-      color: blue;
+      color: rgb(49, 114, 198);
     }
 
     .createdAt {
@@ -147,56 +159,64 @@ const ArticleDescription = styled.div`
   }
 `;
 
+
+
 function Main() {
   return(
-    <MainWrapper>
-      <MainHeaderWrapper>
-        <MainHeaderUpWrapper>
-          <div className='MainHeaderTitle'>All Questions</div>
-            <button className="AskQuestionButton">
-              Ask Question
-            </button>
-        </MainHeaderUpWrapper>
-        <MainHeaderDownWrapper>
-          <div className='DescriptionNumberQuestions'>
-            23,666,091 questions
-          </div>
-          <div className='buttons'>
-            <div className='FilterLeftButton'>Newest</div>
-            <div className='FilterRightButton'>Most Voted</div>
-          </div>
-        </MainHeaderDownWrapper>
-      </MainHeaderWrapper> 
-        {data.slice().reverse().map((post, index) => (
-        <div key={index}>  
-          <ArticleBoxSelector>
-            <ArticleStatus>
-              <div className='articleVotes'><strong>{post.likes} Votes</strong></div>
-              <div className='articleAnswers'>{post.answers} answers</div>
-              <div className='articleViews'>{post.views} views</div>
-            </ArticleStatus>
-            <ArticleDescription>
-              <Link to={`/${post.id}`} className="no-under-line">
-                <div className='ArticleTitle'>
-                  {post.title}
+    <BodyContainer>
+      <Nav />
+      <MainWrapper>
+        <MainHeaderWrapper>
+          <MainHeaderUpWrapper>
+            <div className='MainHeaderTitle'>All Questions</div>
+            <Link to={'/ask'}>
+              <button className="AskQuestionButton">
+                Ask Question
+              </button>
+            </Link>
+          </MainHeaderUpWrapper>
+          <MainHeaderDownWrapper>
+            <div className='DescriptionNumberQuestions'>
+              23,666,091 questions
+            </div>
+            <div className='buttons'>
+              <div className='FilterLeftButton'>Newest</div>
+              <div className='FilterRightButton'>Most Voted</div>
+            </div>
+          </MainHeaderDownWrapper>
+        </MainHeaderWrapper> 
+          {data.slice().reverse().map((post, index) => (
+          <div key={index} className="article-container">  
+            <ArticleBoxSelector>
+              <ArticleStatus>
+                <div className='articleVotes'><strong>{post.likes} Votes</strong></div>
+                <div className='articleAnswers'>{post.answers} answers</div>
+                <div className='articleViews'>{post.views} views</div>
+              </ArticleStatus>
+              <ArticleDescription>
+                <Link to={`/ask/${post.id}`}>
+                  <div className='ArticleTitle'>
+                    {post.title}
+                  </div>
+                </Link>
+                <div className='ArticleSummary'>
+                  {post.content}
                 </div>
-              </Link>
-              <div className='ArticleSummary'>
-                {post.content}
-              </div>
-              <div className='AuthorProfile'>
-                <div className="author">
-                {post.author}
-                </div> 
-                <div className="createdAt">
-                {post.date}
+                <div className='AuthorProfile'>
+                  <div className="author">
+                  {post.author}
+                  </div> 
+                  <div className="createdAt">
+                  {post.date}
+                  </div>
                 </div>
-              </div>
-            </ArticleDescription>
-          </ArticleBoxSelector>
-        </div>
-        ))}
-    </MainWrapper>
+              </ArticleDescription>
+            </ArticleBoxSelector>
+          </div>
+          ))}
+      </MainWrapper>
+      <RightSidebar />
+    </BodyContainer>
   )
 }
 

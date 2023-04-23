@@ -1,9 +1,11 @@
 import styled from "styled-components"
+import Nav from "./Nav";
+import RightSidebar from "./RightSidebar";
 
 const MainWrapper = styled.div`
-  width: 727px;
+  width: 1050px;
   margin-top: 25px;
-  margin-left: auto;
+  margin-left: 24px;
   margin-right: auto;
 
   .header-title {
@@ -12,7 +14,7 @@ const MainWrapper = styled.div`
 
     .title {  
       font-size: 24px;
-      width: 600px;
+      margin-right: 25px;
     }
 
     .AskQuestionButton {
@@ -32,8 +34,12 @@ const MainWrapper = styled.div`
   }
 
   .question-description {
-    margin-top: 10px;
+    margin: 10px 0 20px;
     font-size: 13.5px;
+  }
+
+  #ask-box {
+    border: none;
   }
 
   .text-box {
@@ -43,6 +49,7 @@ const MainWrapper = styled.div`
     margin-top: 20px;
     padding-top: 20px;
 
+    
     .Vote {
       text-align: center;
       width: 50px;  
@@ -90,7 +97,7 @@ const MainWrapper = styled.div`
           width: 200px;
           background-color: #DCE9F6;
           margin-top: 20px;
-          text-align: end;
+          text-align: start;
           padding: 5px;
 
           .createdAt {
@@ -152,80 +159,107 @@ const MainWrapper = styled.div`
   }
 `;
 
+const BodyContainer = styled.div`
+  margin: 33px auto 0;
+  height: 100vh;
+  min-height: calc(100vh - 378px);
+  max-width: 1264px;
+  padding: 20px 0 0;
+  display: flex;
+`
+
+const MainContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: max-contnet;
+  width: 100%;
+  border-top: 1px solid #d7d9dc;
+  .left-content {
+    width: 724px;
+  }
+`
 
 function QuestionDetail() {
   return (
-    <MainWrapper>
-      <div className="header-title">
-        <div className="title">
-          how to adds a field and fills in the specified parameters in kafka hisrtory event
-        </div>
-        <button className="AskQuestionButton">
-          Ask Question
-        </button>
-      </div>
-      <div className="question-description">
-        Asked 7 months ago Modified today Viewed 613 times
-      </div>
-      <div className="text-box">
-        <div className="Vote">
-          <div className="up-button"></div>
-          0<br />
-          <div className="down-button"></div>
-        </div>
-        <div className="Content-text">
-          'm trying to create a column "Cust Rank" which will give me random numbers which should be based on other column "Creator". The only catch here is that the random Numbers should be same for the same Creators.
-          <div className="Author-text-line">
-            <div className="Author-text">
-              <div className="createdAt">
-                asked Sep 8, 2022 at 10:23
-              </div>
-              <div className="author">
-                Nabeel Parkar
-              </div>
-            </div>
+    <BodyContainer>
+      <Nav/>
+      <MainWrapper>
+        <div className="header-title">
+          <div className="title">
+            how to adds a field and fills in the specified parameters in kafka hisrtory event
           </div>
-          <div className="Comment-text">
-            Add a comment
-          </div>
+          <button className="AskQuestionButton">
+            Ask Question
+          </button>
         </div>
-      </div>
-      <div className="number--answer">
-        3 Answers
-      </div>
-      <div className="text-box">
-        <div className="Vote">
-          <div className="up-button"></div>
-          0<br />
-          <div className="down-button"></div>
+        <div className="question-description">
+          Asked 7 months ago Modified today Viewed 613 times
         </div>
-        <div className="Content-text">
-          It seems like dedicated Nvidia GPU's are causing the problem. I have a 3060 laptop and I have the same issue and when I set it to guest it seems to work. My guess is that setting changes it from using the GPU to the CPU. I would recommend you try setting android studio to use integrated graphics instead of dedicated. Since I have a 8 core CPU compared to a 4 core CPU of yours, I'm guessing that's the reason I don't get as bad performance
-          <div className="Author-text-line">
-            <div className="Author-text">
-              <div className="createdAt">
-                answered Dec 29, 2022 at 20:12
+        <MainContent>
+          <div className="left-content">
+            <div className="text-box" id="ask-box">
+              <div className="Vote">
+                <div className="up-button"></div>
+                0<br />
+                <div className="down-button"></div>
               </div>
-              <div className="author">
-                Ayman Isam
+              <div className="Content-text">
+                I'm trying to create a column "Cust Rank" which will give me random numbers which should be based on other column "Creator". The only catch here is that the random Numbers should be same for the same Creators.
+                <div className="Author-text-line">
+                  <div className="Author-text">
+                    <div className="createdAt">
+                      asked Sep 8, 2022 at 10:23
+                    </div>
+                    <div className="author">
+                      Nabeel Parkar
+                    </div>
+                  </div>
+                </div>
+                <div className="Comment-text">
+                  Add a comment
+                </div>
               </div>
             </div>
+            <div className="number--answer">
+              3 Answers
+            </div>
+            <div className="text-box">
+              <div className="Vote">
+                <div className="up-button"></div>
+                0<br />
+                <div className="down-button"></div>
+              </div>
+              <div className="Content-text">
+                It seems like dedicated Nvidia GPU's are causing the problem. I have a 3060 laptop and I have the same issue and when I set it to guest it seems to work. My guess is that setting changes it from using the GPU to the CPU. I would recommend you try setting android studio to use integrated graphics instead of dedicated. Since I have a 8 core CPU compared to a 4 core CPU of yours, I'm guessing that's the reason I don't get as bad performance
+                <div className="Author-text-line">
+                  <div className="Author-text">
+                    <div className="createdAt">
+                      answered Dec 29, 2022 at 20:12
+                    </div>
+                    <div className="author">
+                      Ayman Isam
+                    </div>
+                  </div>
+                </div>
+                <div className="Comment-text">
+                  Add a comment
+                </div>
+              </div>
+            </div>
+            <div className="authorize-answer">
+              <div className="authorize-header">
+                Your answer
+              </div>
+              <textarea className="authorize-box" />
+              <button className="authorize-button">
+                Post your answer
+              </button>
+            </div>
           </div>
-          <div className="Comment-text">
-            Add a comment
-          </div>
-        </div>
-      </div>
-      <div className="authorize-answer">
-        <div className="authorize-header">
-          Your answer
-        </div>
-        <textarea className="authorize-box" />
-        <button className="authorize-button">
-          Post your answer
-        </button>
-      </div>
-    </MainWrapper>
+          <RightSidebar/>
+        </MainContent>
+      </MainWrapper>
+    </BodyContainer>
   )
 }
 
