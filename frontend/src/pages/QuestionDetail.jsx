@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import Nav from "../conponents/Nav";
 import RightSidebar from "../conponents/RightSidebar";
+import { Link } from "react-router-dom";
 
 const MainWrapper = styled.div`
   width: 1050px;
@@ -18,12 +19,13 @@ const MainWrapper = styled.div`
     }
 
     .AskQuestionButton {
-      background-color: #4393F7;
+      background-color: #0a95ff;
+      border: 1px solid #0a95ff;
+      box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4);
       width: 103px;
-      height: 38px;
+      height: 37px;
       color: white;
-      border: none;
-      font-weight: bolder;
+      font-weight: 400;
       border-radius: 3px; 
       cursor: pointer;
 
@@ -188,9 +190,11 @@ function QuestionDetail() {
           <div className="title">
             how to adds a field and fills in the specified parameters in kafka hisrtory event
           </div>
-          <button className="AskQuestionButton">
-            Ask Question
-          </button>
+          <Link to={'/ask'}>
+            <button className="AskQuestionButton">
+              Ask Question
+            </button>
+          </Link>
         </div>
         <div className="question-description">
           Asked 7 months ago Modified today Viewed 613 times
