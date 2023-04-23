@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import GithubLogo from "../../images/github.png";
-import FacebookLogo from "../../images/facebook.png";
+import GithubLogo from "../images/github.png";
+import FacebookLogo from "../images/facebook.png";
 // import { useState } from "react";
 import { Link } from "react-router-dom";
 

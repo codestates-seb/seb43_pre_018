@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import Nav from "./Nav";
-import RightSidebar from "./RightSidebar";
+import Nav from "../conponents/Nav";
+import RightSidebar from "../conponents/RightSidebar";
 
 const MainWrapper = styled.div`
   width: 1050px;

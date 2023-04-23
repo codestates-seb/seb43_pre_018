@@ -2,14 +2,14 @@ import './App.css';
 import { ThemeProvider } from "styled-components";
 import Header from "./conponents/Header/Header";
 import theme from "./conponents/style/theme";
-import Login from "./conponents/Header/Login";
-import Signup from "./conponents/Header/Signup";
-import PasswordPopup from "./conponents/Header/PasswordPopup";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import PasswordPopup from "./pages/PasswordPopup";
 import styled from 'styled-components'
 import Footer from './conponents/Footer';
-import AskQuestion from './page/AskQuestion';
+import AskQuestion from './pages/AskQuestion';
 import Main from './conponents/Main';
-import QuestionDetail from './conponents/QuestionDetail';
+import QuestionDetail from './pages/QuestionDetail';
 // 임시
 import {Routes, Route, useLocation} from "react-router-dom"
 
