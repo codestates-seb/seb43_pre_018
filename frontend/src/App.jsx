@@ -8,7 +8,7 @@ import PasswordPopup from "./pages/PasswordPopup";
 import styled from 'styled-components'
 import Footer from './conponents/Footer';
 import AskQuestion from './pages/AskQuestion';
-import Main from './conponents/Main';
+import Main from './pages/Main';
 import QuestionDetail from './pages/QuestionDetail';
 // 임시
 import {Routes, Route, useLocation} from "react-router-dom"

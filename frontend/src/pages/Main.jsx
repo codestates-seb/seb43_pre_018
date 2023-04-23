@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import data from "../data.json"
 import { Link } from 'react-router-dom';
-import Nav from "./Nav";
-import RightSidebar from "./RightSidebar";
+import Nav from "../conponents/Nav";
+import RightSidebar from "../conponents/RightSidebar";
 
 const BodyContainer = styled.div`
   margin: 33px auto 0px;
@@ -34,11 +34,12 @@ const MainHeaderUpWrapper = styled.div`
   justify-content: space-between;
 
   .AskQuestionButton {
-      background-color: rgb(10, 149, 255);
+      background-color: #0a95ff;
+      border: 1px solid #0a95ff;
+      box-shadow: inset 0px 1.5px 0px 0px rgba(255, 255, 255, 0.3);
       width: 103px;
-      height: 38px;
+      height: 37px;
       color: white;
-      border: none;
       font-weight: 400;
       border-radius: 3px; 
       cursor: pointer;
