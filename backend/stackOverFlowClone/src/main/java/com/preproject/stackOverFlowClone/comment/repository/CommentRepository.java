@@ -2,6 +2,8 @@ package com.preproject.stackOverFlowClone.comment.repository;
 
 import com.preproject.stackOverFlowClone.answer.entity.Answer;
 import com.preproject.stackOverFlowClone.comment.entity.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -27,5 +29,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Answer m WHERE m.id = :answerId")
     boolean existsByAnswerId(Long answerId);
+
+    @Query("SELECT c FROM Comment c WHERE c.answerId = :answerId")
+    Page<Comment> findAll(Long answerId, Pageable pageable);
 
 }

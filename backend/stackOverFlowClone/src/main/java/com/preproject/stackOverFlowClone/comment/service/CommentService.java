@@ -46,9 +46,9 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(CommentUpdateDto commentUpdateDto) {
+    public CommentResponseDto updateComment(Long commentId, CommentUpdateDto commentUpdateDto) {
 
-        Comment findComment = commentRepository.findById(commentUpdateDto.getCommentId())
+        Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
         findComment.update(commentUpdateDto);
@@ -77,9 +77,9 @@ public class CommentService {
 
     }
 
-    public MultiResponseDto<CommentResponseDto> findAllComment(int page, int size) {
+    public MultiResponseDto<CommentResponseDto> findAllComment(Long answerId, int page, int size) {
 
-        Page<Comment> commentPage = commentRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+        Page<Comment> commentPage = commentRepository.findAll(answerId, PageRequest.of(page, size, Sort.by("id").descending()));
         List<Comment> commentList = commentPage.getContent();
 
         List<CommentResponseDto> responseDtos = commentList.stream()
