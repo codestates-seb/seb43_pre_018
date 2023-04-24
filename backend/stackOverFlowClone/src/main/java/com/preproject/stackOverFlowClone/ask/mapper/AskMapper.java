@@ -72,7 +72,7 @@ public class AskMapper {
             Member member = findMember.get();
 
             AskDto.AskDetailAnswerResponseDto askDetailAnswerResponseDto = new AskDto.AskDetailAnswerResponseDto(
-                    answer.getId(), answer.getAskId(), answer.getMemberId(), member.getName(), answer.getContent(), answer.getCreated_at()
+                    answer.getId(), answer.getAskId(), answer.getMemberId(), member.getName(), answer.getContent(), answer.getCreatedAt()
             );
             askDetailAnswerResponseDtoList.add(askDetailAnswerResponseDto);
         }

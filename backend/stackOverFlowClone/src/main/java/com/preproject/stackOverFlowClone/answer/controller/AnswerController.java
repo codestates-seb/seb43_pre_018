@@ -5,6 +5,7 @@ import com.preproject.stackOverFlowClone.answer.dto.AnswerUpdateDTO;
 import com.preproject.stackOverFlowClone.answer.dto.AnswerSaveDTO;
 import com.preproject.stackOverFlowClone.answer.entity.Answer;
 import com.preproject.stackOverFlowClone.answer.mapper.AnswerMapper;
+import com.preproject.stackOverFlowClone.answer.mapper.CustomAnswerMapper;
 import com.preproject.stackOverFlowClone.answer.service.AnswerService;
 import com.preproject.stackOverFlowClone.dto.MultiResponseDto;
 import com.preproject.stackOverFlowClone.dto.SingleResponseDto;
@@ -27,9 +28,9 @@ import java.util.List;
 @Slf4j
 public class AnswerController {
     private final AnswerService answerService;
-    private final AnswerMapper mapper;
+    private final CustomAnswerMapper mapper;
 
-    public AnswerController(AnswerService answerService, AnswerMapper mapper) {
+    public AnswerController(AnswerService answerService, CustomAnswerMapper mapper) {
         this.answerService = answerService;
         this.mapper = mapper;
     }
