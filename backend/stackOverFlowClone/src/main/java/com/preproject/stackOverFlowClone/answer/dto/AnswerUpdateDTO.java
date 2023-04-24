@@ -8,13 +8,15 @@ import java.time.LocalDateTime;
 @Getter
 public class AnswerUpdateDTO {
     private Long id;
-    private Long memberId;
-    private Long askId;
 
     @NotBlank(message = "답변 내용은 공백이 아니어야 합니다.")
     private String content;
 
-    private LocalDateTime created_at = LocalDateTime.now();
+    private Long askId;
+
+    private Long memberId;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public void setId(long id) {
         this.id = id;

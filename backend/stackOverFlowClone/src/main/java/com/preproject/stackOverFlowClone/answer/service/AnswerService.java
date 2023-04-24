@@ -28,9 +28,7 @@ public class AnswerService {
         if (!existsByMemberId) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         else if (!existsByAskId) throw new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND);
         else {
-            Answer savedAnswer = answerRepository.save(answer);
-
-            return savedAnswer;
+            return answerRepository.save(answer);
         }
     }
 
