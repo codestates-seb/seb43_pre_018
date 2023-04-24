@@ -2,6 +2,8 @@ package com.preproject.stackOverFlowClone.answer.service;
 
 import com.preproject.stackOverFlowClone.answer.entity.Answer;
 import com.preproject.stackOverFlowClone.answer.repository.AnswerRepository;
+import com.preproject.stackOverFlowClone.comment.entity.Comment;
+import com.preproject.stackOverFlowClone.comment.repository.CommentRepository;
 import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
 import com.preproject.stackOverFlowClone.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -18,6 +21,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AnswerService {
     public final AnswerRepository answerRepository;
+    public final CommentRepository commentRepository;
 
     public Answer createAnswer(Answer answer){
         boolean existsByMemberId =
@@ -55,6 +59,10 @@ public class AnswerService {
 
     public void deleteAnswer(long id){
         Answer findAnswer = findVerifiedAnswer(id);
+
+        // Answer에 연관된 모든 Comment를 삭제
+        List<Comment> comments = commentRepository.findAllByAnswerId(id);
+        commentRepository.deleteAll(comments);
 
         answerRepository.delete(findAnswer);
     }
