@@ -240,11 +240,10 @@ export default function AskQuestion() {
 		setNextVaild(false);
 		inputRef.current[1].focus();
 	}
-
 	return (
 		<Container>
 			<HeadTextBox>
-				<h1>Ask a public question</h1>
+				<h1>{location.pathname.includes('/edit/')?'Edit':'Ask'} a public question</h1>
 			</HeadTextBox>
 			<InformationWindow>
 				<h2>Writing a good question</h2>

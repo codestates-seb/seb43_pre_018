@@ -26,7 +26,7 @@ const Top = styled.div`
 function App() {
   const location = useLocation()
   return (
-    <Top isAsk={location.pathname==='/ask'?true:false}>
+    <Top isAsk={location.pathname==='/ask'||location.pathname.includes('/edit')?true:false}>
       <Header />
       <ThemeProvider theme={theme}>
         <Routes>
@@ -36,6 +36,7 @@ function App() {
           <Route path="/passwordPopup" element={<PasswordPopup />} />
           <Route path='/ask' element={<AskQuestion />} />
           <Route path="/ask/:askId" element={<QuestionDetail />} />
+          <Route path='/edit/:askId' element={<AskQuestion />}/>
           <Route path='*' element={<Notfound/>} /> 
         </Routes>
       </ThemeProvider>
