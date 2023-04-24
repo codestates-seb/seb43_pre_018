@@ -32,12 +32,13 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<CommentResponseDto> updateComment(@RequestBody CommentUpdateDto commentUpdateDto) {
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<Void> updateComment(@PathVariable("commentId") Long commentId,
+                                                            @RequestBody CommentUpdateDto commentUpdateDto) {
 
-        CommentResponseDto response = commentService.updateComment(commentUpdateDto);
+        CommentResponseDto response = commentService.updateComment(commentId, commentUpdateDto);
 
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{commentId}")
@@ -45,7 +46,7 @@ public class CommentController {
 
         commentService.deleteComment(commentId);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{commentId}")
@@ -56,11 +57,12 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<MultiResponseDto<CommentResponseDto>> findAllComment(@Positive @RequestParam int page,
-                                                                               @Positive @RequestParam int size) {
+    @GetMapping("/{answer-id}/findAll")
+    public ResponseEntity<MultiResponseDto<CommentResponseDto>> findAllComment(     @PathVariable("answer-id") Long answerId,
+                                                                                    @Positive @RequestParam int page,
+                                                                                    @Positive @RequestParam int size ) {
 
-        MultiResponseDto<CommentResponseDto> response = commentService.findAllComment(page-1, size);
+        MultiResponseDto<CommentResponseDto> response = commentService.findAllComment(answerId, page-1, size);
 
         return ResponseEntity.ok(response);
     }
