@@ -50,9 +50,9 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponseSignUpDto updateMember(MemberUpdateDto memberUpdateDto) {
+    public MemberResponseSignUpDto updateMember(Long memberId, MemberUpdateDto memberUpdateDto) {
 
-        Member findMember = memberRepository.findById(memberUpdateDto.getMemberId())
+        Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         findMember.update(memberUpdateDto);

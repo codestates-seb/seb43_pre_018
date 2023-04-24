@@ -34,11 +34,12 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping
-    public ResponseEntity<MemberResponseSignUpDto> updateMember(@RequestBody MemberUpdateDto memberUpdateDto) {
-        MemberResponseSignUpDto response = memberService.updateMember(memberUpdateDto);
+    @PatchMapping("/member/{memberId}")
+    public ResponseEntity<Void> updateMember(@PathVariable("memberId") Long memberId,
+                                                                @RequestBody MemberUpdateDto memberUpdateDto) {
+        MemberResponseSignUpDto response = memberService.updateMember(memberId, memberUpdateDto);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/member/{memberId}")

@@ -38,7 +38,7 @@ public class CommentController {
 
         CommentResponseDto response = commentService.updateComment(commentId, commentUpdateDto);
 
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{commentId}")
