@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {HiOutlinePencilSquare} from "react-icons/hi2"
 import { IconContext } from "react-icons/lib";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
 	width: 1264px;
@@ -188,32 +189,39 @@ export default function AskQuestion() {
 	const inputRef = useRef([])
 	const [isBlock, setIsBlock] = useState(false);
 	// 임시
-	const [isLogin, setIsLogin] = useState(false);
+	const [isLogin, setIsLogin] = useState(true);
 	const navigate = useNavigate();
-	const location = useLocation();
-	
-	// useEffect(()=>{
-	// 	if(!isLogin) {
-	// 			window.alert('This service requires login.');
-	// 			navigate('/');
-	// 	}
-	// 	if(location.pathname==='/edit/:id') {
-	// 		const headers = {
-	// 			'Authorization' : `Bearer ${'accessToken'}`,
-  //     	'Content-Type' : 'Application/json',
-	// 			'Accept' : '*/*'
-	// 		}
-	// 		// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
-	// 	}
-	// 	inputRef.current[0].focus();
-	// 	setIsBlock(true);
-	// },[])
-
+	const params = useParams();
+	const url = process.env.REACT_APP_URL
+	// https://7a34-59-5-132-158.jp.ngrok.io/
 	useEffect(()=>{
+		// axios.get('/ask/1')
+		// .then(res=>{
+		// 	console.log(res.data)
+		// })
+		// .catch(err=>console.log(err.message))
+		if(!isLogin) {
+				window.alert('This service requires login.');
+				navigate('/');
+		}
+		if(params.askId) {
+			// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
+			axios.get(`${url}/ask/find/${params.askId}`)
+				.then(res=>{
+					const oldTitle = res.data.data.title;
+					const oldContent = res.data.data.content;
+					console.log(oldTitle, oldContent);
+					setTitle(oldTitle);
+					setContent(oldContent);
+					setContentVaild(true);
+				})
+				.catch(err=>{
+					console.error(err.message);
+				})
+			}
 		inputRef.current[0].focus();
 		setIsBlock(true);
 	},[])
-
 	// handler
 	const Titlehandle = e =>{
 		setTitle(e.target.value);
@@ -241,10 +249,36 @@ export default function AskQuestion() {
 		inputRef.current[1].focus();
 	}
 
+	const onSubmitHandle = () => {
+		// const headers = {
+		// 	'Authorization' : `Bearer ${'accessToken'}`,
+		// 	'Content-Type' : 'Application/json',
+		// }
+		// const headers = {
+		// 	'Content-Type' : 'Application/json',
+		// }
+		// if(params.askId) {
+		// 	axios.patch(`https://f10f-59-5-132-158.jp.ngrok.io/ask/${params.askId}`,
+		// 		{
+		// 		title: title,
+		// 		content: content,
+		// 		memberId: 1
+		// 		}
+		// 	)
+		// } else {
+		// 	axios.post(`https://f10f-59-5-132-158.jp.ngrok.io/ask/${params.askId}`,
+		// 		{
+		// 			title: title,
+		// 			content: content
+		// 		}
+		// 	)
+		// }
+	}
+
 	return (
 		<Container>
 			<HeadTextBox>
-				<h1>Ask a public question</h1>
+				<h1>{params.askId?'Edit':'Ask'} a public question</h1>
 			</HeadTextBox>
 			<InformationWindow>
 				<h2>Writing a good question</h2>
@@ -276,7 +310,7 @@ export default function AskQuestion() {
 							placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
 						/>
 						<NextBnt 
-							disabled={title.length>=5?false:true}
+							
 							block={nextVaild}
 							onClick={NextClick}
 						>
@@ -315,8 +349,9 @@ export default function AskQuestion() {
 							onFocus={ContentonFocusHandle}
 						/>
 						<NextBnt 
-							disabled={content.length>=15?true:false}
+							disabled={content.length<=15?true:false}
 							block={submitVaild}
+							onClick={onSubmitHandle}
 						>
 							Submit
 						</NextBnt>
