@@ -13,7 +13,8 @@ import java.util.List;
 public interface AnswerMapper {
 
     Answer answerSaveDtoToAnswer(AnswerSaveDTO requestBody);
-    Answer answerUpdateDtoToAnswer(AnswerUpdateDTO requestBody);
+    // 23.04.25 LJC - updateAnswer 수정
+    Answer answerUpdateDtoToAnswer(Long answerId, AnswerUpdateDTO requestBody);
     AnswerResponseDTO answerToAnswerResponseDto(Answer answer);
     List<AnswerResponseDTO> answersToAnswerResponseDtos(List<Answer> answers);
 }

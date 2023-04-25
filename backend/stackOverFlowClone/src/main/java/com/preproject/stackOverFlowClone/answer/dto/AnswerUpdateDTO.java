@@ -7,18 +7,19 @@ import java.time.LocalDateTime;
 
 @Getter
 public class AnswerUpdateDTO {
-    private Long id;
+    // 23.04.25 LJC - updateAnswer 수정
+//    private Long id;
 
     @NotBlank(message = "답변 내용은 공백이 아니어야 합니다.")
     private String content;
 
-    private Long askId;
+//    private Long askId;
 
-    private Long memberId;
+//    private Long memberId;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+//    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public void setId(long id) {
-        this.id = id;
-    }
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 }

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,11 +37,15 @@ public class AnswerService {
         }
     }
 
-    public Answer updateAnswer(Answer answer){
-        Answer findAnswer = findVerifiedAnswer(answer.getId());
+    public Answer updateAnswer(Answer answer, String content){
+        // 23.04.25 LJC - updateAnswer 수정
+//        Answer findAnswer = findVerifiedAnswer(answer.getId());
 
-        Optional.ofNullable(answer.getContent())
-                .ifPresent(content -> findAnswer.setContent(content));
+//        Optional.ofNullable(answer.getContent())
+//                .ifPresent(content -> findAnswer.setContent(content));
+
+        answer.setContent(content);
+        answer.setCreatedAt(LocalDateTime.now());
 
         return answerRepository.save(answer);
     }

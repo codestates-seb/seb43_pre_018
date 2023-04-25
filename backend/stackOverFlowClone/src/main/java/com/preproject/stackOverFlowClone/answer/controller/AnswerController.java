@@ -44,11 +44,13 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    // 23.04.25 LJC - updateAnswer 수정
     @PatchMapping("/{answer-id}")
     public ResponseEntity updateAnswer(@PathVariable("answer-id") @Positive long id,
                                        @Valid @RequestBody AnswerUpdateDTO answerUpdateDTO){
-        answerUpdateDTO.setId(id);
-        Answer answer = answerService.updateAnswer(mapper.answerUpdateDtoToAnswer(answerUpdateDTO));
+//        answerUpdateDTO.setId(id);
+//        Answer answer = answerService.updateAnswer(mapper.answerUpdateDtoToAnswer(answerUpdateDTO));
+        Answer answer = answerService.updateAnswer(mapper.answerUpdateDtoToAnswer(id, answerUpdateDTO), answerUpdateDTO.getContent());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
