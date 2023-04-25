@@ -17,9 +17,6 @@ const HeaderComponent = styled.header`
   display: flex;
   height: 100%;
   left: 0;
-  position: sticky;
-  /* width: 100vw; */
-  z-index: 999;
   justify-content: space-evenly;
   padding: 0 30px 0 20px;
 `;
