@@ -57,6 +57,9 @@ public class AskDto {
         private String memberName;
         private String content;
         private LocalDateTime createdAt;
+
+        //추가
+        private List<AskDetailCommentResponseDto> commentList;
     }
 
     @Getter
@@ -80,5 +83,19 @@ public class AskDto {
         private List<AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList;
         private List<AskDetailCommentResponseDto> askDetailCommentResponseDtoList;
     }
+
+    //상세페이지 답변 클래스 추가
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class AskDetailResponseTemplateDto {
+
+        private ResponseDto askResponseDto;
+
+        private List<AskDetailAnswerResponseDto> answerList;
+
+    }
+
+
 
 }

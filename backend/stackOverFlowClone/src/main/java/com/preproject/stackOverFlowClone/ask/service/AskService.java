@@ -9,6 +9,7 @@ import com.preproject.stackOverFlowClone.ask.repository.AskRepository;
 import com.preproject.stackOverFlowClone.comment.entity.Comment;
 import com.preproject.stackOverFlowClone.comment.repository.CommentRepository;
 import com.preproject.stackOverFlowClone.dto.MultiResponseDto;
+import com.preproject.stackOverFlowClone.dto.PageInfo;
 import com.preproject.stackOverFlowClone.dto.SingleResponseDto;
 import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
 import com.preproject.stackOverFlowClone.exception.ExceptionCode;
@@ -16,6 +17,7 @@ import com.preproject.stackOverFlowClone.member.entity.Member;
 import com.preproject.stackOverFlowClone.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +41,26 @@ public class AskService {
     }
 
     // 질문 상세 내용 조회
-    public AskDto.AskDetailResponseDto getAskDetail(Long askId) {
+//    public AskDto.AskDetailResponseDto getAskDetail(Long askId) {
+//        // 질문 존재 여부 확인
+//        Optional<Ask> findAsk = askRepository.findById(askId);
+//        findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
+//
+//        Ask ask = findAsk.get();
+//        AskDto.ResponseDto responseDto = mapper.askToResponseDto(ask);
+//
+//        List<Answer> answerList = answerRepository.findAnswersByAskId(askId);
+//        List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = mapper.answerListToAskDetailAnswerResponseDtoList(answerList);
+//
+//        List<Comment> commentList = commentRepository.findCommentsByAskId(askId);
+//        List<AskDto.AskDetailCommentResponseDto> askDetailCommentResponseDtoList = mapper.commentListToAskDetailCommentResponseDtoList(commentList);
+//
+//        AskDto.AskDetailResponseDto askDetailResponseDto = new AskDto.AskDetailResponseDto(responseDto, askDetailAnswerResponseDtoList, askDetailCommentResponseDtoList);
+//        return askDetailResponseDto;
+//    }
+
+    // 질문 상세 내용 조회 (최재영 버전 )
+    public MultiResponseDto getAskDetail(Long askId, int page, int size) {
         // 질문 존재 여부 확인
         Optional<Ask> findAsk = askRepository.findById(askId);
         findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
@@ -50,11 +71,18 @@ public class AskService {
         List<Answer> answerList = answerRepository.findAnswersByAskId(askId);
         List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = mapper.answerListToAskDetailAnswerResponseDtoList(answerList);
 
-        List<Comment> commentList = commentRepository.findCommentsByAskId(askId);
-        List<AskDto.AskDetailCommentResponseDto> askDetailCommentResponseDtoList = mapper.commentListToAskDetailCommentResponseDtoList(commentList);
+        int totalPage = (askDetailAnswerResponseDtoList.size() + 1) / size;
 
-        AskDto.AskDetailResponseDto askDetailResponseDto = new AskDto.AskDetailResponseDto(responseDto, askDetailAnswerResponseDtoList, askDetailCommentResponseDtoList);
-        return askDetailResponseDto;
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        PageInfo pageInfo = new PageInfo(page + 1, size, askDetailAnswerResponseDtoList.size() + 1, totalPage);
+
+        AskDto.AskDetailResponseTemplateDto templateDto = new AskDto.AskDetailResponseTemplateDto(responseDto, askDetailAnswerResponseDtoList);
+
+        List finalResponseDto = List.of(templateDto.getAskResponseDto(), templateDto.getAnswerList());
+        MultiResponseDto multiResponseDto = new MultiResponseDto<>(finalResponseDto, pageInfo);
+        return multiResponseDto;
     }
 
     // 질문 리스트 조회
@@ -68,12 +96,14 @@ public class AskService {
     }
 
     // 질문 검색
-    public SingleResponseDto getSearchAskList(String searchWord) {
-        List<Ask> askList = askRepository.findSearchAskList(searchWord);
+    public MultiResponseDto getSearchAskList(String searchWord, int page, int size) {
+        Page<Ask> askPage = askRepository.findSearchAskList(searchWord, PageRequest.of(page, size, Sort.by("id").descending()));
+        List<Ask> askList = askPage.getContent();
 
         List<AskDto.ResponseDto> responseDtoList = mapper.askListToReponseDtoList(askList);
-        SingleResponseDto singleResponseDto = new SingleResponseDto(responseDtoList);
-        return singleResponseDto;
+
+        MultiResponseDto multiResponseDto = new MultiResponseDto<>(responseDtoList, askPage);
+        return multiResponseDto;
     }
 
     // post -> save
@@ -115,5 +145,16 @@ public class AskService {
         askRepository.deleteById(askId);
         String uri = "http://localhost:8080/";
         return uri;
+    }
+
+    public SingleResponseDto getFindAsk(Long askId) {
+
+        Optional<Ask> findAsk = askRepository.findById(askId);
+        findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
+
+        Ask ask = findAsk.get();
+        AskDto.ResponseDto responseDto = mapper.askToResponseDto(ask);
+
+        return new SingleResponseDto(responseDto);
     }
 }
