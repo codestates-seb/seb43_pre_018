@@ -94,7 +94,7 @@ export default function Comments({data, i}) {
 							<span>{c.content}</span>
 							<span>-</span>
 							<Author>{c.memberName}</Author>
-							<span>{`answerd ${c.createdAt}`}</span>
+							<span>{c.createdAt}</span>
 						</CommentBox>
 				)
 			})}

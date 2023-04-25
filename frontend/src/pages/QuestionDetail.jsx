@@ -52,6 +52,7 @@ const MainWrapper = styled.div`
     display: flex;
     border-top: 1px solid #d7d9dc;
     padding-top: 20px;
+    color: #838B94;
 
     
     .Vote {
@@ -193,7 +194,6 @@ function QuestionDetail() {
   useEffect(()=>{
     axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
     .then(res=>{
-      console.log(res.data.data);
       setQuestion(res.data.data[0])
       setAnswers(res.data.data[1])
     })
@@ -229,6 +229,7 @@ function QuestionDetail() {
                 {question.content}
                 <div className="Author-text-line">
                   <div className="Author-text">
+                    asked
                     <div className="createdAt">
                       {question.createdAt}
                     </div>
@@ -257,8 +258,9 @@ function QuestionDetail() {
                     {e.content}
                     <div className="Author-text-line">
                       <div className="Author-text">
+                        answered
                         <div className="createdAt">
-                          {`asked ${e.createdAt}`}
+                          {e.createdAt}
                         </div>
                         <div className="author">
                           {e.memberName}
