@@ -5,20 +5,20 @@ const Container = styled.footer`
 	width: 100vw;
 	background-color: rgb(36, 38, 41);
 	padding-top: 10px;
+	letter-spacing: 0;
 `
 
 const Centering = styled.div`
 	height: 100%;
-	width: 88%;
+	width: 1216px;
 	display: flex;
-	justify-content: space-between;
-	padding: 18px 12px 12px 0px;
+	padding: 20px 10px 12px;
 	margin: 0 auto;
 `
 
 const Logo = styled.div`
 	flex: 0 0 54px;
-	margin: -12px 0 32px;
+	margin: -12px 10px 32px 0;
 `
 
 const ListContainer = styled.div`
@@ -29,12 +29,12 @@ const ListContainer = styled.div`
 const FooterList = styled.ul`
 	list-style: none;
 	flex: 1 0 auto;
-  padding: 0 12px 24px 0;
+  padding: 0 0 24px 0;
 `
 
 const ListTatle = styled.li`
-	font-weight: 800;
-	font-size: 0.5rem;
+	font-weight: 700;
+	font-size: 1rem;
 	color: rgb(187, 191, 195);
 	margin: 0 0 9px;
 `
@@ -43,32 +43,33 @@ const ListItem = styled.li`
 	font-weight: 600;
 	color: ${(props)=>props.isEmpty===true?'rgba(0, 0, 0, 0);':'rgb(141, 149, 155)'};
 	line-height: 2;
-  font-size: 0.4rem;
+  font-size: 1rem;
   list-style: none;
 `
 
 const CopyrightContainer = styled.div`
-	height: 220px;
-	color: rgb(141, 149, 155);
+	height: 280px;
+	color: hsl(210,8%,70%);
 	display: flex;
 	justify-content: space-between;
   flex-direction: column;
-  flex: 1 1 150px;
-  font-size: 11px;
+  flex: 0.8 1 150px;
 `
 
 const SNS = styled.div`
 	>span {
-		font-size: 2px;
+		font-size: 0.9rem;
+		letter-spacing: 0px;
 		margin-right: 10px;
 	}
 `
 
 const Copyright = styled.div`
-	margin: auto 0 24px;
+	margin: auto 0 20px;
 	list-style: none;
 	>li {
-		font-size: 2px;
+		letter-spacing: 0px;
+		font-size: 11px;
 	}
 `
 
@@ -77,7 +78,7 @@ export default function Footer() {
 		<Container>
 			<Centering>
 				<Logo>
-					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-stack-overflow" viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" fill="currentColor" className="bi bi-stack-overflow" viewBox="0 0 16 16">
 						<path d="M12.412 14.572V10.29h1.428V16H1v-5.71h1.428v4.282h9.984z" color="rgb(188, 187, 187)"/>
 						<path d="M3.857 13.145h7.137v-1.428H3.857v1.428zM10.254 0 9.108.852l4.26 5.727 1.146-.852L10.254 0zm-3.54 3.377 5.484 4.567.913-1.097L7.627 2.28l-.914 1.097zM4.922 6.55l6.47 3.013.603-1.294-6.47-3.013-.603 1.294zm-.925 3.344 6.985 1.469.294-1.398-6.985-1.468-.294 1.397z" color="rgb(229, 134, 61)"/>
 					</svg>	
@@ -89,7 +90,7 @@ export default function Footer() {
 						<ListItem>Help</ListItem>
 					</FooterList>
 					<FooterList>
-						<ListTatle>RODUCTS</ListTatle>
+						<ListTatle>PRODUCTS</ListTatle>
 						<ListItem>Teams</ListItem>
 						<ListItem>Advertising</ListItem>
 						<ListItem>Collectives</ListItem>

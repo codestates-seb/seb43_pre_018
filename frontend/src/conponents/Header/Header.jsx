@@ -1,38 +1,41 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
-// import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-// import LogoHomeButton from "./LogoHomeButton";
 
 // 전체 해더 컴포넌트 스타일 지정
 const HeaderComponent = styled.header`
-  align-items: center;
   box-sizing: border-box;
   background-color: rgb(248, 249, 249);
-  border-top: 3px solid ${({ theme }) => theme.orange500};
+  border-top: 3px solid ${(props) => props.theme.orange500};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.05),
     0 2px 8px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  z-index: 1;
+`;
+
+const HeaderContainer = styled.div`
+  width: 1230px;
+  margin: 0 auto;
   display: flex;
-  height: 100%;
-  left: 0;
-  justify-content: space-evenly;
-  padding: 0 30px 0 20px;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 // 왼쪽 상단 햄버거 아이콘 -> 리액트 아이콘 설치 후 import해옴
-const RxHamburgerMenuIcon = styled(RxHamburgerMenu)`
-  all: unset;
-  box-sizing: border-box;
-  height: 50px;
-  padding: 16px;
-  width: 50px;
-  cursor: pointer;
-  &:hover {
-    background-color: rgb(228, 230, 232);
-  }
-`;
+// const RxHamburgerMenuIcon = styled(RxHamburgerMenu)`
+//   all: unset;
+//   box-sizing: border-box;
+//   height: 50px;
+//   padding: 16px;
+//   width: 50px;
+//   cursor: pointer;
+//   &:hover {
+//     background-color: rgb(228, 230, 232);
+//   }
+// `;
 
 // stackOverflow 로고 홈버튼 스타일 지정
 const LogoHomeButton = styled.button`
@@ -72,15 +75,7 @@ const InformationContainer = styled.div`
   }
 `;
 
-const Information = styled.span`
-  /* font-size: 1.2rem;
-  color: grey;
-  text-decoration: underline;
-  cursor: pointer;
-  &:hover {
-    background-color: rgb(228, 230, 232);
-  } */
-`;
+const Information = styled.span``;
 
 // 검색바 스타일 지정
 const SearchBar = styled.div`
@@ -95,9 +90,6 @@ const SearchBar = styled.div`
   width: 50%;
   margin-left: 7px;
   margin-right: 3px;
-  /* & input:focus {
-    box-shadow: 0 0 3px 3px rgba(95, 180, 255, 0.4);
-  } */
 `;
 
 // 검색 입력창 스타일 지정
@@ -116,10 +108,6 @@ const ProfileContainer = styled.div`
   all: unset;
   justify-content: space-evenly;
   display: flex;
-  padding: 5px;
-  button:not(:last-child) {
-    margin-right: 5px;
-  }
 `;
 
 // 로그인 버튼 스타일 지정
@@ -173,58 +161,58 @@ function Header() {
   return (
     <>
       <HeaderComponent>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <RxHamburgerMenuIcon />
-          {/* <LogoHomeButton /> */}
-          <LogoHomeButton>
-            <Link to="/">
-              <img
-                src="http://stackoverflowpre.p-e.kr/static/media/Logo.788ad40bf6ce6ec2bbdff55b6afda940.svg"
-                alt="logo"
-              />
-            </Link>
-          </LogoHomeButton>
-        </div>
-        <InformationContainer>
-          <span className={Information}>About</span>
-          <span className={Information}>Products</span>
-          <span className={Information}>For Teams</span>
-        </InformationContainer>
-        <SearchBar
-          onFocus={() => {
-            handleInputFocus();
-            handleBarFocus();
-          }}
-          onBlur={() => {
-            handleInputBlur();
-            handleBarBlur();
-          }}
-          style={{
-            // boxShadow: inputFocused && "0 0 3px 3px hsl(206,90%,90%)",
-            boxShadow:
-              inputFocused &&
-              "0 0 3.2px 3.2px hsl(206, 65.21739130434787%, 90.98039215686275%)",
-            border: barFocused && " 1px solid hsl(206,90%,69.5%)",
-          }}
-        >
-          <svg
-            aria-hidden="true"
-            class="s-input-icon s-input-icon__search svg-icon iconSearch"
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
+        <HeaderContainer>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <LogoHomeButton>
+              <Link to="/">
+                <img
+                  src="http://stackoverflowpre.p-e.kr/static/media/Logo.788ad40bf6ce6ec2bbdff55b6afda940.svg"
+                  alt="logo"
+                />
+              </Link>
+            </LogoHomeButton>
+          </div>
+          <InformationContainer>
+            <span className={Information}>About</span>
+            <span className={Information}>Products</span>
+            <span className={Information}>For Teams</span>
+          </InformationContainer>
+          <SearchBar
+            onFocus={() => {
+              handleInputFocus();
+              handleBarFocus();
+            }}
+            onBlur={() => {
+              handleInputBlur();
+              handleBarBlur();
+            }}
+            style={{
+              // boxShadow: inputFocused && "0 0 3px 3px hsl(206,90%,90%)",
+              boxShadow:
+                inputFocused &&
+                "0 0 3.2px 3.2px hsl(206, 65.21739130434787%, 90.98039215686275%)",
+              border: barFocused && " 1px solid hsl(206,90%,69.5%)",
+            }}
           >
-            <path
-              d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0Z"
-              style={{ fill: "gray" }}
-            ></path>
-          </svg>
-          <SearchInput type="text" placeholder="Search..." />
-        </SearchBar>
-        <ProfileContainer>
-          <LoginButton to="/login">Log in</LoginButton>
-          <SignUpButton to="/signup">Sign up</SignUpButton>
-        </ProfileContainer>
+            <svg
+              aria-hidden="true"
+              class="s-input-icon s-input-icon__search svg-icon iconSearch"
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+            >
+              <path
+                d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0Z"
+                style={{ fill: "gray" }}
+              ></path>
+            </svg>
+            <SearchInput type="text" placeholder="Search..." />
+          </SearchBar>
+          <ProfileContainer>
+            <LoginButton to="/login">Log in</LoginButton>
+            <SignUpButton to="/signup">Sign up</SignUpButton>
+          </ProfileContainer>
+        </HeaderContainer>
       </HeaderComponent>
     </>
   );
