@@ -76,7 +76,10 @@ public class AskService {
         if (totalPage == 0) {
             totalPage = 1;
         }
-        PageInfo pageInfo = new PageInfo(page + 1, size, askDetailAnswerResponseDtoList.size() + 1, totalPage);
+
+        // 23.04.25 (화) LJC - Total Size를 Answer 갯수로 변경
+        //PageInfo pageInfo = new PageInfo(page + 1, size, askDetailAnswerResponseDtoList.size() + 1, totalPage);
+        PageInfo pageInfo = new PageInfo(page + 1, size, answerList.size(), totalPage);
 
         AskDto.AskDetailResponseTemplateDto templateDto = new AskDto.AskDetailResponseTemplateDto(responseDto, askDetailAnswerResponseDtoList);
 
