@@ -192,7 +192,7 @@ export default function AskQuestion() {
 	const [isLogin, setIsLogin] = useState(true);
 	const navigate = useNavigate();
 	const params = useParams();
-	
+	const url = process.env.REACT_APP_URL
 	// https://7a34-59-5-132-158.jp.ngrok.io/
 	useEffect(()=>{
 		// axios.get('/ask/1')
@@ -206,7 +206,7 @@ export default function AskQuestion() {
 		}
 		if(params.askId) {
 			// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
-			axios.get(`https://3a8f-183-101-242-153.jp.ngrok.io/ask/find/${params.askId}`)
+			axios.get(`${url}/ask/find/${params.askId}`)
 				.then(res=>{
 					const oldTitle = res.data.data.title;
 					const oldContent = res.data.data.content;

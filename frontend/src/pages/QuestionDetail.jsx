@@ -1,7 +1,10 @@
 import styled from "styled-components"
 import Nav from "../conponents/Nav";
 import RightSidebar from "../conponents/RightSidebar";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Comments from "../conponents/QuestionDetail/Comments";
 
 const MainWrapper = styled.div`
   width: 1050px;
@@ -48,7 +51,6 @@ const MainWrapper = styled.div`
     width: 100%;
     display: flex;
     border-top: 1px solid #d7d9dc;
-    margin-top: 20px;
     padding-top: 20px;
 
     
@@ -91,6 +93,7 @@ const MainWrapper = styled.div`
     .Content-text {
       margin-left: 20px;
       font-size: 15px;
+      width: 100%;
 
       .Author-text-line {
         display: flex;
@@ -118,6 +121,7 @@ const MainWrapper = styled.div`
         margin-top: 20px;
         cursor: pointer;
         user-select: none;
+        
 
         &:active {
           color: blue;
@@ -133,7 +137,6 @@ const MainWrapper = styled.div`
 
   .authorize-answer {
     border-top: 1px solid #d7d9dc;
-    margin-top: 20px;
 
     .authorize-header {
       margin-top: 20px;
@@ -182,13 +185,29 @@ const MainContent = styled.div`
 `
 
 function QuestionDetail() {
+  const [question, setQuestion] = useState({})
+  const [answers, setAnswers] = useState([])
+  const params = useParams();
+  const url = process.env.REACT_APP_URL;
+  useEffect(()=>{
+    axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
+    .then(res=>{
+      console.log(res.data.data);
+      setQuestion(res.data.data[0])
+      setAnswers(res.data.data[1])
+    })
+    .catch(e=>console.error(e.message));
+  },[])
+  console.log(question)
+  console.log(answers)
   return (
     <BodyContainer>
       <Nav/>
       <MainWrapper>
         <div className="header-title">
           <div className="title">
-            how to adds a field and fills in the specified parameters in kafka hisrtory event
+            {/* how to adds a field and fills in the specified parameters in kafka hisrtory event */}
+            {question.title}
           </div>
           <Link to={'/ask'}>
             <button className="AskQuestionButton">
@@ -197,7 +216,8 @@ function QuestionDetail() {
           </Link>
         </div>
         <div className="question-description">
-          Asked 7 months ago Modified today Viewed 613 times
+          {/* Asked 7 months ago Modified today Viewed 613 times */}
+          {question.createdAt}
         </div>
         <MainContent>
           <div className="left-content">
@@ -208,14 +228,17 @@ function QuestionDetail() {
                 <div className="down-button"></div>
               </div>
               <div className="Content-text">
-                I'm trying to create a column "Cust Rank" which will give me random numbers which should be based on other column "Creator". The only catch here is that the random Numbers should be same for the same Creators.
+                {/* I'm trying to create a column "Cust Rank" which will give me random numbers which should be based on other column "Creator". The only catch here is that the random Numbers should be same for the same Creators. */}
+                {question.content}
                 <div className="Author-text-line">
                   <div className="Author-text">
                     <div className="createdAt">
-                      asked Sep 8, 2022 at 10:23
+                      {/* asked Sep 8, 2022 at 10:23 */}
+                      {Date(question.createdAt).slice(0,-18)}
                     </div>
                     <div className="author">
-                      Nabeel Parkar
+                      {/* Nabeel Parkar */}
+                      {question.memberName}
                     </div>
                   </div>
                 </div>
@@ -227,29 +250,33 @@ function QuestionDetail() {
             <div className="number--answer">
               3 Answers
             </div>
-            <div className="text-box">
-              <div className="Vote">
-                <div className="up-button"></div>
-                0<br />
-                <div className="down-button"></div>
-              </div>
-              <div className="Content-text">
-                It seems like dedicated Nvidia GPU's are causing the problem. I have a 3060 laptop and I have the same issue and when I set it to guest it seems to work. My guess is that setting changes it from using the GPU to the CPU. I would recommend you try setting android studio to use integrated graphics instead of dedicated. Since I have a 8 core CPU compared to a 4 core CPU of yours, I'm guessing that's the reason I don't get as bad performance
-                <div className="Author-text-line">
-                  <div className="Author-text">
-                    <div className="createdAt">
-                      answered Dec 29, 2022 at 20:12
-                    </div>
-                    <div className="author">
-                      Ayman Isam
-                    </div>
+            {answers.map(e=>{
+               return ( 
+                <div className="text-box">
+                  <div className="Vote">
+                    <div className="up-button"></div>
+                    0<br />
+                    <div className="down-button"></div>
                   </div>
-                </div>
-                <div className="Comment-text">
-                  Add a comment
-                </div>
-              </div>
-            </div>
+                  <div className="Content-text">
+                    {/* It seems like dedicated Nvidia GPU's are causing the problem. I have a 3060 laptop and I have the same issue and when I set it to guest it seems to work. My guess is that setting changes it from using the GPU to the CPU. I would recommend you try setting android studio to use integrated graphics instead of dedicated. Since I have a 8 core CPU compared to a 4 core CPU of yours, I'm guessing that's the reason I don't get as bad performance */}
+                    {e.content}
+                    <div className="Author-text-line">
+                      <div className="Author-text">
+                        <div className="createdAt">
+                          {/* answered Dec 29, 2022 at 20:12 */}
+                          {Date(e.createdAt).slice(0,-18)}
+                        </div>
+                        <div className="author">
+                          {/* Ayman Isam */}
+                          {e.memberName}
+                        </div>
+                      </div>
+                    </div>
+                    <Comments data={e.commentList}/>
+                  </div>
+                </div>)
+            })}
             <div className="authorize-answer">
               <div className="authorize-header">
                 Your answer
