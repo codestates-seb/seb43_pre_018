@@ -132,7 +132,7 @@ public class AskService {
 
         askRepository.save(updateAsk);
 
-        String uri = "http://localhost:8080/ask/" + updateAsk.getId();
+        String uri = "http://localhost:8080/ask/" + updateAsk.getId() + "?page=1&size=10";
         return uri;
     }
 
