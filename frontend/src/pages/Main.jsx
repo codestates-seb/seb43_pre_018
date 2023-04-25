@@ -161,53 +161,12 @@ const ArticleDescription = styled.div`
 `;
 
 function Main() {
-  // useEffect(() => {
-  //   const root = document.getElementById('root');
-  //   const rootStyle = window.getComputedStyle(root);
-  //   const rootHeight = parseInt(rootStyle.height);
-  //   console.log('rootHeight: ' + rootHeight)
-  //   const itemHeight = 104;
-  //   // const numVisibleItems = Math.ceil((windowHeight - 180 - 324)/ itemHeight);
-  //   setTotalItems(items.length);
-  //   setVisibleItems(() => {
-  //     return items.slice(0, 5);
-  //   });
-
-  //   function handleScroll() {
-  //     const scrollTop = window.pageYOffset;
-  //     const root = document.getElementById('root');
-  //     const rootStyle = window.getComputedStyle(root);
-  //     const rootHeight = parseInt(rootStyle.height);
-  //     const element = document.getElementById("articleBox");
-  //     const styles = window.getComputedStyle(element);
-  //     const visibleHeight = parseInt(styles.height);
-  //     console.log('visibleHeight: ' + visibleHeight)
-  //     // const visibleHeight = $('#articleBox').height();
-  //     const bottom = scrollTop + visibleHeight;
-  //     console.log('bottom: ' + bottom)
-  //     const startIndex = visibleItems.length;
-  //     const endIndex = startIndex + 5;
-  //     console.log('rootHeight: ' + rootHeight)
-  //     if(bottom > rootHeight) {
-  //       console.log('over')
-  //       const preItems = visibleItems.slice();
-  //       console.log(preItems);
-  //       setVisibleItems(() => {
-  //         const loadedItems = items.slice(startIndex, endIndex);
-  //         return [...preItems, ...loadedItems];
-  //       });
-  //     }
-  //     console.log('visibleItems 길이: ' + visibleItems.length)
-  //   }
-
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, []);
-
   const [visibleItems, setVisibleItems] = useState([...items.slice(0, 5)]);
   const [fetching, setFetching] = useState(false);
 
-  // 추가 데이터 가져오기
+  const [sortItem, setSortItem] = useState(items);
+  
+
   const fetchMoreItems = async () => {
     setFetching(true);
 
@@ -225,7 +184,6 @@ function Main() {
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
     if (scrollTop + clientHeight >= scrollHeight && fetching === false) {
-      // 페이지 끝에 도달하면 추가 데이터를 받아온다
       fetchMoreItems();
     }
   }
