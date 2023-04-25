@@ -189,6 +189,7 @@ function QuestionDetail() {
   const [answers, setAnswers] = useState([])
   const params = useParams();
   const url = process.env.REACT_APP_URL;
+  
   useEffect(()=>{
     axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
     .then(res=>{
@@ -198,15 +199,13 @@ function QuestionDetail() {
     })
     .catch(e=>console.error(e.message));
   },[])
-  console.log(question)
-  console.log(answers)
+
   return (
     <BodyContainer>
       <Nav/>
       <MainWrapper>
         <div className="header-title">
           <div className="title">
-            {/* how to adds a field and fills in the specified parameters in kafka hisrtory event */}
             {question.title}
           </div>
           <Link to={'/ask'}>
@@ -216,7 +215,6 @@ function QuestionDetail() {
           </Link>
         </div>
         <div className="question-description">
-          {/* Asked 7 months ago Modified today Viewed 613 times */}
           {question.createdAt}
         </div>
         <MainContent>
@@ -228,16 +226,13 @@ function QuestionDetail() {
                 <div className="down-button"></div>
               </div>
               <div className="Content-text">
-                {/* I'm trying to create a column "Cust Rank" which will give me random numbers which should be based on other column "Creator". The only catch here is that the random Numbers should be same for the same Creators. */}
                 {question.content}
                 <div className="Author-text-line">
                   <div className="Author-text">
                     <div className="createdAt">
-                      {/* asked Sep 8, 2022 at 10:23 */}
-                      {Date(question.createdAt).slice(0,-18)}
+                      {question.createdAt}
                     </div>
                     <div className="author">
-                      {/* Nabeel Parkar */}
                       {question.memberName}
                     </div>
                   </div>
@@ -259,16 +254,13 @@ function QuestionDetail() {
                     <div className="down-button"></div>
                   </div>
                   <div className="Content-text">
-                    {/* It seems like dedicated Nvidia GPU's are causing the problem. I have a 3060 laptop and I have the same issue and when I set it to guest it seems to work. My guess is that setting changes it from using the GPU to the CPU. I would recommend you try setting android studio to use integrated graphics instead of dedicated. Since I have a 8 core CPU compared to a 4 core CPU of yours, I'm guessing that's the reason I don't get as bad performance */}
                     {e.content}
                     <div className="Author-text-line">
                       <div className="Author-text">
                         <div className="createdAt">
-                          {/* answered Dec 29, 2022 at 20:12 */}
-                          {Date(e.createdAt).slice(0,-18)}
+                          {`asked ${e.createdAt}`}
                         </div>
                         <div className="author">
-                          {/* Ayman Isam */}
                           {e.memberName}
                         </div>
                       </div>
