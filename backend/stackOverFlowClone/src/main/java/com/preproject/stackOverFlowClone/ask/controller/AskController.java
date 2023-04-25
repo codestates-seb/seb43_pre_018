@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.net.URI;
 
 @RestController
@@ -22,11 +23,21 @@ public class AskController {
     }
     
     // 질문 상세 내용 조회
+//    @GetMapping("/ask/{ask-id}")
+//    public ResponseEntity getAskDetail(@PathVariable("ask-id") Long askId) {
+//        AskDto.AskDetailResponseDto askDetailResponseDto = service.getAskDetail(askId);
+//        SingleResponseDto singleResponseDto = new SingleResponseDto(askDetailResponseDto);
+//        return new ResponseEntity(singleResponseDto, HttpStatus.OK);
+//    }
+
+    //최재영 버전
     @GetMapping("/ask/{ask-id}")
-    public ResponseEntity getAskDetail(@PathVariable("ask-id") Long askId) {
-        AskDto.AskDetailResponseDto askDetailResponseDto = service.getAskDetail(askId);
-        SingleResponseDto singleResponseDto = new SingleResponseDto(askDetailResponseDto);
-        return new ResponseEntity(singleResponseDto, HttpStatus.OK);
+    public ResponseEntity getAskDetail(@PathVariable("ask-id") Long askId,
+                                       @RequestParam int page,
+                                       @RequestParam int size) {
+        MultiResponseDto multiResponseDto = service.getAskDetail(askId, page-1, size);
+
+        return new ResponseEntity(multiResponseDto, HttpStatus.OK);
     }
 
     // 메인 페이지 기본 질문 목록 조회
@@ -46,9 +57,21 @@ public class AskController {
 
     // 질문 검색
     @GetMapping("/search")
-    public ResponseEntity getSearchAskList(@RequestParam String searchWord) {
-        SingleResponseDto singleResponseDto = service.getSearchAskList(searchWord);
-        return new ResponseEntity(singleResponseDto, HttpStatus.OK);
+    public ResponseEntity getSearchAskList(@RequestParam String searchWord,
+                                           @RequestParam int page,
+                                           @RequestParam int size) {
+        MultiResponseDto multiResponseDto = service.getSearchAskList(searchWord, page-1, size);
+        return new ResponseEntity(multiResponseDto, HttpStatus.OK);
+    }
+
+    // 특정 질문 조회
+    @GetMapping("/ask/find/{askId}")
+    public ResponseEntity getFindAsk(@PathVariable("askId") Long askId) {
+
+        SingleResponseDto singleResponseDto = service.getFindAsk(askId);
+
+        return ResponseEntity.ok(singleResponseDto);
+
     }
 
     // post -> save

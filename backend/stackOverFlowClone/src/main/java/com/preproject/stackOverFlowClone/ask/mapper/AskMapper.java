@@ -4,6 +4,7 @@ import com.preproject.stackOverFlowClone.answer.entity.Answer;
 import com.preproject.stackOverFlowClone.ask.dto.AskDto;
 import com.preproject.stackOverFlowClone.ask.entity.Ask;
 import com.preproject.stackOverFlowClone.comment.entity.Comment;
+import com.preproject.stackOverFlowClone.comment.repository.CommentRepository;
 import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
 import com.preproject.stackOverFlowClone.exception.ExceptionCode;
 import com.preproject.stackOverFlowClone.member.entity.Member;
@@ -17,9 +18,11 @@ import java.util.Optional;
 @Component
 public class AskMapper {
     MemberRepository memberRepository;
+    CommentRepository commentRepository;
 
-    public AskMapper(MemberRepository memberRepository) {
+    public AskMapper(MemberRepository memberRepository, CommentRepository commentRepository) {
         this.memberRepository = memberRepository;
+        this.commentRepository = commentRepository;
     }
 
     // post -> save
@@ -63,6 +66,23 @@ public class AskMapper {
     }
 
     // answerList -> AskDetailAnswerResponseDto
+//    public List<AskDto.AskDetailAnswerResponseDto> answerListToAskDetailAnswerResponseDtoList(List<Answer> answerList) {
+//        List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = new LinkedList<>();
+//        for (int i = 0; i < answerList.size(); i++) {
+//            Answer answer = answerList.get(i);
+//            Optional<Member> findMember = memberRepository.findById(answer.getMemberId());
+//            findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//            Member member = findMember.get();
+//
+//            AskDto.AskDetailAnswerResponseDto askDetailAnswerResponseDto = new AskDto.AskDetailAnswerResponseDto(
+//                    answer.getId(), answer.getAskId(), answer.getMemberId(), member.getName(), answer.getContent(), answer.getCreatedAt()
+//            );
+//            askDetailAnswerResponseDtoList.add(askDetailAnswerResponseDto);
+//        }
+//        return askDetailAnswerResponseDtoList;
+//    }
+
+    // 상세조회 매퍼 (최재영 버전)
     public List<AskDto.AskDetailAnswerResponseDto> answerListToAskDetailAnswerResponseDtoList(List<Answer> answerList) {
         List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = new LinkedList<>();
         for (int i = 0; i < answerList.size(); i++) {
@@ -71,8 +91,13 @@ public class AskMapper {
             findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
             Member member = findMember.get();
 
+            List<Comment> commentList = commentRepository.findCommentsByAnswerId(answer.getId());
+
+            List<AskDto.AskDetailCommentResponseDto> commentDtoList = commentListToAskDetailCommentResponseDtoList(commentList);
+
             AskDto.AskDetailAnswerResponseDto askDetailAnswerResponseDto = new AskDto.AskDetailAnswerResponseDto(
-                    answer.getId(), answer.getAskId(), answer.getMemberId(), member.getName(), answer.getContent(), answer.getCreatedAt()
+                    answer.getId(), answer.getAskId(), answer.getMemberId(), member.getName(), answer.getContent(), answer.getCreatedAt(),
+                    commentDtoList
             );
             askDetailAnswerResponseDtoList.add(askDetailAnswerResponseDto);
         }
