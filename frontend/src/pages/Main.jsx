@@ -164,7 +164,9 @@ function Main() {
   const [visibleItems, setVisibleItems] = useState([...items.slice(0, 5)]);
   const [fetching, setFetching] = useState(false);
 
-  // 추가 데이터 가져오기
+  const [sortItem, setSortItem] = useState(items);
+  
+
   const fetchMoreItems = async () => {
     setFetching(true);
 
