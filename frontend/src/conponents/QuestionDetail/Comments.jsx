@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -28,6 +29,9 @@ const InputForm = styled.div`
 	>span {
 		color: rgb(118, 118, 118);
 		margin-right: 10px;
+		&:hover {
+			cursor: pointer;	
+		}
 	}
 `
 
@@ -52,17 +56,36 @@ const AddForm = styled.div`
 	}
 `
 
-export default function Comments({data}) {
+export default function Comments({data, i}) {
 	const [newContent, setNewContent] = useState('')
-	const [add, setAdd] = useState(false)
+	const [add, setAdd] = useState(false);
+	const inputRef = useRef([]);
 
-	const onChangeHandle = e => setNewContent(e.target.value)
+	const onChangeHandle = e => {
+		setNewContent(e.target.value)
+	}
 
-	const onToggle = () => setAdd(true)
+	const onKeyUpHandle = e => {
+		if(e.key==='Enter'&&newContent!=='') {
+			// submit event
+			console.log('submit text')
+		} else if(e.key==='Escape') {
+			setNewContent('')
+			setAdd(false)
+		}
+	}
+
+	const onAddHandle = () => {
+		// inputRef.current.focus();
+		setAdd(true);
+	}
+
+	const cancel = () => {
+		setAdd(false);
+	}
 	return (
 		<Container>
 			{data.map((c,i)=>{
-				console.log(i, c.length)
 				return (
 						<CommentBox 
 							key={c.commentId} 
@@ -79,10 +102,12 @@ export default function Comments({data}) {
 				<Input
 					value={newContent}
 					onChange={onChangeHandle}
+					onKeyUp={onKeyUpHandle}
+					
 				/>
-				<span>X</span>
+				<span onClick={cancel}>X</span>
 			</InputForm>
-			:<AddForm onClick={onToggle}>Add a comment</AddForm>}
+			:<AddForm onClick={onAddHandle}>Add a comment</AddForm>}
 		</Container>
 	)
 }

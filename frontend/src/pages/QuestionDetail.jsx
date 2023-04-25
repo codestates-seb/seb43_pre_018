@@ -252,7 +252,7 @@ function QuestionDetail() {
             </div>
             {answers.map(e=>{
                return ( 
-                <div className="text-box">
+                <div className="text-box" key={e.answerId}>
                   <div className="Vote">
                     <div className="up-button"></div>
                     0<br />
