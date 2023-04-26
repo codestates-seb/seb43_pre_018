@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useRef } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -56,10 +58,11 @@ const AddForm = styled.div`
 	}
 `
 
-export default function Comments({data}) {
+export default function Comments({data, askId, answerId}) {
 	const [newContent, setNewContent] = useState('')
 	const [add, setAdd] = useState(false);
 	const inputRef = useRef([]);
+	const navigate = useNavigate()
 
 	const onChangeHandle = e => {
 		setNewContent(e.target.value)
@@ -67,8 +70,29 @@ export default function Comments({data}) {
 
 	const onKeyUpHandle = e => {
 		if(e.key==='Enter'&&newContent!=='') {
-			// submit event
-			console.log('submit text')
+				const url = process.env.REACT_APP_URL;
+				axios.defaults.withCredentials = true;
+				const token = localStorage.getItem('JWT')
+				const headers = {
+					headers : {
+						"Access-Control-Allow-Origin": "*",
+						"Content-Type": "application/json",
+						"Authorization": token
+					}
+				}
+				const data = JSON.stringify({
+					askId: askId,
+					answerId: answerId,
+					content: newContent
+				})
+				console.log(data)
+				axios.post(`${url}/comment`,data, headers)
+				.then(res=>{
+					console.log(res)
+					navigate(0)
+				})
+				.catch(e=>console.error(e.message))
+			
 		} else if(e.key==='Escape') {
 			setNewContent('')
 			setAdd(false)
@@ -83,6 +107,32 @@ export default function Comments({data}) {
 	const cancel = () => {
 		setAdd(false);
 	}
+
+	// const onSubmit = () => {
+	// 	if(newContent!=='') {
+	// 		const url = process.env.REACT_APP_URL;
+	// 		axios.defaults.withCredentials = true;
+	// 		const token = localStorage.getItem('JWT')
+  //     const headers = {
+  //       headers : {
+  //         "Access-Control-Allow-Origin": "*",
+  //         "Content-Type": "application/json",
+  //         "Authorization": token
+  //       }
+  //     }
+	// 		const data = JSON.stringify({
+	// 			content: newContent,
+	// 			askId: askId,
+	// 			answerId: answerId
+	// 		})
+  //     axios.post(`${url}/comment`,data, headers)
+  //     .then(res=>{
+  //       console.log(res)
+  //       navigate(0)
+  //     })
+  //     .catch(e=>console.error(e.message))
+	// 	}
+	// }
 	return (
 		<Container>
 			{data.map((c,i)=>{
