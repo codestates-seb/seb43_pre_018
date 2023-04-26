@@ -186,6 +186,30 @@ const MainContent = styled.div`
   }
 `
 
+
+
+
+const DateLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`
+
+const EditButton = styled.button`
+  background-color: ${props=>props.red?'rgb(235, 55, 39)':'#D3D3D3'};
+  border: 1px solid #A9A9A9;
+  padding: 7px;
+  margin-left: 7px;
+  color: white;
+  font-weight: 400;
+  border-radius: 3px; 
+  cursor: pointer;
+  &:hover {
+    background-color: #3172C6;
+  }
+`
+
 function QuestionDetail() {
   const [question, setQuestion] = useState({})
   const [answers, setAnswers] = useState([])
@@ -193,7 +217,7 @@ function QuestionDetail() {
   const params = useParams();
   const navigate = useNavigate()
   const url = process.env.REACT_APP_URL;
-  
+  const token = localStorage.getItem('JWT')
   
   useEffect(()=>{
     const headers = {
@@ -202,7 +226,7 @@ function QuestionDetail() {
         "Content-Type": "application/json",
       }
     }
-    axios.get(`${url}/ask/1?page=1&size=1`, headers)
+    axios.get(`${url}/ask/${params.askId}?page=1&size=1`, headers)
     .then(res=>{
       setQuestion(res.data.data[0])
       setAnswers(res.data.data[1])
@@ -210,58 +234,6 @@ function QuestionDetail() {
     .catch(e=>console.error(e.message));
   },[])
 
-  // let headers = {
-  //   "Content-Type": "application/json",
-  //   "Accept": "application/json",
-  //   "Access-Control-Allow-Origin": "*",
-  //   "Access-Control-Allow-Headers": "Content-Type",
-  //   "credentials": "include"
-  // }
-  // useEffect(()=>{
-  //   // axios.defaults.withCredentials = true;
-	// 	// let data = JSON.stringify({
-	// 	// 	email: 'MJS@gmail.com',
-	// 	// 	password : "a123456789!"
-	// 	// }) 
-    
-	// 	// axios.post(`${url}/auth/login`,
-  //   // data,{
-  //   //   headers: {
-  //   //     "Content-Type": "application/json",
-  //   //     "Accept": "application/json",
-  //   //     "Access-Control-Allow-Origin": "*",
-  //   //     "Access-Control-Allow-Headers": "Content-Type"
-  //   //   }
-  //   //   })
-  //   //   .then((res) => {
-  //   //     console.log(res);
-  //   //   })
-  //   //   .catch((e) => console.error(e.message));
-  //   axios.defaults.withCredentials = true;
-
-  //   const headers = {
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //       "Content-Type": "application/json",}
-  //   };
-
-  //   const data = JSON.stringify({
-  //     name : "MJS@gmail.com",
-  //     password : "a123456!"
-  //   })
-
-  //   axios
-  //     .post(`${url}/login`, data, headers)
-  //     .then((response) => {
-  //       return response.headers.get('Authorization');
-  //     })
-  //     .then(data=>{
-  //       console.log(data)
-  //       document.cookie = `token=${data}`;
-  //       console.log(document.cookie)
-  //     })
-  //     .catch((err) => console.error(err.message));
-	// }, [])
   const answerChange = e => {
     setNewAnswer(e.target.value);
   }
@@ -272,7 +244,6 @@ function QuestionDetail() {
         content: newAnswer,
         askId: id
       })
-      const token = localStorage.getItem('JWT')
       const headers = {
         headers : {
           "Access-Control-Allow-Origin": "*",
@@ -287,6 +258,20 @@ function QuestionDetail() {
       })
       .catch(e=>console.error(e.message))
     }
+  }
+  const username = localStorage.getItem('name');
+
+  const questionDelete = () => {
+    const headers = {
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        "Authorization": token
+      }
+    }
+    axios.delete(`${url}/ask/${params.askId}`, headers)
+    .then(console.log('delete ok'))
+    .catch(e=>console.error(e.message))
   }
 
   return (
@@ -303,9 +288,20 @@ function QuestionDetail() {
             </button>
           </Link>
         </div>
-        <div className="question-description">
-          {question.createdAt}
-        </div>
+        <DateLine>
+          <div className="question-description">
+            {question.createdAt}
+          </div>
+          {
+          question.memberName===username&&
+            <div>
+              <Link to={`/edit/${question.askId}`}>
+                <EditButton>Edit Question</EditButton>
+              </Link>
+              <EditButton red={true} onClick={questionDelete}>Delete Question</EditButton>
+            </div>
+          }
+        </DateLine>
         <MainContent>
           <div className="left-content">
             <div className="text-box" id="ask-box">
@@ -356,7 +352,7 @@ function QuestionDetail() {
                         </div>
                       </div>
                     </div>
-                    <Comments data={e.commentList}/>
+                    <Comments data={e.commentList} askId={question.askId} answerId={e.answerId}/>
                   </div>
                 </div>)
             })}
