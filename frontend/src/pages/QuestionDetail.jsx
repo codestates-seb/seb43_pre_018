@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Comments from "../conponents/QuestionDetail/Comments";
-
 const MainWrapper = styled.div`
   width: 1050px;
   margin-top: 25px;
@@ -52,7 +51,7 @@ const MainWrapper = styled.div`
     display: flex;
     border-top: 1px solid #d7d9dc;
     padding-top: 20px;
-    color: #838B94;
+    
 
     
     .Vote {
@@ -105,7 +104,7 @@ const MainWrapper = styled.div`
           margin-top: 20px;
           text-align: start;
           padding: 5px;
-
+          color: #838B94;
           .createdAt {
             color: #838B94;
           }
@@ -191,14 +190,69 @@ function QuestionDetail() {
   const params = useParams();
   const url = process.env.REACT_APP_URL;
   
+  // useEffect(()=>{
+  //   axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
+  //   .then(res=>{
+  //     setQuestion(res.data.data[0])
+  //     setAnswers(res.data.data[1])
+  //   })
+  //   .catch(e=>console.error(e.message));
+  // },[])
+
+  // let headers = {
+  //   "Content-Type": "application/json",
+  //   "Accept": "application/json",
+  //   "Access-Control-Allow-Origin": "*",
+  //   "Access-Control-Allow-Headers": "Content-Type",
+  //   "credentials": "include"
+  // }
   useEffect(()=>{
-    axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
-    .then(res=>{
-      setQuestion(res.data.data[0])
-      setAnswers(res.data.data[1])
+    // axios.defaults.withCredentials = true;
+		// let data = JSON.stringify({
+		// 	email: 'MJS@gmail.com',
+		// 	password : "a123456789!"
+		// }) 
+    
+		// axios.post(`${url}/auth/login`,
+    // data,{
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Headers": "Content-Type"
+    //   }
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((e) => console.error(e.message));
+    axios.defaults.withCredentials = true;
+
+    const headers = {
+        headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      }
+    };
+
+    const data = JSON.stringify({
+      name: '뉴뭉진스',
+      email: 'MDN@gmail.com',
+      password : "b123456789!"
     })
-    .catch(e=>console.error(e.message));
-  },[])
+
+    axios
+      .post(`${url}/signUp`, data, { headers })
+      .then((response) => {
+        console.log(response.data)
+        // const accessToken = response.headers.get("Authorization").split(" ")[1];
+        // sessionStorage.setItem("accesstoken", accessToken);
+        // sessionStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
+      })
+      .catch((err) => console.error(err.message));
+	}, [])
+    
+		
 
   return (
     <BodyContainer>

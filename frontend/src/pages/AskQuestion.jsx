@@ -254,24 +254,37 @@ export default function AskQuestion() {
 		// 	'Authorization' : `Bearer ${'accessToken'}`,
 		// 	'Content-Type' : 'Application/json',
 		// }
-		// const headers = {
-		// 	'Content-Type' : 'Application/json',
-		// }
+		const headers = {
+			headers: {
+				'Content-Type' : 'Application/json',
+				"Accept": "application/json",
+			}
+		}
 		// if(params.askId) {
-		// 	axios.patch(`https://f10f-59-5-132-158.jp.ngrok.io/ask/${params.askId}`,
-		// 		{
-		// 		title: title,
-		// 		content: content,
-		// 		memberId: 1
-		// 		}
-		// 	)
-		// } else {
-		// 	axios.post(`https://f10f-59-5-132-158.jp.ngrok.io/ask/${params.askId}`,
-		// 		{
-		// 			title: title,
-		// 			content: content
-		// 		}
-		// 	)
+			// axios.patch(`${process.env.REACT_APP_URL}/ask/${params.askId}`,
+			// 	JSON.stringify({
+			// 	'title': title,
+			// 	'content': content,
+			// 	'memberId': 1
+			// 	}),
+			// 	headers
+			// )
+		// } 
+		// else {
+			const data = JSON.stringify({
+				// "name" : "최재영",
+				// "email" : "MJS@gmail.com",
+				// "password" : "a123456789!"
+				title: title,
+				content: content,
+				memberId: 1
+			})
+			axios.patch(`https://5b6e-59-5-132-158.ngrok-free.app/ask/1`,
+			data,
+				headers
+			)
+			.then(res=>console.log(res))
+			.catch(e=>console.log(e.message))
 		// }
 	}
 

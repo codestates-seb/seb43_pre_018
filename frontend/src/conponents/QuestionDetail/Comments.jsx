@@ -56,7 +56,7 @@ const AddForm = styled.div`
 	}
 `
 
-export default function Comments({data, i}) {
+export default function Comments({data}) {
 	const [newContent, setNewContent] = useState('')
 	const [add, setAdd] = useState(false);
 	const inputRef = useRef([]);
