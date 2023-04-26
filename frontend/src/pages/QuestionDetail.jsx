@@ -1,10 +1,12 @@
 import styled from "styled-components"
 import Nav from "../conponents/Nav";
 import RightSidebar from "../conponents/RightSidebar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Comments from "../conponents/QuestionDetail/Comments";
+axios.defaults.withCredentials = true;
+
 const MainWrapper = styled.div`
   width: 1050px;
   margin-top: 25px;
@@ -187,17 +189,26 @@ const MainContent = styled.div`
 function QuestionDetail() {
   const [question, setQuestion] = useState({})
   const [answers, setAnswers] = useState([])
+  const [newAnswer, setNewAnswer] = useState('')
   const params = useParams();
+  const navigate = useNavigate()
   const url = process.env.REACT_APP_URL;
   
-  // useEffect(()=>{
-  //   axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
-  //   .then(res=>{
-  //     setQuestion(res.data.data[0])
-  //     setAnswers(res.data.data[1])
-  //   })
-  //   .catch(e=>console.error(e.message));
-  // },[])
+  
+  useEffect(()=>{
+    const headers = {
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      }
+    }
+    axios.get(`${url}/ask/1?page=1&size=1`, headers)
+    .then(res=>{
+      setQuestion(res.data.data[0])
+      setAnswers(res.data.data[1])
+    })
+    .catch(e=>console.error(e.message));
+  },[])
 
   // let headers = {
   //   "Content-Type": "application/json",
@@ -206,53 +217,77 @@ function QuestionDetail() {
   //   "Access-Control-Allow-Headers": "Content-Type",
   //   "credentials": "include"
   // }
-  useEffect(()=>{
-    // axios.defaults.withCredentials = true;
-		// let data = JSON.stringify({
-		// 	email: 'MJS@gmail.com',
-		// 	password : "a123456789!"
-		// }) 
+  // useEffect(()=>{
+  //   // axios.defaults.withCredentials = true;
+	// 	// let data = JSON.stringify({
+	// 	// 	email: 'MJS@gmail.com',
+	// 	// 	password : "a123456789!"
+	// 	// }) 
     
-		// axios.post(`${url}/auth/login`,
-    // data,{
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Accept": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Headers": "Content-Type"
-    //   }
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((e) => console.error(e.message));
-    axios.defaults.withCredentials = true;
+	// 	// axios.post(`${url}/auth/login`,
+  //   // data,{
+  //   //   headers: {
+  //   //     "Content-Type": "application/json",
+  //   //     "Accept": "application/json",
+  //   //     "Access-Control-Allow-Origin": "*",
+  //   //     "Access-Control-Allow-Headers": "Content-Type"
+  //   //   }
+  //   //   })
+  //   //   .then((res) => {
+  //   //     console.log(res);
+  //   //   })
+  //   //   .catch((e) => console.error(e.message));
+  //   axios.defaults.withCredentials = true;
 
-    const headers = {
-        headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      }
-    };
+  //   const headers = {
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",}
+  //   };
 
-    const data = JSON.stringify({
-      name: '뉴뭉진스',
-      email: 'MDN@gmail.com',
-      password : "b123456789!"
-    })
+  //   const data = JSON.stringify({
+  //     name : "MJS@gmail.com",
+  //     password : "a123456!"
+  //   })
 
-    axios
-      .post(`${url}/signUp`, data, { headers })
-      .then((response) => {
-        console.log(response.data)
-        // const accessToken = response.headers.get("Authorization").split(" ")[1];
-        // sessionStorage.setItem("accesstoken", accessToken);
-        // sessionStorage.setItem("userInfoStorage", JSON.stringify(response.data.data));
+  //   axios
+  //     .post(`${url}/login`, data, headers)
+  //     .then((response) => {
+  //       return response.headers.get('Authorization');
+  //     })
+  //     .then(data=>{
+  //       console.log(data)
+  //       document.cookie = `token=${data}`;
+  //       console.log(document.cookie)
+  //     })
+  //     .catch((err) => console.error(err.message));
+	// }, [])
+  const answerChange = e => {
+    setNewAnswer(e.target.value);
+  }
+  
+	const onSubmit = (id) => {
+    if(newAnswer!=='') {
+      const data = JSON.stringify({
+        content: newAnswer,
+        askId: id
       })
-      .catch((err) => console.error(err.message));
-	}, [])
-    
-		
+      const token = localStorage.getItem('JWT')
+      const headers = {
+        headers : {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          "Authorization": token
+        }
+      }
+      axios.post(`${url}/answer`,data, headers)
+      .then(res=>{
+        console.log(res)
+        navigate(0);
+      })
+      .catch(e=>console.error(e.message))
+    }
+  }
 
   return (
     <BodyContainer>
@@ -329,8 +364,8 @@ function QuestionDetail() {
               <div className="authorize-header">
                 Your answer
               </div>
-              <textarea className="authorize-box" />
-              <button className="authorize-button">
+              <textarea className="authorize-box" onChange={answerChange} value={newAnswer}/>
+              <button className="authorize-button" onClick={()=>onSubmit(question.askId)}>
                 Post your answer
               </button>
             </div>
