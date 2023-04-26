@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import GithubLogo from "../images/github.png";
 import FacebookLogo from "../images/facebook.png";
 import { Link } from "react-router-dom";
-// import { useState } from "react";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 // 로그인 페이지 전체 스타일 지정
 const Background = styled.div`
@@ -225,11 +226,12 @@ const SignupLabel = styled.label`
 const SignupInput = styled.input`
   width: 100%;
   height: 30px;
-  border: 1px solid #bababa;
+  border: 1px solid ${({passed})=>passed?'#bababa':'red'};
   border-radius: 4px;
+  padding-left: 10px;
   &:focus {
-    box-shadow: 0 0 3.2px 3.2px hsl(206, 65.21739130434787%, 90.98039215686275%);
-    border: 1px solid hsl(206, 90%, 69.5%);
+    box-shadow: 0 0 3.2px 3.2px ${({passed})=>passed?'hsl(206, 65.21739130434787%, 90.98039215686275%)':'rgb(248, 212, 211)'};
+    border: 1px solid ${({passed})=>passed?'hsl(206, 90%, 69.5%)':'red'};
     outline: 0;
   }
 `;
@@ -256,7 +258,84 @@ const SignupButton = styled.button`
     background-color: rgb(49, 114, 198);
   }
 `;
+
+const NonePassedMessage = styled.div`
+  color: ${({passed})=>passed?'#6A737C':'red'};
+  font-size: 12px;
+  margin-top: 8px;
+`
+
+const passedInitailState = {
+  displayName: true,
+  email: true,
+  password: true
+}
+
 export default function Signup() {
+  const [displayName, setDisplayName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [passed, setPassed] = useState(passedInitailState)
+
+  const onNameChange = e => {
+    const regex = /^[가-힣]+$/
+    setDisplayName(e.target.value);
+    if(!regex.test(displayName)) {
+      setPassed({...passed, displayName: false})
+    } else {
+      setPassed({...passed, displayName: true})
+    }
+  }
+  
+  const onEmailChange = e => {
+    const regex = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z]+\.[a-zA-Z.]+$/
+    setEmail(e.target.value);
+    if(!regex.test(email)) {
+      setPassed({...passed, email: false})
+    } else {
+      setPassed({...passed, email: true})
+    }
+  }
+  
+  const onPasswordChange = e => {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/
+    setPassword(e.target.value);
+    if(!regex.test(password)) {
+      setPassed({...passed, password: false})
+    } else {
+      setPassed({...passed, password: true})
+    }
+  }
+
+  const onSignUpHnadle = () => {
+    if(!passed.displayName||!passed.email||!passed.password) {
+      // window.alert('유효하지 않은 정보입니다. 다시 시도해 주세요')
+      if(!passed.displayName) setDisplayName('')
+      if(!passed.email) setEmail('')
+      if(!passed.password) setPassword('')
+    } else {
+      const url = process.env.REACT_APP_URL
+      const headers = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",}
+      };
+  
+      const data = JSON.stringify({
+        email: email,
+        name : displayName,
+        password : password
+      })
+      // axios
+      //   .post(`${url}/signUp`, data, headers)
+      //   .then((res) => {
+      //     console.log('회원가입 완료')
+
+      //   })
+      //   .catch((err) => console.error(err.message));
+    }
+  }
+
   return (
     <>
       <Background>
@@ -349,27 +428,23 @@ export default function Signup() {
           <FormContainer>
             <SignupInputContainer>
               <SignupLabel>Display name</SignupLabel>
-              <SignupInput />
+              <SignupInput onChange={onNameChange} passed={passed.displayName} value={displayName||''}/>
+              {!passed.displayName&&<NonePassedMessage passed={passed.displayName}>Display name은 한글만 입력해야 합니다.</NonePassedMessage>}
               <EmailContainer>
                 <SignupLabel>Email</SignupLabel>
-                <SignupInput />
+                <SignupInput onChange={onEmailChange} passed={passed.email} value={email||''}/>
+                {!passed.email&&<NonePassedMessage passed={passed.email}>올바르지 않은 email 형식입니다.</NonePassedMessage>}
               </EmailContainer>
               <PassWordContainer>
                 <SignupLabel>Password</SignupLabel>
-                <SignupInput />
-                <div
-                  style={{
-                    color: "#6A737C",
-                    fontSize: "12px",
-                    marginTop: "12px",
-                  }}
-                >
+                <SignupInput onChange={onPasswordChange} passed={passed.password} value={password||''}/>
+                <NonePassedMessage passed={passed.password}>
                   Passwords must contain at least eight characters, including at
                   least 1 letter and 1 number.
-                </div>
+                </NonePassedMessage>
               </PassWordContainer>
             </SignupInputContainer>
-            <SignupButton>Sign up</SignupButton>
+            <SignupButton onClick={onSignUpHnadle}>Sign up</SignupButton>
           </FormContainer>
           <div style={{ fontSize: "13px", marginTop: "15px" }}>
             Already have a account?{" "}
