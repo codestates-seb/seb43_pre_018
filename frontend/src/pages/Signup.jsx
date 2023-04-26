@@ -4,7 +4,7 @@ import GithubLogo from "../images/github.png";
 import FacebookLogo from "../images/facebook.png";
 import { Link } from "react-router-dom";
 import axios from "axios";
-axios.defaults.withCredentials = true;
+
 
 // 로그인 페이지 전체 스타일 지정
 const Background = styled.div`
@@ -278,33 +278,33 @@ export default function Signup() {
   const [passed, setPassed] = useState(passedInitailState)
 
   const onNameChange = e => {
-    const regex = /^[가-힣]+$/
-    setDisplayName(e.target.value);
+    const regex = /^[ㄱ-ㅎ|가-힣]+$/
     if(!regex.test(displayName)) {
       setPassed({...passed, displayName: false})
     } else {
       setPassed({...passed, displayName: true})
     }
+    setDisplayName(e.target.value);
   }
   
   const onEmailChange = e => {
     const regex = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z]+\.[a-zA-Z.]+$/
-    setEmail(e.target.value);
     if(!regex.test(email)) {
       setPassed({...passed, email: false})
     } else {
       setPassed({...passed, email: true})
     }
+    setEmail(e.target.value);
   }
   
   const onPasswordChange = e => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/
-    setPassword(e.target.value);
     if(!regex.test(password)) {
       setPassed({...passed, password: false})
     } else {
       setPassed({...passed, password: true})
     }
+    setPassword(e.target.value);
   }
 
   const onSignUpHnadle = () => {
@@ -314,25 +314,28 @@ export default function Signup() {
       if(!passed.email) setEmail('')
       if(!passed.password) setPassword('')
     } else {
-      const url = process.env.REACT_APP_URL
+      axios.defaults.withCredentials = true;
+      const url = process.env.REACT_APP_URL;
       const headers = {
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",}
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
       };
   
       const data = JSON.stringify({
-        email: email,
         name : displayName,
+        email: email,
         password : password
       })
-      // axios
-      //   .post(`${url}/signUp`, data, headers)
-      //   .then((res) => {
-      //     console.log('회원가입 완료')
 
-      //   })
-      //   .catch((err) => console.error(err.message));
+      axios
+      .post(`${url}/signUp`, data, headers)
+      .then((res) => {
+        console.log('회원가입 완료')
+      })
+      .catch((err) => console.error(err.message));
     }
   }
 
