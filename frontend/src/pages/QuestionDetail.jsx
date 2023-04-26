@@ -5,6 +5,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Comments from "../conponents/QuestionDetail/Comments";
+import {FiEdit3} from "react-icons/fi"
+import { IconContext } from "react-icons/lib";
+import {RiDeleteBin2Line} from "react-icons/ri"
+
 axios.defaults.withCredentials = true;
 
 const MainWrapper = styled.div`
@@ -94,12 +98,17 @@ const MainWrapper = styled.div`
 
     .Content-text {
       margin-left: 20px;
-      font-size: 15px;
       width: 100%;
 
+      >.content-main {
+        word-break: break-word;
+        font-size: 15px;
+      }
       .Author-text-line {
         display: flex;
         justify-content: end;
+        align-items: end;
+        width: 100%;
         .Author-text {
           width: 200px;
           background-color: #DCE9F6;
@@ -210,6 +219,14 @@ const EditButton = styled.button`
   }
 `
 
+const IconContainer = styled.div`
+  justify-content: end;
+  >.edit-icon {
+    margin-left: 5px;
+    justify-self: start;
+}
+`
+
 function QuestionDetail() {
   const [question, setQuestion] = useState({})
   const [answers, setAnswers] = useState([])
@@ -274,6 +291,21 @@ function QuestionDetail() {
     .catch(e=>console.error(e.message))
   }
 
+  const answerDelete = (answerId) => {
+    const headers = {
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        "Authorization": token
+      }
+    }
+    axios.delete(`${url}/answer/${answerId}`, headers)
+    .then(res=>{
+      console.log('ansewr delete ok')
+      navigate(0)
+    })
+    .catch(e=>console.error(e.message))
+  }
   return (
     <BodyContainer>
       <Nav/>
@@ -340,8 +372,21 @@ function QuestionDetail() {
                     <div className="down-button"></div>
                   </div>
                   <div className="Content-text">
-                    {e.content}
+                    <div className="content-main">
+                      {e.content}
+                    </div>
                     <div className="Author-text-line">
+                      {username===e.memberName&&
+                        <IconContainer>
+                          <IconContext.Provider value={{size: '1.5rem', color: 'darkgray'}}>
+                            <FiEdit3 className="edit-icon"/>
+                          </IconContext.Provider>
+                          <IconContext.Provider value={{size: '1.5rem', color: 'rgb(235, 55, 39)'}}>
+                            <RiDeleteBin2Line className="edit-icon" onClick={()=>answerDelete(e.answerId)}/>
+                          </IconContext.Provider>
+                          
+                        </IconContainer>
+                      }
                       <div className="Author-text">
                         answered
                         <div className="createdAt">
