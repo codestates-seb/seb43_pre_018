@@ -35,14 +35,23 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/member/{memberId}")
-    public ResponseEntity<Void> updateMember(@PathVariable("memberId") Long memberId,
-                                                                @RequestBody MemberUpdateDto memberUpdateDto) {
-        MemberResponseSignUpDto response = memberService.updateMember(memberId, memberUpdateDto);
+//    @PatchMapping("/member/{memberId}")
+//    public ResponseEntity<Void> updateMember(@PathVariable("memberId") Long memberId,
+//                                                                @RequestBody MemberUpdateDto memberUpdateDto) {
+//        MemberResponseSignUpDto response = memberService.updateMember(memberId, memberUpdateDto);
+//
+//        return ResponseEntity.ok().build();
+//    }
+
+    // 수정
+    @PatchMapping("/member")
+    public ResponseEntity<Void> updateMember(@RequestBody MemberUpdateDto memberUpdateDto) {
+        memberService.updateMember(memberUpdateDto);
 
         return ResponseEntity.ok().build();
     }
 
+    // 추후 관리자 넣었을때 쓸 수 있으므로 일단은 살려둔다.
     @GetMapping("/member/{memberId}")
     public ResponseEntity<MemberFindResponseDto> findMember(@PathVariable("memberId") Long memberId) {
 
@@ -51,11 +60,26 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    // 추가
+    @GetMapping("/member")
+    public ResponseEntity<MemberFindResponseDto> findMember() {
+        MemberFindResponseDto response = memberService.findMember();
+        return ResponseEntity.ok(response);
+    }
+
+    // 추후 관리자 넣었을때 쓸 수 있으므로 일단은 살려둔다.
     @DeleteMapping("/member/{memberId}")
     public ResponseEntity<Void> deleteMember(@PathVariable("memberId") Long memberId) {
 
         memberService.deleteMember(memberId);
 
+        return ResponseEntity.noContent().build();
+    }
+
+    // 추가
+    @DeleteMapping("/member")
+    public ResponseEntity<Void> deleteMember() {
+        memberService.deleteMember();
         return ResponseEntity.noContent().build();
     }
 }

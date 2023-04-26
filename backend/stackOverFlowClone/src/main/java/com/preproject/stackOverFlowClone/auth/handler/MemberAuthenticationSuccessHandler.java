@@ -40,7 +40,7 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
 
         try(PrintWriter writer = response.getWriter()){
             JsonObject json = new JsonObject();
-            json.addProperty("username", username);
+            json.addProperty("username", username);     // 멤버 이름 추가 해주는 부분
             writer.write(json.toString());
         }
     }

@@ -54,6 +54,13 @@ public class MemberService {
     }
 
     public URI saveMember(MemberSaveSignUpDto signUpDto) {
+        // 추가
+        if(verifyExistEmail(signUpDto.getEmail()) == true) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EMAIL_EXISTS);
+        }
+        if(verifyExistName(signUpDto.getName()) == true) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NAME_EXISTS);
+        }
 
         Member member = Member.of(signUpDto);
 
@@ -75,22 +82,33 @@ public class MemberService {
 
     }
 
+//    @Transactional
+//    public MemberResponseSignUpDto updateMember(Long memberId, MemberUpdateDto memberUpdateDto) {
+//
+//        Member findMember = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//
+//        findMember.update(memberUpdateDto);
+//
+//        return MemberResponseSignUpDto.of(findMember);
+//    }
+
     @Transactional
-    public MemberResponseSignUpDto updateMember(Long memberId, MemberUpdateDto memberUpdateDto) {
+    public MemberResponseSignUpDto updateMember(MemberUpdateDto memberUpdateDto) {
+        Member member = getLoginMember();
 
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        member.update(memberUpdateDto);
 
-        findMember.update(memberUpdateDto);
-
-        return MemberResponseSignUpDto.of(findMember);
-
+        return MemberResponseSignUpDto.of(member);
     }
 
     public void deleteMember(Long memberId) {
-
         memberRepository.deleteById(memberId);
+    }
 
+    // 추가
+    public void deleteMember() {
+        memberRepository.deleteById(getLoginMember().getId());
     }
 
     public MemberFindResponseDto findMember(Long memberId) {
@@ -99,7 +117,12 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return MemberFindResponseDto.of(findMember);
+    }
 
+    // 추가
+    public MemberFindResponseDto findMember() {
+        Member member = getLoginMember();
+        return MemberFindResponseDto.of(member);
     }
 
     // JWT
@@ -108,5 +131,23 @@ public class MemberService {
         findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         Member member = findMember.get();
         return member;
+    }
+
+    // 추가
+    public boolean verifyExistEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if(findMember.isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    // 추가
+    public boolean verifyExistName(String name) {
+        Optional<Member> findMember = memberRepository.findByName(name);
+        if(findMember.isPresent()) {
+            return true;
+        }
+        return false;
     }
 }

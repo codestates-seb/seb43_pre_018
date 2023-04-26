@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public class MemberUpdateDto {
 
-    private Long memberId;
+    // 수정
+//    private Long memberId;
 
     private String name;
 

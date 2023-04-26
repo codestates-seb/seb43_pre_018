@@ -144,6 +144,11 @@ public class AskService {
         Optional<Ask> findAsk = askRepository.findById(askId);
         findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
 
+        Member member = memberService.getLoginMember();
+        if(member.getId() != findAsk.get().getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+        }
+
         Ask updateAsk = findAsk.get();
         updateAsk.setTitle(updateDto.getTitle());
         updateAsk.setContent(updateDto.getContent());
@@ -156,6 +161,14 @@ public class AskService {
 
     // 질문 삭제
     public String deleteAsk(Long askId) {
+        Member member = memberService.getLoginMember();
+        Optional<Ask> findAsk = askRepository.findById(askId);
+        findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
+        Ask ask = findAsk.get();
+
+        if(member.getId() != ask.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+        }
 
         askRepository.deleteAnswersByAskId(askId);
         askRepository.deleteCommentsByAskId(askId);
