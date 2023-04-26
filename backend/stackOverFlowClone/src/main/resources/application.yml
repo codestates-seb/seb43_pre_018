@@ -13,3 +13,12 @@ logging:
       tutorial:
         spring-boot: DEBUG
   path: logs
+
+#JWT
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key: "c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK"
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420

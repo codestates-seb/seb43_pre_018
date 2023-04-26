@@ -42,7 +42,7 @@ public class Comment {
 
         comment.setContent(commentSaveDto.getContent());
 
-        comment.setMemberId(commentSaveDto.getMemberId());
+//        comment.setMemberId(commentSaveDto.getMemberId());
 
         comment.setAnswerId(commentSaveDto.getAnswerId());
 

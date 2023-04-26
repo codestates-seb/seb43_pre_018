@@ -38,7 +38,7 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity saveAnswer(@Valid @RequestBody AnswerSaveDTO answerSaveDTO){
         Answer answer = mapper.answerSaveDtoToAnswer(answerSaveDTO);
-        Answer createdAnswer = answerService.createAnswer(answer);
+        Answer createdAnswer = answerService.saveAnswer(answer);
         AnswerResponseDTO answerResponseDTO = mapper.answerToAnswerResponseDto(createdAnswer);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

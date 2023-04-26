@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class CommentSaveDto {
 
-    private Long memberId;
+//    private Long memberId;
 
     private Long askId;
 

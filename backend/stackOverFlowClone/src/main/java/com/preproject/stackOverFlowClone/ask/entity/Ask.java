@@ -29,9 +29,14 @@ public class Ask {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Ask(String title, String content, Long memberId) {
+//    public Ask(String title, String content, Long memberId) {
+//        this.title = title;
+//        this.content = content;
+//        this.memberId = memberId;
+//    }
+
+    public Ask(String title, String content) {
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
     }
 }

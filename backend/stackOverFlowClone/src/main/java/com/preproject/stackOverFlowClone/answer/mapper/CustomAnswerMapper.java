@@ -37,7 +37,6 @@ public class CustomAnswerMapper implements AnswerMapper{
         Answer answer = new Answer();
         answer.setContent(requestBody.getContent());
         answer.setAskId(requestBody.getAskId());
-        answer.setMemberId(requestBody.getMemberId());
         answer.setCreatedAt(requestBody.getCreatedAt());
 
         return answer;

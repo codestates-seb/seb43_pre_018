@@ -30,8 +30,10 @@ public class AskMapper {
     public Ask saveDtoToAsk(AskDto.SaveDto saveDto) {
         Ask ask = new Ask(
                 saveDto.getTitle(),
-                saveDto.getContent(),
-                saveDto.getMemberId()
+                saveDto.getContent()
+                // JWT
+//                saveDto.getContent(),
+//                saveDto.getMemberId()
         );
 
         return ask;
