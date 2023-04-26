@@ -14,8 +14,9 @@ public class AskDto {
     @Setter
     @AllArgsConstructor
     public static class SaveDto {
-        @NotBlank
-        private Long memberId;
+        // JWT
+//        @NotBlank
+//        private Long memberId;
         @NotBlank
         private String title;
         @NotBlank
@@ -27,8 +28,9 @@ public class AskDto {
     @Setter
     @AllArgsConstructor
     public static class UpdateDto {
-        @NotBlank
-        private Long memberId;
+        // JWT
+//        @NotBlank
+//        private Long memberId;
         @NotBlank
         private String title;
         @NotBlank

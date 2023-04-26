@@ -8,11 +8,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+// JWT
+//@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +30,18 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    // JWT
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
+    public Member(Long id, String name, String email, String password, List<String> roles) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public static Member of(MemberSaveSignUpDto signUpDto) {
 

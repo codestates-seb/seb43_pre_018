@@ -15,6 +15,7 @@ import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
 import com.preproject.stackOverFlowClone.exception.ExceptionCode;
 import com.preproject.stackOverFlowClone.member.entity.Member;
 import com.preproject.stackOverFlowClone.member.repository.MemberRepository;
+import com.preproject.stackOverFlowClone.member.service.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,14 +32,25 @@ public class AskService {
     AskRepository askRepository;
     AnswerRepository answerRepository;
     CommentRepository commentRepository;
+    // JWT
+    MemberService memberService;
 
-    public AskService(AskMapper mapper, MemberRepository memberRepository, AskRepository askRepository, AnswerRepository answerRepository, CommentRepository commentRepository) {
+    public AskService(AskMapper mapper, MemberRepository memberRepository, AskRepository askRepository, AnswerRepository answerRepository, CommentRepository commentRepository, MemberService memberService) {
         this.mapper = mapper;
         this.memberRepository = memberRepository;
         this.askRepository = askRepository;
         this.answerRepository = answerRepository;
         this.commentRepository = commentRepository;
+        this.memberService = memberService;
     }
+
+    //    public AskService(AskMapper mapper, MemberRepository memberRepository, AskRepository askRepository, AnswerRepository answerRepository, CommentRepository commentRepository) {
+//        this.mapper = mapper;
+//        this.memberRepository = memberRepository;
+//        this.askRepository = askRepository;
+//        this.answerRepository = answerRepository;
+//        this.commentRepository = commentRepository;
+//    }
 
     // 질문 상세 내용 조회
 //    public AskDto.AskDetailResponseDto getAskDetail(Long askId) {
@@ -113,10 +125,13 @@ public class AskService {
     // 질문 등록
     public String saveAsk(AskDto.SaveDto saveDto) {
         // 멤버 존재 여부 확인
-        Optional<Member> findMember = memberRepository.findById(saveDto.getMemberId());
-        findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//        Optional<Member> findMember = memberRepository.findById(saveDto.getMemberId());
+//        findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
+        // JWT
+        Member member = memberService.getLoginMember();
         Ask ask = mapper.saveDtoToAsk(saveDto);
+        ask.setMemberId(member.getId());
         ask = askRepository.save(ask);
         String uri = "http://localhost:8080/ask/" + ask.getId();
         return uri;

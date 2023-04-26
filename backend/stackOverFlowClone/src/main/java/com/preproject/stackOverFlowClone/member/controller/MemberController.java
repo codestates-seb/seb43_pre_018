@@ -18,13 +18,14 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody MemberSaveLoginDto loginDto) {
-
-        URI location = memberService.loginMember(loginDto);
-
-        return ResponseEntity.ok().location(location).build();
-    }
+    // JWT
+//    @PostMapping("/login")
+//    public ResponseEntity<Void> login(@RequestBody MemberSaveLoginDto loginDto) {
+//
+//        URI location = memberService.loginMember(loginDto);
+//
+//        return ResponseEntity.ok().location(location).build();
+//    }
 
     @PostMapping("/signUp")
     public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSaveSignUpDto signUpDto) {
