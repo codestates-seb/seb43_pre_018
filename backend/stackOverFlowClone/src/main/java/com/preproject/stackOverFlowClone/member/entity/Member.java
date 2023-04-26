@@ -44,13 +44,10 @@ public class Member {
     }
 
     public static Member of(MemberSaveSignUpDto signUpDto) {
-
         Member member = new Member();
 
         member.setName(signUpDto.getName());
-
         member.setEmail(signUpDto.getEmail());
-
         member.setPassword(signUpDto.getPassword());
 
         return member;

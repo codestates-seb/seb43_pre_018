@@ -10,21 +10,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberResponseSignUpDto {
-
     private String name;
-
     private String email;
-
     private String password;
 
     public static MemberResponseSignUpDto of(Member member) {
-
         MemberResponseSignUpDto dto = new MemberResponseSignUpDto();
 
         dto.setEmail(member.getEmail());
-
         dto.setName(member.getName());
-
         dto.setPassword(member.getPassword());
 
         return dto;

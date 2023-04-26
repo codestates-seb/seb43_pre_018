@@ -6,7 +6,6 @@ import com.preproject.stackOverFlowClone.ask.dto.AskDto;
 import com.preproject.stackOverFlowClone.ask.entity.Ask;
 import com.preproject.stackOverFlowClone.ask.mapper.AskMapper;
 import com.preproject.stackOverFlowClone.ask.repository.AskRepository;
-import com.preproject.stackOverFlowClone.comment.entity.Comment;
 import com.preproject.stackOverFlowClone.comment.repository.CommentRepository;
 import com.preproject.stackOverFlowClone.dto.MultiResponseDto;
 import com.preproject.stackOverFlowClone.dto.PageInfo;
@@ -18,7 +17,6 @@ import com.preproject.stackOverFlowClone.member.repository.MemberRepository;
 import com.preproject.stackOverFlowClone.member.service.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -44,34 +42,7 @@ public class AskService {
         this.memberService = memberService;
     }
 
-    //    public AskService(AskMapper mapper, MemberRepository memberRepository, AskRepository askRepository, AnswerRepository answerRepository, CommentRepository commentRepository) {
-//        this.mapper = mapper;
-//        this.memberRepository = memberRepository;
-//        this.askRepository = askRepository;
-//        this.answerRepository = answerRepository;
-//        this.commentRepository = commentRepository;
-//    }
-
     // 질문 상세 내용 조회
-//    public AskDto.AskDetailResponseDto getAskDetail(Long askId) {
-//        // 질문 존재 여부 확인
-//        Optional<Ask> findAsk = askRepository.findById(askId);
-//        findAsk.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
-//
-//        Ask ask = findAsk.get();
-//        AskDto.ResponseDto responseDto = mapper.askToResponseDto(ask);
-//
-//        List<Answer> answerList = answerRepository.findAnswersByAskId(askId);
-//        List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = mapper.answerListToAskDetailAnswerResponseDtoList(answerList);
-//
-//        List<Comment> commentList = commentRepository.findCommentsByAskId(askId);
-//        List<AskDto.AskDetailCommentResponseDto> askDetailCommentResponseDtoList = mapper.commentListToAskDetailCommentResponseDtoList(commentList);
-//
-//        AskDto.AskDetailResponseDto askDetailResponseDto = new AskDto.AskDetailResponseDto(responseDto, askDetailAnswerResponseDtoList, askDetailCommentResponseDtoList);
-//        return askDetailResponseDto;
-//    }
-
-    // 질문 상세 내용 조회 (최재영 버전 )
     public MultiResponseDto getAskDetail(Long askId, int page, int size) {
         // 질문 존재 여부 확인
         Optional<Ask> findAsk = askRepository.findById(askId);
@@ -90,7 +61,6 @@ public class AskService {
         }
 
         // 23.04.25 (화) LJC - Total Size를 Answer 갯수로 변경
-        //PageInfo pageInfo = new PageInfo(page + 1, size, askDetailAnswerResponseDtoList.size() + 1, totalPage);
         PageInfo pageInfo = new PageInfo(page + 1, size, answerList.size(), totalPage);
 
         AskDto.AskDetailResponseTemplateDto templateDto = new AskDto.AskDetailResponseTemplateDto(responseDto, askDetailAnswerResponseDtoList);
@@ -124,10 +94,6 @@ public class AskService {
     // post -> save
     // 질문 등록
     public String saveAsk(AskDto.SaveDto saveDto) {
-        // 멤버 존재 여부 확인
-//        Optional<Member> findMember = memberRepository.findById(saveDto.getMemberId());
-//        findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
         // JWT
         Member member = memberService.getLoginMember();
         Ask ask = mapper.saveDtoToAsk(saveDto);

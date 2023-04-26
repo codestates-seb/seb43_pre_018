@@ -10,15 +10,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentResponseDto {
-
     private Long commentId;
-
     private String content;
-
     private String memberName;
 
     public static CommentResponseDto of(String memberName, Comment comment) {
-
         CommentResponseDto dto = new CommentResponseDto();
 
         dto.setCommentId(comment.getId());

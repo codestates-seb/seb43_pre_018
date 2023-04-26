@@ -5,7 +5,6 @@ import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
 import com.preproject.stackOverFlowClone.exception.ExceptionCode;
 import com.preproject.stackOverFlowClone.member.entity.Member;
 import com.preproject.stackOverFlowClone.member.repository.MemberRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -33,7 +32,6 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         Member member = findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         String username = member.getName();
 
-        // 기존에 try 안에 있던 set하는 부분 위로 뺌
         response.setStatus(HttpStatus.ACCEPTED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());

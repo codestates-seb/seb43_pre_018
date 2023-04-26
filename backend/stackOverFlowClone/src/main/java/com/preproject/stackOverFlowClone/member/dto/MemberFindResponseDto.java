@@ -10,9 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberFindResponseDto {
-
     private String name;
-
     private String email;
 
     public static MemberFindResponseDto of(Member member) {
@@ -23,5 +21,4 @@ public class MemberFindResponseDto {
 
         return dto;
     }
-
 }

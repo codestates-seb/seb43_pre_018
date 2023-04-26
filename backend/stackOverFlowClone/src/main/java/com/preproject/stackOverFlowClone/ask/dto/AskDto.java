@@ -9,14 +9,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class AskDto {
+
     // post -> save
     @Getter
     @Setter
     @AllArgsConstructor
     public static class SaveDto {
-        // JWT
-//        @NotBlank
-//        private Long memberId;
+
         @NotBlank
         private String title;
         @NotBlank
@@ -28,9 +27,7 @@ public class AskDto {
     @Setter
     @AllArgsConstructor
     public static class UpdateDto {
-        // JWT
-//        @NotBlank
-//        private Long memberId;
+
         @NotBlank
         private String title;
         @NotBlank
@@ -59,8 +56,6 @@ public class AskDto {
         private String memberName;
         private String content;
         private LocalDateTime createdAt;
-
-        //추가
         private List<AskDetailCommentResponseDto> commentList;
     }
 
@@ -91,13 +86,7 @@ public class AskDto {
     @Setter
     @AllArgsConstructor
     public static class AskDetailResponseTemplateDto {
-
         private ResponseDto askResponseDto;
-
         private List<AskDetailAnswerResponseDto> answerList;
-
     }
-
-
-
 }

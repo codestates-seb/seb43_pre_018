@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.net.URI;
 
 @RestController
@@ -21,16 +20,8 @@ public class AskController {
         this.service = service;
         this.uriCreator = uriCreator;
     }
-    
-    // 질문 상세 내용 조회
-//    @GetMapping("/ask/{ask-id}")
-//    public ResponseEntity getAskDetail(@PathVariable("ask-id") Long askId) {
-//        AskDto.AskDetailResponseDto askDetailResponseDto = service.getAskDetail(askId);
-//        SingleResponseDto singleResponseDto = new SingleResponseDto(askDetailResponseDto);
-//        return new ResponseEntity(singleResponseDto, HttpStatus.OK);
-//    }
 
-    //최재영 버전
+    // 특정 질문에 대한 상세 페이지 조회
     @GetMapping("/ask/{ask-id}")
     public ResponseEntity getAskDetail(@PathVariable("ask-id") Long askId,
                                        @RequestParam int page,
@@ -74,7 +65,6 @@ public class AskController {
 
     }
 
-    // post -> save
     // 질문 등록
     @PostMapping("/ask")
     public ResponseEntity saveAsk(@RequestBody AskDto.SaveDto saveDto) {
@@ -83,7 +73,6 @@ public class AskController {
         return ResponseEntity.created(location).build();
     }
 
-    // patch -> update
     // 질문 수정
     @PatchMapping("/ask/{ask-id}")
     public ResponseEntity updateAsk(@PathVariable("ask-id") Long askId,

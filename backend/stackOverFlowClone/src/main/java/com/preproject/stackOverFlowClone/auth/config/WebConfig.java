@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    // 철수새끼 오기만 해봐라!
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
