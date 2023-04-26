@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
-import javax.websocket.server.PathParam;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/comment")
@@ -34,8 +32,7 @@ public class CommentController {
 
     @PatchMapping("/{commentId}")
     public ResponseEntity<Void> updateComment(@PathVariable("commentId") Long commentId,
-                                                            @RequestBody CommentUpdateDto commentUpdateDto) {
-
+                                              @RequestBody CommentUpdateDto commentUpdateDto) {
         CommentResponseDto response = commentService.updateComment(commentId, commentUpdateDto);
 
         return ResponseEntity.ok().build();
@@ -43,7 +40,6 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable("commentId") Long commentId) {
-
         commentService.deleteComment(commentId);
 
         return ResponseEntity.ok().build();
@@ -51,17 +47,15 @@ public class CommentController {
 
     @GetMapping("/{commentId}")
     public ResponseEntity<SingleResponseDto<CommentResponseDto>> findComment(@PathVariable("commentId") Long commentId) {
-
         SingleResponseDto<CommentResponseDto> response = commentService.findComment(commentId);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{answer-id}/findAll")
-    public ResponseEntity<MultiResponseDto<CommentResponseDto>> findAllComment(     @PathVariable("answer-id") Long answerId,
-                                                                                    @Positive @RequestParam int page,
-                                                                                    @Positive @RequestParam int size ) {
-
+    public ResponseEntity<MultiResponseDto<CommentResponseDto>> findAllComment(@PathVariable("answer-id") Long answerId,
+                                                                               @Positive @RequestParam int page,
+                                                                               @Positive @RequestParam int size ) {
         MultiResponseDto<CommentResponseDto> response = commentService.findAllComment(answerId, page-1, size);
 
         return ResponseEntity.ok(response);

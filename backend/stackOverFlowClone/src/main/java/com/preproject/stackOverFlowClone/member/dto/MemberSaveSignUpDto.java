@@ -20,5 +20,4 @@ public class MemberSaveSignUpDto {
     @NotBlank
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%!&*^])[A-Za-z\\d@#$%!&*^]{8,20}$", message = "영문, 숫자, 특수문자(@,#,$,%,!,&,*,^)가 사용되어야합니다.(8~20글자)")
     private String password;
-
 }

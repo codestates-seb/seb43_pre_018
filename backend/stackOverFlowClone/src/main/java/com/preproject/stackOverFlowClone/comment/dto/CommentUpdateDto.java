@@ -6,5 +6,4 @@ import lombok.Getter;
 public class CommentUpdateDto {
 
     private String content;
-
 }

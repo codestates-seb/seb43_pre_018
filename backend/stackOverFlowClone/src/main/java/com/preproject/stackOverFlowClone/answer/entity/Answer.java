@@ -1,7 +1,5 @@
 package com.preproject.stackOverFlowClone.answer.entity;
 
-import com.preproject.stackOverFlowClone.ask.entity.Ask;
-import com.preproject.stackOverFlowClone.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 

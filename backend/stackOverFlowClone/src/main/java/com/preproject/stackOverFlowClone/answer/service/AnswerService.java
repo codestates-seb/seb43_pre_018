@@ -2,8 +2,6 @@ package com.preproject.stackOverFlowClone.answer.service;
 
 import com.preproject.stackOverFlowClone.answer.entity.Answer;
 import com.preproject.stackOverFlowClone.answer.repository.AnswerRepository;
-import com.preproject.stackOverFlowClone.ask.entity.Ask;
-import com.preproject.stackOverFlowClone.auth.utils.GetAuthUserUtils;
 import com.preproject.stackOverFlowClone.comment.entity.Comment;
 import com.preproject.stackOverFlowClone.comment.repository.CommentRepository;
 import com.preproject.stackOverFlowClone.exception.BusinessLogicException;
@@ -31,6 +29,7 @@ public class AnswerService {
     public final CommentRepository commentRepository;
     public final MemberService memberService;
 
+    // post -> save
     public Answer saveAnswer(Answer answer){
         boolean existsByAskId =
                 answerRepository.existsByAskId(answer.getAskId());
@@ -44,14 +43,8 @@ public class AnswerService {
         }
     }
 
+    // patch -> update
     public Answer updateAnswer(Answer answer, String content){
-        // 23.04.25 LJC - updateAnswer 수정
-//        Answer findAnswer = findVerifiedAnswer(answer.getId());
-
-//        Optional.ofNullable(answer.getContent())
-//                .ifPresent(content -> findAnswer.setContent(content));
-
-        // 23.04.26 KSH - JWT 관련 수정 - answer 존재여부 검증 및 멤버 일치여부 검증
         answer = answerRepository.findById(answer.getId())
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
         Member loginMember = memberService.getLoginMember();
@@ -61,9 +54,9 @@ public class AnswerService {
             answer.setCreatedAt(LocalDateTime.now());
 
             return answerRepository.save(answer);
-        } else {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
         }
+        else
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
 
     @Transactional(readOnly = true)
@@ -92,9 +85,8 @@ public class AnswerService {
 
         answerRepository.delete(findAnswer);
         }
-        else{
+        else
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
-        }
     }
 
     @Transactional(readOnly = true)

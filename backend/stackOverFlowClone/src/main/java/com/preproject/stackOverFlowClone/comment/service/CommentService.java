@@ -1,7 +1,5 @@
 package com.preproject.stackOverFlowClone.comment.service;
 
-import com.preproject.stackOverFlowClone.ask.entity.Ask;
-import com.preproject.stackOverFlowClone.auth.utils.GetAuthUserUtils;
 import com.preproject.stackOverFlowClone.comment.dto.CommentResponseDto;
 import com.preproject.stackOverFlowClone.comment.dto.CommentSaveDto;
 import com.preproject.stackOverFlowClone.comment.dto.CommentUpdateDto;
@@ -41,7 +39,6 @@ public class CommentService {
 
 
     public void saveComment(CommentSaveDto commentSaveDto) {
-//        boolean validMember = commentRepository.existsByMemberId(commentSaveDto.getMemberId());
         boolean validAsk = commentRepository.existsByAskId(commentSaveDto.getAskId());
         boolean validAnswer = commentRepository.existsByAnswerId(commentSaveDto.getAnswerId());
 
@@ -59,7 +56,6 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentUpdateDto commentUpdateDto) {
-
         Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
         Member loginmember = memberService.getLoginMember();
@@ -71,11 +67,12 @@ public class CommentService {
             findComment.update(commentUpdateDto);
 
             String memberName = commentRepository.findMemberNameByMemberId(findComment.getMemberId())
-                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));;
+                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
             return CommentResponseDto.of(memberName, findComment);
-        } else {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
         }
+        else
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
 
     public void deleteComment(Long commentId) {
@@ -87,13 +84,11 @@ public class CommentService {
         if (loginMember.getId().equals(comment.getMemberId())) {
             commentRepository.deleteById(commentId);
         }
-        else{
+        else
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
-        }
     }
 
     public SingleResponseDto<CommentResponseDto> findComment(Long commentId) {
-
         Comment findComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
@@ -102,11 +97,9 @@ public class CommentService {
         CommentResponseDto responseDto = CommentResponseDto.of(memberName, findComment);
 
         return new SingleResponseDto<>(responseDto);
-
     }
 
     public MultiResponseDto<CommentResponseDto> findAllComment(Long answerId, int page, int size) {
-
         Page<Comment> commentPage = commentRepository.findAll(answerId, PageRequest.of(page, size, Sort.by("id").descending()));
         List<Comment> commentList = commentPage.getContent();
 

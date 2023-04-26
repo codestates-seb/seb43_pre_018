@@ -31,9 +31,6 @@ public class AskMapper {
         Ask ask = new Ask(
                 saveDto.getTitle(),
                 saveDto.getContent()
-                // JWT
-//                saveDto.getContent(),
-//                saveDto.getMemberId()
         );
 
         return ask;
@@ -67,24 +64,7 @@ public class AskMapper {
         return responseDtoList;
     }
 
-    // answerList -> AskDetailAnswerResponseDto
-//    public List<AskDto.AskDetailAnswerResponseDto> answerListToAskDetailAnswerResponseDtoList(List<Answer> answerList) {
-//        List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = new LinkedList<>();
-//        for (int i = 0; i < answerList.size(); i++) {
-//            Answer answer = answerList.get(i);
-//            Optional<Member> findMember = memberRepository.findById(answer.getMemberId());
-//            findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//            Member member = findMember.get();
-//
-//            AskDto.AskDetailAnswerResponseDto askDetailAnswerResponseDto = new AskDto.AskDetailAnswerResponseDto(
-//                    answer.getId(), answer.getAskId(), answer.getMemberId(), member.getName(), answer.getContent(), answer.getCreatedAt()
-//            );
-//            askDetailAnswerResponseDtoList.add(askDetailAnswerResponseDto);
-//        }
-//        return askDetailAnswerResponseDtoList;
-//    }
-
-    // 상세조회 매퍼 (최재영 버전)
+    // 상세조회 매퍼
     public List<AskDto.AskDetailAnswerResponseDto> answerListToAskDetailAnswerResponseDtoList(List<Answer> answerList) {
         List<AskDto.AskDetailAnswerResponseDto> askDetailAnswerResponseDtoList = new LinkedList<>();
         for (int i = 0; i < answerList.size(); i++) {
@@ -105,7 +85,6 @@ public class AskMapper {
         }
         return askDetailAnswerResponseDtoList;
     }
-
 
     // commentList -> AskDetailCommentResponseDto
     public List<AskDto.AskDetailCommentResponseDto> commentListToAskDetailCommentResponseDtoList(List<Comment> commentList) {

@@ -19,18 +19,9 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-
     private final MemberRepository memberRepository;
-
-    // Spring Security
-    private final PasswordEncoder passwordEncoder;
-
-    // JWT
-    private final CustomAuthorityUtils authorityUtils;
-
-//    public MemberService(MemberRepository memberRepository) {
-//        this.memberRepository = memberRepository;
-//    }
+    private final PasswordEncoder passwordEncoder;  // Spring Security
+    private final CustomAuthorityUtils authorityUtils;  // JWT
 
     public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
@@ -38,11 +29,12 @@ public class MemberService {
         this.authorityUtils = authorityUtils;
     }
 
+    // 회원 로그인
     public URI loginMember(MemberSaveLoginDto loginDto) {
         // JWT
         Optional<Member> findMember = memberRepository.findByEmail(loginDto.getEmail());
         Member member = findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//        if(Objects.equals(findMember.getPassword(), loginDto.getPassword())) {
+
         if(Objects.equals(member.getPassword(), loginDto.getPassword())) {
             String defaultUri = "http://localhost:8080";
             URI location = UriCreator.createUri(defaultUri);
@@ -53,6 +45,7 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
     }
 
+    // 회원 가입 (회원 등록)
     public URI saveMember(MemberSaveSignUpDto signUpDto) {
         // 추가
         if(verifyExistEmail(signUpDto.getEmail()) == true) {
@@ -71,7 +64,6 @@ public class MemberService {
         // JWT
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
-
         memberRepository.save(member);
 
         String loginUri = "http://localhost:8080/login";
@@ -79,20 +71,9 @@ public class MemberService {
         URI location = UriCreator.createUri(loginUri);
 
         return location;
-
     }
 
-//    @Transactional
-//    public MemberResponseSignUpDto updateMember(Long memberId, MemberUpdateDto memberUpdateDto) {
-//
-//        Member findMember = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        findMember.update(memberUpdateDto);
-//
-//        return MemberResponseSignUpDto.of(findMember);
-//    }
-
+    // 회원 정보 수정
     @Transactional
     public MemberResponseSignUpDto updateMember(MemberUpdateDto memberUpdateDto) {
         Member member = getLoginMember();
@@ -119,7 +100,6 @@ public class MemberService {
         return MemberFindResponseDto.of(findMember);
     }
 
-    // 추가
     public MemberFindResponseDto findMember() {
         Member member = getLoginMember();
         return MemberFindResponseDto.of(member);
@@ -133,7 +113,6 @@ public class MemberService {
         return member;
     }
 
-    // 추가
     public boolean verifyExistEmail(String email) {
         Optional<Member> findMember = memberRepository.findByEmail(email);
         if(findMember.isPresent()) {
@@ -142,7 +121,6 @@ public class MemberService {
         return false;
     }
 
-    // 추가
     public boolean verifyExistName(String name) {
         Optional<Member> findMember = memberRepository.findByName(name);
         if(findMember.isPresent()) {

@@ -11,8 +11,6 @@ import com.preproject.stackOverFlowClone.member.entity.Member;
 import com.preproject.stackOverFlowClone.member.repository.MemberRepository;
 import org.springframework.stereotype.Component;
 
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +18,6 @@ import java.util.Optional;
 @Component
 public class CustomAnswerMapper implements AnswerMapper{
     private final MemberRepository memberRepository;
-    // 23.04.25 LJC - updateAnswer 수정
     private final AnswerRepository answerRepository;
 
     public CustomAnswerMapper(MemberRepository memberRepository, AnswerRepository answerRepository) {
@@ -28,9 +25,6 @@ public class CustomAnswerMapper implements AnswerMapper{
         this.answerRepository = answerRepository;
     }
 
-//    public CustomAnswerMapper(MemberRepository memberRepository) {
-//        this.memberRepository = memberRepository;
-//    }
 
     @Override
     public Answer answerSaveDtoToAnswer(AnswerSaveDTO requestBody) {
@@ -44,16 +38,9 @@ public class CustomAnswerMapper implements AnswerMapper{
 
     @Override
     public Answer answerUpdateDtoToAnswer(Long answerId, AnswerUpdateDTO requestBody) {
-        // 23.04.25 LJC - updateAnswer 수정
         Optional<Answer> findAnswer = answerRepository.findById(answerId);
         findAnswer.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ASK_NOT_FOUND));
         Answer answer = findAnswer.get();
-
-//        Answer answer = new Answer();
-//        answer.setContent(requestBody.getContent());
-//        answer.setAskId(requestBody.getAskId());
-//        answer.setMemberId(requestBody.getMemberId());
-//        answer.setCreatedAt(requestBody.getCreatedAt());
 
         return answer;
     }

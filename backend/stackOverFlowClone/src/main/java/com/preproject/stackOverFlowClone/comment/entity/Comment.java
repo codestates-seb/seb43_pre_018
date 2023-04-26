@@ -37,23 +37,16 @@ public class Comment {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public static Comment of(CommentSaveDto commentSaveDto) {
-
         Comment comment = new Comment();
 
         comment.setContent(commentSaveDto.getContent());
-
-//        comment.setMemberId(commentSaveDto.getMemberId());
-
         comment.setAnswerId(commentSaveDto.getAnswerId());
-
         comment.setAskId(commentSaveDto.getAskId());
 
         return comment;
-
     }
 
     public void update(CommentUpdateDto commentUpdateDto) {
-
         if(commentUpdateDto.getContent() != null) {
             this.setContent(commentUpdateDto.getContent());
         }

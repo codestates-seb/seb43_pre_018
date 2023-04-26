@@ -16,5 +16,4 @@ public class AnswerResponseDTO {
     private String memberName;
     private String content;
     private LocalDateTime createdAt;
-
 }
