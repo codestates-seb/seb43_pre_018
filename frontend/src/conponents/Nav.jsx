@@ -14,7 +14,7 @@ const BookMark = styled.button`
 	border: none;
 	background-color: inherit;
 	width: 100%;
-	height: 30px;s
+	height: 30px;
 	display: block;
 	text-align: left;
 	>span {

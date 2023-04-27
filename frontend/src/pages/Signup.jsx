@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import GithubLogo from "../images/github.png";
 import FacebookLogo from "../images/facebook.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import axios from "axios";
-// import { useMutation } from "@tanstack/react-query";
+
 
 // 로그인 페이지 전체 스타일 지정
 const Background = styled.div`
@@ -249,11 +248,12 @@ const SignupLabel = styled.label`
 const SignupInput = styled.input`
   width: 100%;
   height: 30px;
-  border: 1px solid #bababa;
+  border: 1px solid ${({passed})=>passed?'#bababa':'red'};
   border-radius: 4px;
+  padding-left: 10px;
   &:focus {
-    box-shadow: 0 0 3.2px 3.2px hsl(206, 65.21739130434787%, 90.98039215686275%);
-    border: 1px solid hsl(206, 90%, 69.5%);
+    box-shadow: 0 0 3.2px 3.2px ${({passed})=>passed?'hsl(206, 65.21739130434787%, 90.98039215686275%)':'rgb(248, 212, 211)'};
+    border: 1px solid ${({passed})=>passed?'hsl(206, 90%, 69.5%)':'red'};
     outline: 0;
   }
 `;
@@ -280,188 +280,88 @@ const SignupButton = styled.button`
     background-color: rgb(49, 114, 198);
   }
 `;
-// const SignupWarningIconContainer = styled.div`
-//   display: flex;
-//   padding-top: 5px;
-//   margin-right: 5px;
-// `
 
-const SignupValidationContainer = styled.div`
-  color: #b90101;
-  display: flex;
-  flex-direction: column;
+const NonePassedMessage = styled.div`
+  color: ${({passed})=>passed?'#6A737C':'red'};
   font-size: 12px;
-  margin-top: 5px;
-`;
+  margin-top: 8px;
+`
+
+const passedInitailState = {
+  displayName: true,
+  email: true,
+  password: true
+}
 
 export default function Signup() {
-  const [displayName, setDisplayName] = useState("");
-  const [displayNameValid, setDisplayNameValid] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
-  const [userEmailValid, setUserEmailValid] = useState(false);
-  const [userPassword, setUserPassword] = useState("");
-  const [passwordLegnthValid, setPasswordLengthValid] = useState(false);
-  const [passwordRegexValid, setPasswordRegexValid] = useState(false);
+  const [displayName, setDisplayName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [passed, setPassed] = useState(passedInitailState)
+  const navigate = useNavigate()
 
-  // Other Hooks
-  const navigate = useNavigate();
-
-  // UseEffect 유효성 검사
-  // useEffect(() => {
-  //   if (displayName.length > 0) {
-  //     setDisplayNameValid(true);
-  //   } else {
-  //     setDisplayNameValid(false);
-  //   }
-  // }, [displayName]);
-
-  // useEffect(() => {
-  //   if (
-  //     userEmail.length > 0 &&
-  //     /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(userEmail)
-  //   ) {
-  //     setUserEmailValid(true);
-  //   } else {
-  //     setUserEmailValid(false);
-  //   }
-  // }, [userEmail]);
-
-  // useEffect(() => {
-  //   if (userPassword.length > 8 && userPassword.length < 20) {
-  //     setPasswordLengthValid(true);
-  //   } else {
-  //     setPasswordLengthValid(false);
-  //   }
-
-  //   if (
-  //     /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/.test(
-  //       userPassword
-  //     )
-  //   ) {
-  //     setPasswordRegexValid(true);
-  //   } else {
-  //     setPasswordRegexValid(false);
-  //   }
-  // }, [userPassword]);
-
-  // Ajax function (Axios)
-  const postSignupData = () => {
-    const data = {
-      username: displayName,
-      email: userEmail,
-      password: userPassword,
-    };
-
-    const headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    };
-
-    return axios.post(
-      `${process.env.REACT_APP_SERVER_URI}users/signup`,
-      data,
-      headers
-    );
-  };
-
-  // Ajax OnSuccess
-  const createUserOnSuccess = () => {
-    window.alert("Successfully created");
-    navigate("/login");
-  };
-
-  // // Ajax Tanstack Query
-  // const { mutate: createUser } = useMutation({
-  //   mutationKey: ["postSignupData"],
-  //   mutationFn: postSignupData,
-  //   onSuccess: createUserOnSuccess,
-  // });
-
-  // Event Handlers
-  const inputOnChangeHandler = (e, setState) => {
-    setState(e.target.value);
-  };
-
-  const inputOnFocusHandler = (setState) => {
-    setState(true);
-  };
-
-  const signupOnClickHandler = () => {
-    if (
-      displayNameValid &&
-      userEmailValid &&
-      passwordLegnthValid &&
-      passwordRegexValid
-    ) {
-      try {
-        // createUser();
-      } catch {
-        navigate("/error");
-      }
+  const onNameChange = e => {
+    const regex = /^[ㄱ-ㅎ|가-힣]+$/
+    if(!regex.test(displayName)) {
+      setPassed({...passed, displayName: false})
     } else {
-      window.alert("please fill in the whole forms");
+      setPassed({...passed, displayName: true})
     }
-  };
+    setDisplayName(e.target.value);
+  }
+  
+  const onEmailChange = e => {
+    const regex = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z]+\.[a-zA-Z.]+$/
+    if(!regex.test(email)) {
+      setPassed({...passed, email: false})
+    } else {
+      setPassed({...passed, email: true})
+    }
+    setEmail(e.target.value);
+  }
+  
+  const onPasswordChange = e => {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/
+    if(!regex.test(password)) {
+      setPassed({...passed, password: false})
+    } else {
+      setPassed({...passed, password: true})
+    }
+    setPassword(e.target.value);
+  }
 
-  const linkerOnClickHandler = () => {
-    navigate("/login");
-  };
-  // *************리덕스 툴킷********************
-  // //  initialState를 정의
-  // const initialState = {
-  //   displayName: "",
-  //   displayNameValid: false,
-  //   userEmail: "",
-  //   userEmailValid: false,
-  //   userPassword: "",
-  //   passwordLengthValid: false,
-  //   passwordRegexValid: false,
-  // };
+  const onSignUpHnadle = () => {
+    if(!passed.displayName||!passed.email||!passed.password) {
+      // window.alert('유효하지 않은 정보입니다. 다시 시도해 주세요')
+      if(!passed.displayName) setDisplayName('')
+      if(!passed.email) setEmail('')
+      if(!passed.password) setPassword('')
+    } else {
+      axios.defaults.withCredentials = true;
+      const url = process.env.REACT_APP_URL;
+      const headers = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
+      };
+  
+      const data = JSON.stringify({
+        name : displayName,
+        email: email,
+        password : password
+      })
 
-  // //  createSlice로 slice를 생성
-  // const authSlice = createSlice({
-  //   name: "auth",
-  //   initialState,
-  //   reducers: {
-  //     setDisplayName: (state, action) => {
-  //       state.displayName = action.payload;
-  //     },
-  //     setDisplayNameValid: (state, action) => {
-  //       state.displayNameValid = action.payload;
-  //     },
-  //     setUserEmail: (state, action) => {
-  //       state.userEmail = action.payload;
-  //     },
-  //     setUserEmailValid: (state, action) => {
-  //       state.userEmailValid = action.payload;
-  //     },
-  //     setUserPassword: (state, action) => {
-  //       state.userPassword = action.payload;
-  //     },
-  //     setPasswordLengthValid: (state, action) => {
-  //       state.passwordLengthValid = action.payload;
-  //     },
-  //     setPasswordRegexValid: (state, action) => {
-  //       state.passwordRegexValid = action.payload;
-  //     },
-  //   },
-  // });
-  // const {
-  //   setDisplayName,
-  //   setDisplayNameValid,
-  //   setUserEmail,
-  //   setUserEmailValid,
-  //   setUserPassword,
-  //   setPasswordLengthValid,
-  //   setPasswordRegexValid,
-  // } = authSlice.actions;
-
-  // //  configureStore로 store 생성
-  // const store = configureStore({
-  //   reducer: authSlice.reducer,
-  // });
-
-  // *************리덕스 툴킷********************
+      axios
+      .post(`${url}/signUp`, data, headers)
+      .then((res) => {
+        console.log('회원가입 완료')
+        navigate('/')
+      })
+      .catch((err) => console.error(err.message));
+    }
+  }
 
   return (
     <>
@@ -551,177 +451,42 @@ export default function Signup() {
               ></FacebookIcon>
               <FacebookLoginText>Sign up with Facebook</FacebookLoginText>
             </FacebookLogin>
-
-            <FormContainer>
-              <SignupInputContainer>
-                <SignupLabel>Display name</SignupLabel>
-                <SignupInputBox
-                  className={!displayNameValid}
-                  isValid={displayNameValid}
-                >
-                  <SignupInput
-                    onChange={(e) => {
-                      inputOnChangeHandler(e, setDisplayName);
-                    }}
-                    value={displayName}
-                  />
-                  {!displayNameValid && (
-                    <SignupWarningIconContainer>
-                      <svg
-                        width="20px"
-                        height="20px"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                      >
-                        <path
-                          fill="#b90101"
-                          d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"
-                        />
-                      </svg>
-                    </SignupWarningIconContainer>
-                  )}
-                </SignupInputBox>
-                {/* {
-                !displayNameValid &&
-                <SignupValidationContainer>
-                  Display name cannot be empty.
-                </SignupValidationContainer>
-              } */}
-              </SignupInputContainer>
+          
+          <FormContainer>
+            <SignupInputContainer>
+              <SignupLabel>Display name</SignupLabel>
+              <SignupInput onChange={onNameChange} passed={passed.displayName} value={displayName||''}/>
+              {!passed.displayName&&<NonePassedMessage passed={passed.displayName}>Display name은 한글만 입력해야 합니다.</NonePassedMessage>}
               <EmailContainer>
-                <SignupInputContainer>
-                  <SignupLabel>Email</SignupLabel>
-                  <SignupInputBox
-                    className={!userEmailValid}
-                    isValid={userEmailValid}
-                  >
-                    <SignupInput
-                      type="email"
-                      value={userEmail}
-                      onChange={(e) => inputOnChangeHandler(e, setUserEmail)}
-                    />
-                    {!userEmailValid && (
-                      <SignupWarningIconContainer>
-                        <svg
-                          width="20px"
-                          height="20px"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                        >
-                          <path
-                            fill="#b90101"
-                            d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"
-                          />
-                        </svg>
-                      </SignupWarningIconContainer>
-                    )}
-                  </SignupInputBox>
-                  {!userEmailValid && (
-                    <SignupValidationContainer>
-                      Email must have valid email form.
-                    </SignupValidationContainer>
-                  )}
-                </SignupInputContainer>
+                <SignupLabel>Email</SignupLabel>
+                <SignupInput onChange={onEmailChange} passed={passed.email}/>
               </EmailContainer>
-
+              {!passed.email&&<NonePassedMessage passed={passed.email}>Email형식이 올바르지 않습니다.</NonePassedMessage>}
               <PassWordContainer>
-                <SignupInputContainer>
-                  <SignupLabel>Password</SignupLabel>
-                  <SignupInputBox
-                    className={!(passwordLegnthValid && passwordRegexValid)}
-                    isValid={passwordLegnthValid && passwordRegexValid}
-                  >
-                    <SignupInput
-                      type="password"
-                      value={userPassword}
-                      onChange={(e) => {
-                        inputOnChangeHandler(e, setUserPassword);
-                      }}
-                    />
-                    {!(passwordLegnthValid && passwordRegexValid) && (
-                      <SignupWarningIconContainer>
-                        <svg
-                          width="20px"
-                          height="20px"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                        >
-                          <path
-                            fill="#b90101"
-                            d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"
-                          />
-                        </svg>
-                      </SignupWarningIconContainer>
-                    )}
-                  </SignupInputBox>
-                  {!(passwordLegnthValid && passwordRegexValid) && (
-                    <SignupValidationContainer>
-                      Password must follow valid rules.
-                      <ul
-                        css={`
-                          padding: 0;
-                          padding-left: 20px;
-                        `}
-                      >
-                        {!passwordLegnthValid && (
-                          <li
-                            css={`
-                              margin-top: 5px;
-                            `}
-                          >
-                            Password must be 8 ~ 20 characters.
-                          </li>
-                        )}
-                        {!passwordRegexValid && (
-                          <li
-                            css={`
-                              margin-top: 5px;
-                            `}
-                          >
-                            Password must have one or more number and character
-                          </li>
-                        )}
-                        {!passwordRegexValid && (
-                          <li
-                            css={`
-                              margin-top: 5px;
-                            `}
-                          >
-                            Password cannot use special characters other than
-                            !@#$%^&*
-                          </li>
-                        )}
-                      </ul>
-                    </SignupValidationContainer>
-                  )}
-                </SignupInputContainer>
-                <div
-                  style={{
-                    color: "#6A737C",
-                    fontSize: "12px",
-                    marginTop: "12px",
-                  }}
-                >
+                <SignupLabel>Password</SignupLabel>
+                <SignupInput onChange={onPasswordChange} passed={passed.password} value={password||''}/>
+                <NonePassedMessage passed={passed.password}>
                   Passwords must contain at least eight characters, including at
                   least 1 letter and 1 number.
-                </div>
+                </NonePassedMessage>
               </PassWordContainer>
-              <SignupButton>Sign up</SignupButton>
-            </FormContainer>
-            <div style={{ fontSize: "13px", marginTop: "15px" }}>
-              Already have a account?{" "}
-              <span
-                style={{ color: "hsl(206, 100%, 40%)", cursor: "pointer" }}
-                onMouseEnter={(e) =>
-                  (e.target.style.color = "hsl(206, 90%, 69.5%)")
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.color = "hsl(206, 100%, 40%)")
-                }
-              >
-                <Link to="/login">Log in</Link>
-              </span>
-            </div>
+            </SignupInputContainer>
+            <SignupButton onClick={onSignUpHnadle} type="password">Sign up</SignupButton>
+          </FormContainer>
+          <div style={{ fontSize: "13px", marginTop: "15px" }}>
+            Already have a account?{" "}
+            <span
+              style={{ color: "hsl(206, 100%, 40%)", cursor: "pointer" }}
+              onMouseEnter={(e) =>
+                (e.target.style.color = "hsl(206, 90%, 69.5%)")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.color = "hsl(206, 100%, 40%)")
+              }
+            >
+              <Link to="/login">Log in</Link>
+            </span>
+          </div>
           </SignupContainer>
         </Container>
       </Background>

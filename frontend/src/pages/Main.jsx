@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Nav from "../conponents/Nav";
 import RightSidebar from "../conponents/RightSidebar";
 import { useState, useEffect, useRef } from 'react';
+import axios from "axios";
 
 const BodyContainer = styled.div`
   margin: 33px auto 0px;
@@ -11,12 +12,15 @@ const BodyContainer = styled.div`
   max-width: 1264px;
   padding: 20px 0 0;
   display: flex;
+  
 `
 
 const MainWrapper = styled.div`
   width: 751px;
   height: 100%;
+  min-height: calc(100vh - 378px);
   margin-top: 25px;
+  border-left: 1px solid #D7D9DC;
   .no-under-line {
     text-decoration: none;
     color: inherit;
@@ -165,30 +169,49 @@ const ArticleDescription = styled.div`
 `;
 
 function Main() {
-  const [items, setItems] = useState(data);
-  const [visibleItems, setVisibleItems] = useState([...items.slice(0, 5)]);
-  const [fetching, setFetching] = useState(false);
-
-  const fetchMoreItems = async () => {
-    setFetching(true);
-
-    const startIndex = visibleItems.length;
-    const preItems = visibleItems.slice();
-    const fetchedItems = items.slice(startIndex, startIndex + 5);
-    setVisibleItems(() => {
-      return [...preItems, ...fetchedItems];
-    });
-    setFetching(false);
-  }
-
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight && fetching === false) {
-      fetchMoreItems();
+  const [items, setItems] = useState([]);
+  const [visibleItems, setVisibleItems] = useState([...items.slice(0,10)]);
+  axios.defaults.withCredentials = true;
+  const url = process.env.REACT_APP_URL;
+  const headers = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
     }
-  }
+  };
+  useEffect(()=>{
+    axios.get(`${url}/`, headers)
+    .then(res=>{
+      setVisibleItems(res.data.data)
+    })
+  }, [])
+
+  // const fetchMoreItems = async () => {
+  //   setFetching(true);
+  //   setPage(page=>page+1)
+  //   axios.get(`${url}/ask?page=${page}&size=10`, headers)
+  //   .then(res=>{
+  //     setItems(res.data.data)
+  //     setVisibleItems(() => {
+  //       return [...items, ...res.data.data];
+  //     });
+  //     console.log(visibleItems)
+  //   })
+  //   // const startIndex = visibleItems.length;
+  //   // const preItems = visibleItems.slice();
+  //   // const fetchedItems = items.slice(startIndex, startIndex + 5);
+  //   setFetching(false);
+  // }
+
+  // const handleScroll = () => {
+  //   const scrollHeight = document.documentElement.scrollHeight;
+  //   const scrollTop = document.documentElement.scrollTop;
+  //   const clientHeight = document.documentElement.clientHeight;
+  //   if (scrollTop + clientHeight >= scrollHeight && fetching === false) {
+  //     fetchMoreItems();
+  //   }
+  // }
 
   const handleFilter = (e) => {
     if(e.target.classList[1] !== 'clicked') {
@@ -209,12 +232,12 @@ function Main() {
     setVisibleItems([...items.slice(0, 5)])
   }
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll)  
-    }
-  })
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll)  
+  //   }
+  // })
 
   return(
     <BodyContainer>
@@ -231,7 +254,7 @@ function Main() {
           </MainHeaderUpWrapper>
           <MainHeaderDownWrapper>
             <div className='DescriptionNumberQuestions'>
-              {items.length} questions
+              {visibleItems.length} questions
             </div>
             <div className='buttons'>
               <div className='FilterLeftButton clicked' onClick={handleFilter}>Newest</div>
@@ -249,7 +272,7 @@ function Main() {
                   <div className='articleViews'>{post.views} views</div>
                 </ArticleStatus>
                 <ArticleDescription>
-                  <Link to={`/ask/${post.id}`}>
+                  <Link to={`/ask/${post.askId}`}>
                     <div className='ArticleTitle'>
                       {post.title}
                     </div>

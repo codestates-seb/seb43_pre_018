@@ -1,15 +1,19 @@
 import styled from "styled-components"
 import Nav from "../conponents/Nav";
 import RightSidebar from "../conponents/RightSidebar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Comments from "../conponents/QuestionDetail/Comments";
+
+import Answers from "../conponents/QuestionDetail/Answers";
+
+axios.defaults.withCredentials = true;
 
 const MainWrapper = styled.div`
   width: 1050px;
+  border-left: 1px solid #D7D9DC;
   margin-top: 25px;
-  margin-left: 24px;
+  padding-left: 24px;
   margin-right: auto;
 
   .header-title {
@@ -52,7 +56,7 @@ const MainWrapper = styled.div`
     display: flex;
     border-top: 1px solid #d7d9dc;
     padding-top: 20px;
-    color: #838B94;
+    
 
     
     .Vote {
@@ -93,19 +97,24 @@ const MainWrapper = styled.div`
 
     .Content-text {
       margin-left: 20px;
-      font-size: 15px;
       width: 100%;
 
+      >.content-main {
+        word-break: break-word;
+        font-size: 15px;
+      }
       .Author-text-line {
         display: flex;
         justify-content: end;
+        align-items: end;
+        width: 100%;
         .Author-text {
           width: 200px;
           background-color: #DCE9F6;
           margin-top: 20px;
           text-align: start;
           padding: 5px;
-
+          color: #838B94;
           .createdAt {
             color: #838B94;
           }
@@ -186,14 +195,55 @@ const MainContent = styled.div`
   }
 `
 
+
+
+
+const DateLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`
+
+const EditButton = styled.button`
+  background-color: ${props=>props.red?'rgb(235, 55, 39)':'#D3D3D3'};
+  border: 1px solid #A9A9A9;
+  padding: 7px;
+  margin-left: 7px;
+  color: white;
+  font-weight: 400;
+  border-radius: 3px; 
+  cursor: pointer;
+  &:hover {
+    background-color: #3172C6;
+  }
+`
+
+const IconContainer = styled.div`
+  justify-content: end;
+  >.edit-icon {
+    margin-left: 5px;
+    justify-self: start;
+}
+`
+
 function QuestionDetail() {
   const [question, setQuestion] = useState({})
   const [answers, setAnswers] = useState([])
+  const [newAnswer, setNewAnswer] = useState('')
   const params = useParams();
+  const navigate = useNavigate()
   const url = process.env.REACT_APP_URL;
+  const token = localStorage.getItem('JWT')
   
   useEffect(()=>{
-    axios.get(`${url}/ask/${params.askId}?page=1&size=1`)
+    const headers = {
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      }
+    }
+    axios.get(`${url}/ask/${params.askId}?page=1&size=1`, headers)
     .then(res=>{
       setQuestion(res.data.data[0])
       setAnswers(res.data.data[1])
@@ -201,6 +251,64 @@ function QuestionDetail() {
     .catch(e=>console.error(e.message));
   },[])
 
+  const answerChange = e => {
+    setNewAnswer(e.target.value);
+  }
+  
+	const onSubmit = (id) => {
+    if(newAnswer!=='') {
+      const data = JSON.stringify({
+        content: newAnswer,
+        askId: id
+      })
+      const headers = {
+        headers : {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          "Authorization": token
+        }
+      }
+      axios.post(`${url}/answer`,data, headers)
+      .then(res=>{
+        console.log(res)
+        navigate(0);
+      })
+      .catch(e=>console.error(e.message))
+    }
+  }
+  const username = localStorage.getItem('name');
+
+  const questionDelete = () => {
+    const headers = {
+      headers : {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        "Authorization": token
+      }
+    }
+    axios.delete(`${url}/ask/${params.askId}`, headers)
+    .then(res=>{
+      console.log('delete ok')
+      navigate('/')
+    })
+    .catch(e=>console.error(e.message))
+  }
+
+  // const answerDelete = (answerId) => {
+  //   const headers = {
+  //     headers : {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",
+  //       "Authorization": token
+  //     }
+  //   }
+  //   axios.delete(`${url}/answer/${answerId}`, headers)
+  //   .then(res=>{
+  //     console.log('ansewr delete ok')
+  //     navigate(0)
+  //   })
+  //   .catch(e=>console.error(e.message))
+  // }
   return (
     <BodyContainer>
       <Nav/>
@@ -215,9 +323,20 @@ function QuestionDetail() {
             </button>
           </Link>
         </div>
-        <div className="question-description">
-          {question.createdAt}
-        </div>
+        <DateLine>
+          <div className="question-description">
+            {question.createdAt}
+          </div>
+          {
+          question.memberName===username&&
+            <div>
+              <Link to={`/edit/${question.askId}`}>
+                <EditButton>Edit Question</EditButton>
+              </Link>
+              <EditButton red={true} onClick={questionDelete}>Delete Question</EditButton>
+            </div>
+          }
+        </DateLine>
         <MainContent>
           <div className="left-content">
             <div className="text-box" id="ask-box">
@@ -245,39 +364,16 @@ function QuestionDetail() {
               </div>
             </div>
             <div className="number--answer">
-              3 Answers
+              {answers.length} Answers
             </div>
-            {answers.map(e=>{
-               return ( 
-                <div className="text-box" key={e.answerId}>
-                  <div className="Vote">
-                    <div className="up-button"></div>
-                    0<br />
-                    <div className="down-button"></div>
-                  </div>
-                  <div className="Content-text">
-                    {e.content}
-                    <div className="Author-text-line">
-                      <div className="Author-text">
-                        answered
-                        <div className="createdAt">
-                          {e.createdAt}
-                        </div>
-                        <div className="author">
-                          {e.memberName}
-                        </div>
-                      </div>
-                    </div>
-                    <Comments data={e.commentList}/>
-                  </div>
-                </div>)
-            })}
+            {answers.map((e,i)=>{ 
+            return <Answers data={e} key={i}/>})}
             <div className="authorize-answer">
               <div className="authorize-header">
                 Your answer
               </div>
-              <textarea className="authorize-box" />
-              <button className="authorize-button">
+              <textarea className="authorize-box" onChange={answerChange} value={newAnswer}/>
+              <button className="authorize-button" onClick={()=>onSubmit(question.askId)}>
                 Post your answer
               </button>
             </div>

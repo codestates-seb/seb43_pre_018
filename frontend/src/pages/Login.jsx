@@ -3,11 +3,12 @@ import styled from "styled-components";
 import GithubLogo from "../images/github.png";
 import FacebookLogo from "../images/facebook.png";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../store/axiosConfig";
 import { useDispatch } from "react-redux";
 import { TbAlertCircleFilled } from "react-icons/tb";
-
+import axios from "axios";
+import { login } from "../store/userSlice";
 const NoScrollContainer = styled.form`
   overflow: hidden;
 `;
@@ -244,8 +245,7 @@ const InputContainer = styled.div`
 
 // 정규식
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -255,6 +255,7 @@ const Login = () => {
     password: "",
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const validateEmail = (email) => {
     return emailRegex.test(email);
@@ -264,17 +265,43 @@ const Login = () => {
   };
 
   const loginUser = async (email, password) => {
-    try {
-      const response = await axiosInstance.post("./login", {
-        email,
-        password,
-      });
-      if (response.data.token) {
-        localStorage.setItem("jwt", response.data.token);
-        dispatch(Login(response.data.user));
-      } else {
-      }
-    } catch (error) {}
+    // try {
+    //   const response = await axiosInstance.post("./login", {
+    //     email,
+    //     password,
+    //   });
+    //   if (response.data.token) {
+    //     localStorage.setItem("jwt", response.data.token);
+    //     dispatch(Login(response.data.user));
+    //   } else {
+    //   }
+    // } catch (error) {}
+    axios.defaults.withCredentials = true;
+    const url = process.env.REACT_APP_URL;
+    const headers = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",}
+    };
+
+    const data = JSON.stringify({
+      name : "g858@gmail.com",
+      password : "y123456!"
+    })
+
+    axios
+      .post(`${url}/login`, data, headers)
+      .then((response) => {
+				localStorage.setItem('name', response.data.username)
+        return response.headers.get('Authorization');
+      })
+      .then(data=>{
+        localStorage.setItem('JWT', data)
+        console.log('로그인 성공')
+        navigate('/')
+        dispatch(login())
+      })
+      .catch((err) => console.error(err.message));
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -300,6 +327,7 @@ const Login = () => {
 
     await loginUser(email, password);
   };
+
 
   return (
     <>
@@ -357,7 +385,8 @@ const Login = () => {
                       error={error.password}
                       type="password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)
+                    }
                     />
 
                     {error.password ? (

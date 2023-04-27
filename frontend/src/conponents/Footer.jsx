@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const Container = styled.footer`
-	margin-top: 20px;
 	height: max-content;
 	width: 100vw;
 	background-color: rgb(36, 38, 41);

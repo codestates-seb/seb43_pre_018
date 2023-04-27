@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 // import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchPopUp from "./SearchPopup";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/userSlice";
 // import useSearchPopUpStore from "../../store/store";
 // import { useDispatch } from 'react-redux';
 // import { setSearchTerm } from '../slices/searchSlice';
@@ -157,13 +159,13 @@ const LoginButton = styled(Link)`
 
 //가입 버튼 스타일 지정
 const SignUpButton = styled(LoginButton)`
-  background-color: rgb(10, 149, 255);
+  background-color: ${props=>props.login?'rgb(236, 106, 95)':'rgb(10, 149, 255)'};
   color: rgb(255, 255, 255);
   width: 65px;
   margin-left: 5px;
   cursor: pointer;
   &:hover {
-    background-color: rgb(49, 114, 198);
+    background-color: ${props=>props.login?'rgb(207, 78, 66)':'rgb(49, 114, 198)'};
   }
 `;
 
@@ -186,6 +188,9 @@ function Header() {
   const handleInputBlur = () => setInputFocused(false);
   const handleBarFocus = () => setBarFocused(true);
   const handleBarBlur = () => setBarFocused(false);
+  const isLogin = useSelector(state=>state.user.isAuthenticated)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   // const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
@@ -213,6 +218,14 @@ function Header() {
   //     }
   //   }
   // };
+
+
+  const LogoutClick = () => {
+    localStorage.removeItem('JWT')
+    localStorage.removeItem('name')
+    dispatch(logout())
+    navigate('/')
+  }
 
   return (
     <>
@@ -278,8 +291,15 @@ function Header() {
             <SearchPopUp showPopUp={isFocused} handlePopUp={handlePopUp} />
           </SearchBar>
           <ProfileContainer>
-            <LoginButton to="/login">Log in</LoginButton>
-            <SignUpButton to="/signup">Sign up</SignUpButton>
+            {isLogin?
+            <>
+              <LoginButton>{localStorage.getItem('name')}</LoginButton>
+              <SignUpButton login={true} onClick={LogoutClick}>Log out</SignUpButton>
+            </>
+            :<>
+              <LoginButton to="/login">Log in</LoginButton>
+              <SignUpButton to="/signup">Sign up</SignUpButton>
+            </>}
           </ProfileContainer>
         </HeaderContainer>
       </HeaderComponent>
