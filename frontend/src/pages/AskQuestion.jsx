@@ -4,6 +4,7 @@ import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { IconContext } from "react-icons/lib";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   width: 1264px;
@@ -189,7 +190,7 @@ export default function AskQuestion() {
 	const inputRef = useRef([])
 	const [isBlock, setIsBlock] = useState(false);
 	// 임시
-	const [isLogin, setIsLogin] = useState(true);
+	const isLogin = useSelector(state=>state.user.isAuthenticated)
 	const navigate = useNavigate();
 	const params = useParams();
 	const url = process.env.REACT_APP_URL
@@ -223,56 +224,10 @@ export default function AskQuestion() {
 		inputRef.current[0].focus();
 		setIsBlock(true);
 	},[])
-	// useEffect(()=>{
-	// 	axios.defaults.withCredentials = true;
 
-  //   const headers = {
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //       "Content-Type": "application/json",}
-  //   };
-
-  //   const data = JSON.stringify({
-  //     name : "MJS@gmail.com",
-  //     password : "a123456!"
-  //   })
-
-  //   axios
-  //     .post(`${url}/login`, data, headers)
-  //     .then((response) => {
-	// 			console.log(response.data)
-  //       return response.headers.get('Authorization');
-  //     })
-  //     .then(data=>{
-  //       localStorage.setItem('JWT', data)
-  //       console.log(localStorage.getItem('JWT'))
-  //     })
-  //     .catch((err) => console.error(err.message));
-			
-	// },[])
-	// handler
 	const Titlehandle = e =>{
 		setTitle(e.target.value);
 	}
-
-  // useEffect(()=>{
-  // 	if(!isLogin) {
-  // 			window.alert('This service requires login.');
-  // 			navigate('/');
-  // 	}
-  // 	if(location.pathname==='/edit/:id') {
-  // 		const headers = {
-  // 			'Authorization' : `Bearer ${'accessToken'}`,
-  //     	'Content-Type' : 'Application/json',
-  // 			'Accept' : '*/*'
-  // 		}
-  // 		// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
-  // 	}
-  // 	inputRef.current[0].focus();
-  // 	setIsBlock(true);
-  // },[])
-
-  
 
   const TitleonFocusHandle = () => {
     if (!contentVaild) setNextVaild(true);
@@ -284,7 +239,6 @@ export default function AskQuestion() {
 		axios.defaults.withCredentials = true;
 
 		const Token = localStorage.getItem('JWT')
-		console.log(Token)
     const headers = {
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -296,6 +250,11 @@ export default function AskQuestion() {
     const data = JSON.stringify({
       title: title,
 			content: content
+    })
+    axios.post(`${url}/ask`, data, headers)
+    .then(res=>{
+      console.log('질문 등록 완료')
+      navigate('/')
     })
   }
 
@@ -312,59 +271,6 @@ export default function AskQuestion() {
 	const ContentChange = e =>{
 		setContent(e.target.value)
 	}
-
-	const tempLogin = () => {
-    axios.defaults.withCredentials = true;
-
-    const headers = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",}
-    };
-
-    const data = JSON.stringify({
-      name : "g858@gmail.com",
-      password : "y123456!"
-    })
-
-    axios
-      .post(`${url}/login`, data, headers)
-      .then((response) => {
-				localStorage.setItem('name', response.data.username)
-        console.log(response.headers.get('Authorization'))
-        return response.headers.get('Authorization');
-      })
-      .then(data=>{
-        // localStorage.setItem('JWT', data)
-        // console.log(localStorage.getItem('JWT'))
-        localStorage.setItem('JWT', data)
-        console.log(localStorage.getItem('JWT'))
-      })
-      .catch((err) => console.error(err.message));
-  }
-  
-  const tempSignUp = () => {
-    axios.defaults.withCredentials = true;
-
-    const headers = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",}
-    };
-
-    const data = JSON.stringify({
-      email: "g858@gmail.com",
-      name : "나야나",
-      password : "y123456!"
-    })
-
-    axios
-      .post(`${url}/signUp`, data, headers)
-      .then((res) => {
-        console.log('회원가입 완료')
-      })
-      .catch((err) => console.error(err.message));
-  }
 
 	return (
 		<Container>
@@ -446,10 +352,6 @@ export default function AskQuestion() {
 						>
 							Submit
 						</NextBnt>
-						<NextBnt block={submitVaild}
-							onClick={tempLogin}>login</NextBnt>
-						<NextBnt block={submitVaild}
-							onClick={tempSignUp}>signup</NextBnt>
 					</AskInputBox>
 					<WriteGuide block={submitVaild}>
 						<GuideName>

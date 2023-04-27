@@ -471,7 +471,7 @@ export default function Signup() {
                 </NonePassedMessage>
               </PassWordContainer>
             </SignupInputContainer>
-            <SignupButton onClick={onSignUpHnadle}>Sign up</SignupButton>
+            <SignupButton onClick={onSignUpHnadle} type="password">Sign up</SignupButton>
           </FormContainer>
           <div style={{ fontSize: "13px", marginTop: "15px" }}>
             Already have a account?{" "}
