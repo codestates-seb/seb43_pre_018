@@ -1,184 +1,184 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {HiOutlinePencilSquare} from "react-icons/hi2"
+import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { IconContext } from "react-icons/lib";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const Container = styled.div`
-	width: 1264px;
-	padding: 10px 24px 30px;
-	margin: 0 auto;
-`
+  width: 1264px;
+  padding: 10px 24px 30px;
+  margin: 0 auto;
+`;
 
 const HeadTextBox = styled.div`
- padding: 60px 0;
-	>h1 {
-		font-size: 2rem;
-		font-weight: bold;
-	}
-`
+  padding: 60px 0;
+  > h1 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+`;
 
 const InformationWindow = styled.div`
-	background-color: rgb(236, 244, 251);
-	border: 1px solid rgb(174, 205, 234);
-	border-radius: 3px;
-	padding: 25px 25px;
-	width: 69%;
-	>ul {
-		margin-left: 2rem;
-		list-style: square;
-		>li {
-			font-size: 1rem;
-		}
-	}
-	>h5 {
-		font-weight: 600;
-		margin: 10px 0;
-		font-size: 1rem;
-	}
-	>h2 {
-		font-size: 1.6rem;
-		font-weight: 445;
-		margin-bottom: 10px;
-	}
-	>p {
-		font-size: 1.1rem;
-		span {
-			color: rgb(50, 125, 202);
-			font-weight: 500;
-		}
-	}
-`
+  background-color: rgb(236, 244, 251);
+  border: 1px solid rgb(174, 205, 234);
+  border-radius: 3px;
+  padding: 25px 25px;
+  width: 69%;
+  > ul {
+    margin-left: 2rem;
+    list-style: square;
+    > li {
+      font-size: 1rem;
+    }
+  }
+  > h5 {
+    font-weight: 600;
+    margin: 10px 0;
+    font-size: 1rem;
+  }
+  > h2 {
+    font-size: 1.6rem;
+    font-weight: 445;
+    margin-bottom: 10px;
+  }
+  > p {
+    font-size: 1.1rem;
+    span {
+      color: rgb(50, 125, 202);
+      font-weight: 500;
+    }
+  }
+`;
 
 const FormContainer = styled.div`
-	width: 100%;
-	margin-top: 10px;
-`
+  width: 100%;
+  margin-top: 10px;
+`;
 
 const InputContainer = styled.div`
-	width: 100%;
-	display: flex;
-	padding: 5px 0;
-`
+  width: 100%;
+  display: flex;
+  padding: 5px 0;
+`;
 
 const WriteGuide = styled.div`
-	display: ${props=>props.block?'block':'none'};
-	border: 1px solid rgb(213, 217, 221);
-	border-radius: 2px;
-	box-shadow: 0 0 10px 1px rgb(232, 234, 235);
-	overflow: hidden;
-	height: 181px;
-	margin-left: 15px;
-`
+  display: ${(props) => (props.block ? "block" : "none")};
+  border: 1px solid rgb(213, 217, 221);
+  border-radius: 2px;
+  box-shadow: 0 0 10px 1px rgb(232, 234, 235);
+  overflow: hidden;
+  height: 181px;
+  margin-left: 15px;
+`;
 
 const GuideName = styled.div`
-	background-color: rgb(247, 249, 250);
-	border-bottom: 1px solid rgb(213, 217, 221);
-	padding: 12px;
-	font-size: 1.2rem;
-	font-weight: 400;
-`
+  background-color: rgb(247, 249, 250);
+  border-bottom: 1px solid rgb(213, 217, 221);
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: 400;
+`;
 
 const GuideLine = styled.div`
-	display: flex;
-	background-color: rgb(255, 255, 255);
-	height: 100%;
-	justify-content: center;
-	align-items: start;
-	padding: 28px 20px;
-	>.icon {
-		margin-top: -7px;
-	}
-`
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  height: 100%;
+  justify-content: center;
+  align-items: start;
+  padding: 28px 20px;
+  > .icon {
+    margin-top: -7px;
+  }
+`;
 
 const GuideText = styled.div`
-	margin-left: 15px;
-	>.first {
-		margin-bottom: 1rem;
-	}
-	>p {
-		font-size: 1rem;
-	}
-`
+  margin-left: 15px;
+  > .first {
+    margin-bottom: 1rem;
+  }
+  > p {
+    font-size: 1rem;
+  }
+`;
 
 const AskInputBox = styled.div`
-	border: 1px solid rgb(228, 229, 231);
-	background-color: rgb(255, 255, 255);
-	border-radius: 3px;
-	width: 69%;
-	padding: 23px 25px;
-	
-	${props=>{
-			if(props.disabled) return `
+  border: 1px solid rgb(228, 229, 231);
+  background-color: rgb(255, 255, 255);
+  border-radius: 3px;
+  width: 69%;
+  padding: 23px 25px;
+
+  ${(props) => {
+    if (props.disabled)
+      return `
 			opacity: 0.4;
 			pointer-events: none;
-		`
-	}}
-`
+		`;
+  }}
+`;
 
 const Label = styled.label`
-	font-weight: 600;
-	font-size: 1.2rem;
-	>p{
-		font-weight: 400;
-		font-size: 1rem;
-		margin: 6px 0 10px 0;
-	}
-`
+  font-weight: 600;
+  font-size: 1.2rem;
+  > p {
+    font-weight: 400;
+    font-size: 1rem;
+    margin: 6px 0 10px 0;
+  }
+`;
 
 const TitleInput = styled.input`
-	width: 100%;
-	height: 2rem;
-	padding: 1.3rem 0.7rem;
-	border: 1px solid rgb(186, 191, 197);
-	border-radius: 2px;
-	&:focus {
-		outline: none;
-		border: 1px solid rgb(107, 162, 217);
-		border-radius: 2px;
-		box-shadow: 0 0 0 3px rgb(222, 234, 247);
-	}
-	&::placeholder {
-		color: rgb(188, 191, 197);
-		font-size: 1rem;
-	}
-`
+  width: 100%;
+  height: 2rem;
+  padding: 1.3rem 0.7rem;
+  border: 1px solid rgb(186, 191, 197);
+  border-radius: 2px;
+  &:focus {
+    outline: none;
+    border: 1px solid rgb(107, 162, 217);
+    border-radius: 2px;
+    box-shadow: 0 0 0 3px rgb(222, 234, 247);
+  }
+  &::placeholder {
+    color: rgb(188, 191, 197);
+    font-size: 1rem;
+  }
+`;
 
 // 추후에 Be에서 준비 됬을 때 ReactQuill로 변경
 const ContentArea = styled.textarea`
-	width: 100%;
-	height: 90px;
-	padding: 0.5rem 0.5rem;
-	border: 1px solid rgb(186, 191, 197);
-	border-radius: 2px;
-	&:focus {
-		outline: none;
-		border: 1px solid rgb(107, 162, 217);
-		border-radius: 2px;
-		box-shadow: 0 0 0 3px rgb(222, 234, 247);
-	}
-`
-
+  width: 100%;
+  height: 90px;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid rgb(186, 191, 197);
+  border-radius: 2px;
+  &:focus {
+    outline: none;
+    border: 1px solid rgb(107, 162, 217);
+    border-radius: 2px;
+    box-shadow: 0 0 0 3px rgb(222, 234, 247);
+  }
+`;
 
 // display: ${props=>props.show?'block':'none'}
 const NextBnt = styled.button`
-	display: ${props=>props.block?'block':'none'};
-	border: none !important;
-	border-radius: 3px;
-	background-color: rgb(67, 147, 247);
-	color: rgb(255, 255, 255);
-	padding: 11px;
-	margin-top: 10px;
-	font-size: 1rem;
-	font-weight: 600;
-	&:disabled {
-		background-color: rgb(161, 201, 251)
-	}
-	&::hover {
-		backgroud-color: rgb(49, 114, 198);
-	}
-`
+  display: ${(props) => (props.block ? "block" : "none")};
+  border: none !important;
+  border-radius: 3px;
+  background-color: rgb(67, 147, 247);
+  color: rgb(255, 255, 255);
+  padding: 11px;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  &:disabled {
+    background-color: rgb(161, 201, 251);
+  }
+  &::hover {
+    backgroud-color: rgb(49, 114, 198);
+  }
+`;
 
 export default function AskQuestion() {
 	const [nextVaild, setNextVaild] = useState(false)
@@ -188,7 +188,6 @@ export default function AskQuestion() {
 	const [contentVaild, setContentVaild] = useState(false)
 	const inputRef = useRef([])
 	const [isBlock, setIsBlock] = useState(false);
-	const [jjwt, setJjwt] = useState('');
 	// 임시
 	const [isLogin, setIsLogin] = useState(true);
 	const navigate = useNavigate();
@@ -256,27 +255,30 @@ export default function AskQuestion() {
 		setTitle(e.target.value);
 	}
 
-	const TitleonFocusHandle = () => {
-		if(!contentVaild) setNextVaild(true);
-		setSubmitVaild(false);
-		setIsBlock(true)
-	}
+  // useEffect(()=>{
+  // 	if(!isLogin) {
+  // 			window.alert('This service requires login.');
+  // 			navigate('/');
+  // 	}
+  // 	if(location.pathname==='/edit/:id') {
+  // 		const headers = {
+  // 			'Authorization' : `Bearer ${'accessToken'}`,
+  //     	'Content-Type' : 'Application/json',
+  // 			'Accept' : '*/*'
+  // 		}
+  // 		// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
+  // 	}
+  // 	inputRef.current[0].focus();
+  // 	setIsBlock(true);
+  // },[])
 
-	const ContentonFocusHandle = () => {
-		setSubmitVaild(true);
-		setNextVaild(false);
-		setIsBlock(false);
-	}
+  
 
-	const ContentChange = e =>{
-		setContent(e.target.value)
-	}
-
-	const NextClick = () => {
-		setContentVaild(true);
-		setNextVaild(false);
-		inputRef.current[1].focus();
-	}
+  const TitleonFocusHandle = () => {
+    if (!contentVaild) setNextVaild(true);
+    setSubmitVaild(false);
+    setIsBlock(true);
+  };
 
 	const onSubmitHandle = () => {
 		axios.defaults.withCredentials = true;
@@ -296,23 +298,14 @@ export default function AskQuestion() {
 			content: content
     })
 
-		if(params.askId) {
-			axios
-      .patch(`${url}/ask/${params.askId}`, data, headers)
-      .then((response) => {
-				console.log(response)
-				navigate('/')
-      })
-      .catch((err) => console.error(err.message));
-		} else {
-			axios
-      .post(`${url}/ask`, data, headers)
-      .then((response) => {
-				console.log(response)
-				navigate('/')
-      })
-      .catch((err) => console.error(err.message));
-		}
+	const ContentonFocusHandle = () => {
+		setSubmitVaild(true);
+		setNextVaild(false);
+		setIsBlock(false);
+	}
+
+	const ContentChange = e =>{
+		setContent(e.target.value)
 	}
 
 	const tempLogin = () => {

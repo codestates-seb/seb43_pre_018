@@ -3,10 +3,10 @@ import data from "../data.json"
 import { Link } from 'react-router-dom';
 import Nav from "../conponents/Nav";
 import RightSidebar from "../conponents/RightSidebar";
+import { useState, useEffect, useRef } from 'react';
 
 const BodyContainer = styled.div`
   margin: 33px auto 0px;
-  height: 100vh;
   min-height: calc(100vh - 378px);
   max-width: 1264px;
   padding: 20px 0 0;
@@ -74,12 +74,11 @@ const MainHeaderDownWrapper = styled.div`
       border-top: 1px solid #808080;
       border-bottom: 1px solid #808080;
       border-right: none;
-      background-color: white;
       height: 30px;
       line-height: 28px;
       width: 60px;
       text-align: center;
-      background-color: #e1e1e3;
+      cursor: pointer;
     }
 
     .FilterRightButton {
@@ -91,6 +90,11 @@ const MainHeaderDownWrapper = styled.div`
       line-height: 28px;
       width: 80px;
       text-align: center;
+      cursor: pointer;
+    }
+
+    .clicked {
+      background-color: #e1e1e3;
     }
   }
 `;
@@ -160,9 +164,58 @@ const ArticleDescription = styled.div`
   }
 `;
 
-
-
 function Main() {
+  const [items, setItems] = useState(data);
+  const [visibleItems, setVisibleItems] = useState([...items.slice(0, 5)]);
+  const [fetching, setFetching] = useState(false);
+
+  const fetchMoreItems = async () => {
+    setFetching(true);
+
+    const startIndex = visibleItems.length;
+    const preItems = visibleItems.slice();
+    const fetchedItems = items.slice(startIndex, startIndex + 5);
+    setVisibleItems(() => {
+      return [...preItems, ...fetchedItems];
+    });
+    setFetching(false);
+  }
+
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight && fetching === false) {
+      fetchMoreItems();
+    }
+  }
+
+  const handleFilter = (e) => {
+    if(e.target.classList[1] !== 'clicked') {
+      if(e.target.classList[0] === 'FilterLeftButton') {
+        const another = document.getElementsByClassName('FilterRightButton');
+        another[0].classList.remove('clicked');
+        e.target.classList.add('clicked');
+        const sortedItems = items.sort((a, b) => a.id - b.id);
+        setItems([...sortedItems]);
+      } else {
+        const another = document.getElementsByClassName('FilterLeftButton');
+        another[0].classList.remove('clicked');
+        e.target.classList.add('clicked');
+        const sortedItems = items.sort((a, b) => a.likes - b.likes);
+        setItems([...sortedItems]);
+      }
+    }
+    setVisibleItems([...items.slice(0, 5)])
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll)  
+    }
+  })
+
   return(
     <BodyContainer>
       <Nav />
@@ -178,43 +231,45 @@ function Main() {
           </MainHeaderUpWrapper>
           <MainHeaderDownWrapper>
             <div className='DescriptionNumberQuestions'>
-              23,666,091 questions
+              {items.length} questions
             </div>
             <div className='buttons'>
-              <div className='FilterLeftButton'>Newest</div>
-              <div className='FilterRightButton'>Most Voted</div>
+              <div className='FilterLeftButton clicked' onClick={handleFilter}>Newest</div>
+              <div className='FilterRightButton' onClick={handleFilter}>Most Voted</div>
             </div>
           </MainHeaderDownWrapper>
         </MainHeaderWrapper> 
-          {data.slice().reverse().map((post, index) => (
-          <div key={index} className="article-container">  
-            <ArticleBoxSelector>
-              <ArticleStatus>
-                <div className='articleVotes'><strong>{post.likes} Votes</strong></div>
-                <div className='articleAnswers'>{post.answers} answers</div>
-                <div className='articleViews'>{post.views} views</div>
-              </ArticleStatus>
-              <ArticleDescription>
-                <Link to={`/ask/${post.id}`}>
-                  <div className='ArticleTitle'>
-                    {post.title}
+        <div id="articleBox">
+          {visibleItems.map((post, index) => (
+            <div key={index}>
+              <ArticleBoxSelector>
+                <ArticleStatus>
+                  <div className='articleVotes'><strong>{post.likes} Votes</strong></div>
+                  <div className='articleAnswers'>{post.answers} answers</div>
+                  <div className='articleViews'>{post.views} views</div>
+                </ArticleStatus>
+                <ArticleDescription>
+                  <Link to={`/ask/${post.id}`}>
+                    <div className='ArticleTitle'>
+                      {post.title}
+                    </div>
+                  </Link>
+                  <div className='ArticleSummary'>
+                    {post.content}
                   </div>
-                </Link>
-                <div className='ArticleSummary'>
-                  {post.content}
-                </div>
-                <div className='AuthorProfile'>
-                  <div className="author">
-                  {post.author}
-                  </div> 
-                  <div className="createdAt">
-                  {post.date}
+                  <div className='AuthorProfile'>
+                    <div className="author">
+                    {post.author}
+                    </div>
+                    <div className="createdAt">
+                    {post.date}
+                    </div>
                   </div>
-                </div>
-              </ArticleDescription>
-            </ArticleBoxSelector>
-          </div>
+                </ArticleDescription>
+              </ArticleBoxSelector>
+            </div>
           ))}
+        </div>
       </MainWrapper>
       <RightSidebar />
     </BodyContainer>

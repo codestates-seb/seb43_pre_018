@@ -173,13 +173,14 @@ const MainWrapper = styled.div`
       font-weight: bolder;
       border-radius: 1px; 
       cursor: pointer;
+      margin-bottom: 20px;
     }
   }
 `;
 
 const BodyContainer = styled.div`
   margin: 33px auto 0;
-  height: 100vh;
+  /* height: 100vh; */
   min-height: calc(100vh - 378px);
   max-width: 1264px;
   padding: 20px 0 0;

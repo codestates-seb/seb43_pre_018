@@ -35,12 +35,11 @@ const WelcomeText = styled.div`
   text-align: center;
 `;
 
-
 const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  >p {
+  > p {
     margin-bottom: 10px;
   }
 `;
@@ -49,7 +48,7 @@ const DetailContent = styled.div`
   display: flex;
   align-items: center;
   margin: 5px 0;
-  >p {
+  > p {
     font-weight: 500;
     font-size: 1.2rem;
   }
@@ -157,7 +156,7 @@ const FacebookLogin = styled.a`
   padding: 3px;
   font-size: 14px;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #314a86;
   }
@@ -204,6 +203,29 @@ const SignupInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+//
+const SignupInputBox = styled.div`
+  border: 1px solid #bababa;
+  border-radius: 4px;
+  display: flex;
+  height: 30px;
+  width: 100%;
+
+  &.focused {
+    border: ${(props) =>
+      props.isValid ? "1px solid #bababa" : "1px solid #b90101;"};
+  }
+
+  &:focus-within {
+    border: 1px solid rgba(0, 103, 194, 0.4);
+    box-shadow: 0 0 0 4px rgba(144, 203, 255, 0.4);
+  }
+`;
+const SignupWarningIconContainer = styled.div`
+  display: flex;
+  padding-top: 5px;
+  margin-right: 5px;
 `;
 
 // email과 비번 라벨 스타일 지정
@@ -435,9 +457,9 @@ export default function Signup() {
               {!passed.displayName&&<NonePassedMessage passed={passed.displayName}>Display name은 한글만 입력해야 합니다.</NonePassedMessage>}
               <EmailContainer>
                 <SignupLabel>Email</SignupLabel>
-                <SignupInput onChange={onEmailChange} passed={passed.email} value={email||''}/>
-                {!passed.email&&<NonePassedMessage passed={passed.email}>올바르지 않은 email 형식입니다.</NonePassedMessage>}
+                <SignupInput />
               </EmailContainer>
+
               <PassWordContainer>
                 <SignupLabel>Password</SignupLabel>
                 <SignupInput onChange={onPasswordChange} passed={passed.password} value={password||''}/>

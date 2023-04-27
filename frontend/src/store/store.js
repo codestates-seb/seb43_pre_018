@@ -1,27 +1,26 @@
-// import { createSlice } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice";
+import idReducer from "./idSlice";
+import { create } from "zustand";
 
-// const isLoginSlice = createSlice({
-//   name: "isLogin",
-//   initialState: { value: false },
-//   reducers: {
-//     setIsLogin: (state, action) => {
-//       state.value = action.payload;
-//     },
-//   },
-// });
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    id: idReducer,
+  },
+});
 
-// export const { setIsLogin } = isLoginSlice.actions;
-// export default isLoginSlice.reducer;
+const useSearchPopUpStore = create((set) => ({
+  showPopUp: false,
+  handlePopUp: () => set((state) => ({ showPopUp: !state.showPopUp })),
+}));
 
-// import { configureStore } from "@reduxjs/toolkit";
-// import logger from "redux-logger";
-// import authReducer from "./authSlice";
+const useShareSheetStore = create((set) => ({
+  showShareSheet: false,
+  handleShareSheet: () =>
+    set((state) => ({ showShareSheet: !state.showShareSheet })),
+}));
 
-// const store = configureStore({
-//   reducer: {
-//     auth: authReducer,
-//   },
-//   // middleware,
-// });
+export { useSearchPopUpStore, useShareSheetStore };
 
-// export default store;
+export default store;
