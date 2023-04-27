@@ -9,6 +9,8 @@ import {FiEdit3} from "react-icons/fi"
 import { IconContext } from "react-icons/lib";
 import {RiDeleteBin2Line} from "react-icons/ri"
 
+import Answers from "../conponents/QuestionDetail/Answers";
+
 axios.defaults.withCredentials = true;
 
 const MainWrapper = styled.div`
@@ -287,25 +289,28 @@ function QuestionDetail() {
       }
     }
     axios.delete(`${url}/ask/${params.askId}`, headers)
-    .then(console.log('delete ok'))
-    .catch(e=>console.error(e.message))
-  }
-
-  const answerDelete = (answerId) => {
-    const headers = {
-      headers : {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        "Authorization": token
-      }
-    }
-    axios.delete(`${url}/answer/${answerId}`, headers)
     .then(res=>{
-      console.log('ansewr delete ok')
-      navigate(0)
+      console.log('delete ok')
+      navigate('/')
     })
     .catch(e=>console.error(e.message))
   }
+
+  // const answerDelete = (answerId) => {
+  //   const headers = {
+  //     headers : {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",
+  //       "Authorization": token
+  //     }
+  //   }
+  //   axios.delete(`${url}/answer/${answerId}`, headers)
+  //   .then(res=>{
+  //     console.log('ansewr delete ok')
+  //     navigate(0)
+  //   })
+  //   .catch(e=>console.error(e.message))
+  // }
   return (
     <BodyContainer>
       <Nav/>
@@ -361,46 +366,10 @@ function QuestionDetail() {
               </div>
             </div>
             <div className="number--answer">
-              3 Answers
+              {answers.length} Answers
             </div>
-            {answers.map(e=>{
-               return ( 
-                <div className="text-box" key={e.answerId}>
-                  <div className="Vote">
-                    <div className="up-button"></div>
-                    0<br />
-                    <div className="down-button"></div>
-                  </div>
-                  <div className="Content-text">
-                    <div className="content-main">
-                      {e.content}
-                    </div>
-                    <div className="Author-text-line">
-                      {username===e.memberName&&
-                        <IconContainer>
-                          <IconContext.Provider value={{size: '1.5rem', color: 'darkgray'}}>
-                            <FiEdit3 className="edit-icon"/>
-                          </IconContext.Provider>
-                          <IconContext.Provider value={{size: '1.5rem', color: 'rgb(235, 55, 39)'}}>
-                            <RiDeleteBin2Line className="edit-icon" onClick={()=>answerDelete(e.answerId)}/>
-                          </IconContext.Provider>
-                          
-                        </IconContainer>
-                      }
-                      <div className="Author-text">
-                        answered
-                        <div className="createdAt">
-                          {e.createdAt}
-                        </div>
-                        <div className="author">
-                          {e.memberName}
-                        </div>
-                      </div>
-                    </div>
-                    <Comments data={e.commentList} askId={question.askId} answerId={e.answerId}/>
-                  </div>
-                </div>)
-            })}
+            {answers.map(e=>{ console.log(e)
+            return <Answers data={e}/>})}
             <div className="authorize-answer">
               <div className="authorize-header">
                 Your answer
