@@ -188,6 +188,7 @@ export default function AskQuestion() {
 	const [contentVaild, setContentVaild] = useState(false)
 	const inputRef = useRef([])
 	const [isBlock, setIsBlock] = useState(false);
+	const [jjwt, setJjwt] = useState('');
 	// 임시
 	const [isLogin, setIsLogin] = useState(true);
 	const navigate = useNavigate();
@@ -195,11 +196,11 @@ export default function AskQuestion() {
 	const url = process.env.REACT_APP_URL
 	// https://7a34-59-5-132-158.jp.ngrok.io/
 	useEffect(()=>{
-		// axios.get('/ask/1')
-		// .then(res=>{
-		// 	console.log(res.data)
-		// })
-		// .catch(err=>console.log(err.message))
+		axios.get('/ask/1')
+		.then(res=>{
+			console.log(res.data)
+		})
+		.catch(err=>console.log(err.message))
 		if(!isLogin) {
 				window.alert('This service requires login.');
 				navigate('/');
@@ -208,6 +209,7 @@ export default function AskQuestion() {
 			// contentVaild를 true로 바꾸고 대충 session 넣은 axios 갈겨서 title, content 채우기
 			axios.get(`${url}/ask/find/${params.askId}`)
 				.then(res=>{
+					console.log(res)
 					const oldTitle = res.data.data.title;
 					const oldContent = res.data.data.content;
 					console.log(oldTitle, oldContent);
@@ -222,6 +224,33 @@ export default function AskQuestion() {
 		inputRef.current[0].focus();
 		setIsBlock(true);
 	},[])
+	// useEffect(()=>{
+	// 	axios.defaults.withCredentials = true;
+
+  //   const headers = {
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",}
+  //   };
+
+  //   const data = JSON.stringify({
+  //     name : "MJS@gmail.com",
+  //     password : "a123456!"
+  //   })
+
+  //   axios
+  //     .post(`${url}/login`, data, headers)
+  //     .then((response) => {
+	// 			console.log(response.data)
+  //       return response.headers.get('Authorization');
+  //     })
+  //     .then(data=>{
+  //       localStorage.setItem('JWT', data)
+  //       console.log(localStorage.getItem('JWT'))
+  //     })
+  //     .catch((err) => console.error(err.message));
+			
+	// },[])
 	// handler
 	const Titlehandle = e =>{
 		setTitle(e.target.value);
@@ -250,44 +279,94 @@ export default function AskQuestion() {
 	}
 
 	const onSubmitHandle = () => {
-		// const headers = {
-		// 	'Authorization' : `Bearer ${'accessToken'}`,
-		// 	'Content-Type' : 'Application/json',
-		// }
-		const headers = {
-			headers: {
-				'Content-Type' : 'Application/json',
-				"Accept": "application/json",
+		axios.defaults.withCredentials = true;
+
+		const Token = localStorage.getItem('JWT')
+		console.log(Token)
+    const headers = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+				"Authorization": Token,
 			}
+    };
+
+    const data = JSON.stringify({
+      title: title,
+			content: content
+    })
+
+		if(params.askId) {
+			axios
+      .patch(`${url}/ask/${params.askId}`, data, headers)
+      .then((response) => {
+				console.log(response)
+				navigate('/')
+      })
+      .catch((err) => console.error(err.message));
+		} else {
+			axios
+      .post(`${url}/ask`, data, headers)
+      .then((response) => {
+				console.log(response)
+				navigate('/')
+      })
+      .catch((err) => console.error(err.message));
 		}
-		// if(params.askId) {
-			// axios.patch(`${process.env.REACT_APP_URL}/ask/${params.askId}`,
-			// 	JSON.stringify({
-			// 	'title': title,
-			// 	'content': content,
-			// 	'memberId': 1
-			// 	}),
-			// 	headers
-			// )
-		// } 
-		// else {
-			const data = JSON.stringify({
-				// "name" : "최재영",
-				// "email" : "MJS@gmail.com",
-				// "password" : "a123456789!"
-				title: title,
-				content: content,
-				memberId: 1
-			})
-			axios.patch(`https://5b6e-59-5-132-158.ngrok-free.app/ask/1`,
-			data,
-				headers
-			)
-			.then(res=>console.log(res))
-			.catch(e=>console.log(e.message))
-		// }
 	}
 
+	const tempLogin = () => {
+    axios.defaults.withCredentials = true;
+
+    const headers = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",}
+    };
+
+    const data = JSON.stringify({
+      name : "g858@gmail.com",
+      password : "y123456!"
+    })
+
+    axios
+      .post(`${url}/login`, data, headers)
+      .then((response) => {
+				localStorage.setItem('name', response.data.username)
+        console.log(response.headers.get('Authorization'))
+        return response.headers.get('Authorization');
+      })
+      .then(data=>{
+        // localStorage.setItem('JWT', data)
+        // console.log(localStorage.getItem('JWT'))
+        localStorage.setItem('JWT', data)
+        console.log(localStorage.getItem('JWT'))
+      })
+      .catch((err) => console.error(err.message));
+  }
+  
+  const tempSignUp = () => {
+    axios.defaults.withCredentials = true;
+
+    const headers = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",}
+    };
+
+    const data = JSON.stringify({
+      email: "g858@gmail.com",
+      name : "나야나",
+      password : "y123456!"
+    })
+
+    axios
+      .post(`${url}/signUp`, data, headers)
+      .then((res) => {
+        console.log('회원가입 완료')
+      })
+      .catch((err) => console.error(err.message));
+  }
 	return (
 		<Container>
 			<HeadTextBox>
@@ -368,6 +447,10 @@ export default function AskQuestion() {
 						>
 							Submit
 						</NextBnt>
+						<NextBnt block={submitVaild}
+							onClick={tempLogin}>login</NextBnt>
+						<NextBnt block={submitVaild}
+							onClick={tempSignUp}>signup</NextBnt>
 					</AskInputBox>
 					<WriteGuide block={submitVaild}>
 						<GuideName>
