@@ -1,15 +1,11 @@
 import axios from "axios";
-import { useRef } from "react";
-import { useState } from "react";
+import { useRef, useState  } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import {FiEdit3} from "react-icons/fi"
 import { IconContext } from "react-icons/lib";
 import {RiDeleteBin2Line} from "react-icons/ri"
 
-const Container = styled.div`
-	margin-top: 20px;
-`
 
 const SubContainer =styled.div`
 	display: flex;
@@ -58,14 +54,6 @@ const Input = styled.input`
 	}
 `
 
-const AddForm = styled.div`
-	padding: 10px 0 13px;
-	color: rgb(182, 186, 191);
-	&:hover {
-		cursor: pointer;
-	}
-`
-
 const IconContainer = styled.div`
   justify-content: end;
   >.edit-icon {
@@ -73,84 +61,32 @@ const IconContainer = styled.div`
     justify-self: start;
 }`
 
-export default function Comments({data, askId, answerId}) {
+export default function Comments({data, i}) {
 	const [newContent, setNewContent] = useState('')
 	const [add, setAdd] = useState(false);
-	const inputRef = useRef([]);
+	const [isEdit, setIsEdit] = useState(false)
 	const navigate = useNavigate()
 	const username = localStorage.getItem('name');
 	const url = process.env.REACT_APP_URL;
 	const token = localStorage.getItem('JWT')
-
-	const onChangeHandle = e => {
-		setNewContent(e.target.value)
-	}
-
-	const onKeyUpHandle = e => {
-		if(e.key==='Enter'&&newContent!=='') {
-				const url = process.env.REACT_APP_URL;
-				axios.defaults.withCredentials = true;
-				const token = localStorage.getItem('JWT')
-				const headers = {
-					headers : {
-						"Access-Control-Allow-Origin": "*",
-						"Content-Type": "application/json",
-						"Authorization": token
-					}
-				}
-				const data = JSON.stringify({
-					askId: askId,
-					answerId: answerId,
-					content: newContent
-				})
-				console.log(data)
-				axios.post(`${url}/comment`,data, headers)
-				.then(res=>{
-					console.log(res)
-					navigate(0)
-				})
-				.catch(e=>console.error(e.message))
-			
-		} else if(e.key==='Escape') {
-			setNewContent('')
-			setAdd(false)
+	axios.defaults.withCredentials = true;
+	const headers = {
+		headers : {
+			"Access-Control-Allow-Origin": "*",
+			"Content-Type": "application/json;charset=utf-8",
+			"Authorization": token
 		}
 	}
 
-	const onAddHandle = () => {
-		// inputRef.current.focus();
-		setAdd(true);
+	const editVaild = (content) => {
+		setIsEdit(true)
+		console.log(isEdit)
+		setNewContent(content)
 	}
 
 	const cancel = () => {
-		setAdd(false);
+		setIsEdit(false);
 	}
-
-	// const onSubmit = () => {
-	// 	if(newContent!=='') {
-	// 		const url = process.env.REACT_APP_URL;
-	// 		axios.defaults.withCredentials = true;
-	// 		const token = localStorage.getItem('JWT')
-  //     const headers = {
-  //       headers : {
-  //         "Access-Control-Allow-Origin": "*",
-  //         "Content-Type": "application/json",
-  //         "Authorization": token
-  //       }
-  //     }
-	// 		const data = JSON.stringify({
-	// 			content: newContent,
-	// 			askId: askId,
-	// 			answerId: answerId
-	// 		})
-  //     axios.post(`${url}/comment`,data, headers)
-  //     .then(res=>{
-  //       console.log(res)
-  //       navigate(0)
-  //     })
-  //     .catch(e=>console.error(e.message))
-	// 	}
-	// }
 
 	const commentDelete = (commentId) => {
     const headers = {
@@ -168,44 +104,67 @@ export default function Comments({data, askId, answerId}) {
     .catch(e=>console.error(e.message))
   }
 
+	const onChangeHandle = e => {
+		setNewContent(e.target.value)
+	}
+
+	const commentKeyup = e => {
+		if(e.key==='Enter'&&newContent!=='') {
+			editSubmit()
+		} else if (e.key==='Escape') {
+			setIsEdit(false)
+			setNewContent('')
+		}
+	}
+
+	const editSubmit = () => {
+		if(newContent!=='') {
+			const body = JSON.stringify({
+				content: newContent
+			})
+			axios.patch(`${url}/comment/${data.commentId}`, body, headers)
+			.then(res=>{
+				window.alert('답변 수정완료')
+				navigate(0)
+			})
+		} else {
+			window.alert("야 뭐하나? 이게 최선이야?")
+			setNewContent(data.content)
+		}
+	}
+
 	return (
-		<Container>
-			{data.map((c,i)=>{
-				return (
-					<SubContainer 
-						edit={username===c.memberName}
-						key={c.commentId} 
-						first={i===0&&true}
-					>
-						<CommentBox>
-							<span>{c.content}</span>
-							<span>-</span>
-							<Author>{c.memberName}</Author>
-							<span>{c.createdAt}</span>
-						</CommentBox>
-						{username===c.memberName&&
-						<IconContainer>
-							<IconContext.Provider value={{size: '1.2rem', color: 'darkgray'}}>
-								<FiEdit3 className="edit-icon" />
-							</IconContext.Provider>
-							<IconContext.Provider value={{size: '1.2rem', color: 'rgb(235, 55, 39)'}}>
-								<RiDeleteBin2Line className="edit-icon" onClick={()=>commentDelete(c.commentId)}/>
-							</IconContext.Provider>
-						</IconContainer>
-						}
-					</SubContainer>
-				)
-			})}
-			{add? <InputForm>
+		<>
+			{isEdit?<InputForm>
 				<Input
 					value={newContent}
 					onChange={onChangeHandle}
-					onKeyUp={onKeyUpHandle}
-					
+					onKeyUp={commentKeyup}
 				/>
 				<span onClick={cancel}>X</span>
 			</InputForm>
-			:<AddForm onClick={onAddHandle}>Add a comment</AddForm>}
-		</Container>
+			:<SubContainer 
+				edit={username===data.memberName}
+				key={data.commentId} 
+				first={i===0&&true}
+			>
+				<CommentBox>
+					<span>{data.content}</span>
+					<span>-</span>
+					<Author>{data.memberName}</Author>
+					<span>{data.createdAt}</span>
+				</CommentBox>
+				{username===data.memberName&&
+				<IconContainer>
+					<IconContext.Provider value={{size: '1.2rem', color: 'darkgray'}}>
+						<FiEdit3 className="edit-icon" onClick={()=>editVaild(data.content)}/>
+					</IconContext.Provider>
+					<IconContext.Provider value={{size: '1.2rem', color: 'rgb(235, 55, 39)'}}>
+						<RiDeleteBin2Line className="edit-icon" onClick={()=>commentDelete(data.commentId)}/>
+					</IconContext.Provider>
+				</IconContainer>
+				}
+			</SubContainer>}	
+		</>
 	)
 }

@@ -114,16 +114,98 @@ const EditButton = styled.button`
 	padding: 0 3px;
 `
 
+const Container = styled.div`
+	margin-top: 20px;
+`
+
+const InputForm = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	>span {
+		color: rgb(118, 118, 118);
+		margin-right: 10px;
+		&:hover {
+			cursor: pointer;	
+		}
+	}
+`
+
+const Input = styled.input`
+	width: 96%;
+	border: none;
+	margin: 10px 0px 13px;
+	padding: 0 10px;
+	font-size: 1.1rem;
+	color: rgb(118, 118, 118);
+	&:focus {
+		outline: none;
+		border-bottom: 1px solid rgb(200, 200, 200);
+	}
+`
+
+const AddForm = styled.div`
+	padding: 10px 0 13px;
+	color: rgb(182, 186, 191);
+	&:hover {
+		cursor: pointer;
+	}
+`
+
 export default function Answers({data}) {
 	const [editAnswer, setEditAnswer] = useState(false);
-	const [newAnswer, sertNewAnswer] = useState('')
+	const [newAnswer, setNewAnswer] = useState('')
 	const username = localStorage.getItem('name')
 	const navigate = useNavigate()
 	const params = useParams()
 	axios.defaults.withCredentials = true
 	const url = process.env.REACT_APP_URL
 	const token = localStorage.getItem('JWT')
+
+	const [newContent, setNewContent] = useState('')
+	const [isEdit, setIsEdit] = useState(false)
+	const [add, setAdd] = useState(false);
+
+	const onChangeHandle = e => {
+		setNewContent(e.target.value)
+	}
+
 	
+
+	const onKeyUpHandle = (e, askId, answerId) => {
+		if(e.key==='Enter'&&newContent!=='') {
+				postClick(askId, answerId);	
+		} else if(e.key==='Escape') {
+			setNewContent('')
+			setAdd(false)
+		}
+	}
+
+	const postClick = (askId, answerId) => {
+		const data = JSON.stringify({
+			askId: askId,
+			answerId: answerId,
+			content: newContent
+		})
+		console.log(data)
+		axios.post(`${url}/comment`,data, headers)
+		.then(res=>{
+			console.log(res)
+			setNewContent('')
+			navigate(0)
+		})
+		.catch(e=>console.error(e.message))
+	}
+
+	const onAddHandle = () => {
+		// inputRef.current.focus();
+		setAdd(true);
+	}
+
+	const cancel = () => {
+		setAdd(false);
+	}
+
 	const headers = {
 		headers : {
 			"Access-Control-Allow-Origin": "*",
@@ -142,7 +224,7 @@ export default function Answers({data}) {
 	}
 
 	const answerChange = e => {
-		sertNewAnswer(e.target.value)
+		setNewAnswer(e.target.value)
 	}
 
 	const answerKeyUp = e => {
@@ -150,7 +232,7 @@ export default function Answers({data}) {
 			editSubmit()
 		} else if (e.key==='Escape') {
 			setEditAnswer(false)
-			sertNewAnswer('')
+			setNewAnswer('')
 		}
 	}
 
@@ -166,13 +248,13 @@ export default function Answers({data}) {
 			})
 		} else {
 			window.alert("야 뭐하나? 이게 최선이야?")
-			sertNewAnswer(data.content)
+			setNewAnswer(data.content)
 		}
 	}
-
+	
 	const editClick = (data) =>{
 		setEditAnswer(true)
-		sertNewAnswer(data)
+		setNewAnswer(data)
 	}
 	return(
 		<TextBox key={data.answerId}>
@@ -183,7 +265,13 @@ export default function Answers({data}) {
       </div>
 			{editAnswer?
 			<>
-				<TextArea value={newAnswer} onChange={answerChange} onKeyUp={answerKeyUp}/>
+				<TextArea 
+					value={newAnswer} 
+					onChange={answerChange} 
+					onKeyUp={answerKeyUp}
+					isEdit={isEdit}
+					setIsEdit={setIsEdit}
+				/>
 				<EditButton onClick={editSubmit}>Edit</EditButton>
 			</>
 			:<div className="Content-text">
@@ -211,7 +299,24 @@ export default function Answers({data}) {
             </div>
           </div>
         </div>
-        <Comments data={data.commentList} askId={params.aksId} answerId={data.answerId}/>
+        {/* <Comments data={data.commentList} askId={params.askId} answerId={data.answerId}/> */}
+				<Container>
+					{data.commentList.map((e,i)=><Comments
+						key={i}
+						data={e} 
+						i={i}
+					/>)}
+					{add? <InputForm>
+					<Input
+						value={newContent}
+						onChange={onChangeHandle}
+						onKeyUp={(e)=>onKeyUpHandle(e, params.askId, data.answerId)}
+						
+					/>
+					<span onClick={cancel}>X</span>
+				</InputForm>
+				:<AddForm onClick={onAddHandle}>Add a comment</AddForm>}
+			</Container>
       </div>}
 			</TextBox>
 	)
