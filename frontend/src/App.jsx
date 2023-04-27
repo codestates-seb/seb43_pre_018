@@ -10,8 +10,9 @@ import Footer from "./conponents/Footer";
 import AskQuestion from "./pages/AskQuestion";
 import Main from "./pages/Main";
 import QuestionDetail from "./pages/QuestionDetail";
-// 임시
 import { Routes, Route, useLocation } from "react-router-dom";
+// 404 페이지 사용할지 말지 결정후 적용
+import Notfound from "./pages/Notfound";
 
 const Top = styled.div`
   display: flex;
@@ -37,6 +38,8 @@ function App() {
           <Route path="/passwordPopup" element={<PasswordPopup />} />
           <Route path="/ask" element={<AskQuestion />} />
           <Route path="/ask/:askId" element={<QuestionDetail />} />
+          <Route path="/edit/:askId" element={<AskQuestion />} />
+          <Route path="*" element={<Notfound />} />
         </Routes>
       </ThemeProvider>
       <Footer />

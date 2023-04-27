@@ -67,7 +67,7 @@ export default function RightSidebar() {
 				</Items>
 				<Title>Featured on Meta</Title>
 				<Items>
-					<IconContext.Provider value={{size: '2rem', color: 'blue'}}>
+					<IconContext.Provider value={{size: '2rem', color: 'rgb(95, 160, 212)'}}>
 						<FiMessageSquare className={'icon'}/>
 					</IconContext.Provider>
 					<span>

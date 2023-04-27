@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { IconContext } from "react-icons/lib";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
   width: 1264px;
@@ -209,10 +210,10 @@ export default function AskQuestion() {
   // 	setIsBlock(true);
   // },[])
 
-  // useEffect(()=>{
-  // 	inputRef.current[0].focus();
-  // 	setIsBlock(true);
-  // },[])
+  useEffect(() => {
+    inputRef.current[0].focus();
+    setIsBlock(true);
+  }, []);
 
   // handler
   const Titlehandle = (e) => {
