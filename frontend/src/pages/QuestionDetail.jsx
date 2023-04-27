@@ -369,8 +369,8 @@ function QuestionDetail() {
             <div className="number--answer">
               {answers.length} Answers
             </div>
-            {answers.map(e=>{ console.log(e)
-            return <Answers data={e}/>})}
+            {answers.map((e,i)=>{ 
+            return <Answers data={e} key={i}/>})}
             <div className="authorize-answer">
               <div className="authorize-header">
                 Your answer

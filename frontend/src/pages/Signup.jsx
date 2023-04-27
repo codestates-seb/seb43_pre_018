@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import GithubLogo from "../images/github.png";
 import FacebookLogo from "../images/facebook.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
@@ -298,6 +298,7 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passed, setPassed] = useState(passedInitailState)
+  const navigate = useNavigate()
 
   const onNameChange = e => {
     const regex = /^[ㄱ-ㅎ|가-힣]+$/
@@ -356,6 +357,7 @@ export default function Signup() {
       .post(`${url}/signUp`, data, headers)
       .then((res) => {
         console.log('회원가입 완료')
+        navigate('/')
       })
       .catch((err) => console.error(err.message));
     }
@@ -457,9 +459,9 @@ export default function Signup() {
               {!passed.displayName&&<NonePassedMessage passed={passed.displayName}>Display name은 한글만 입력해야 합니다.</NonePassedMessage>}
               <EmailContainer>
                 <SignupLabel>Email</SignupLabel>
-                <SignupInput />
+                <SignupInput onChange={onEmailChange} passed={passed.email}/>
               </EmailContainer>
-
+              {!passed.email&&<NonePassedMessage passed={passed.email}>Email형식이 올바르지 않습니다.</NonePassedMessage>}
               <PassWordContainer>
                 <SignupLabel>Password</SignupLabel>
                 <SignupInput onChange={onPasswordChange} passed={passed.password} value={password||''}/>

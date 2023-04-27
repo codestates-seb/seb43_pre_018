@@ -297,6 +297,11 @@ export default function AskQuestion() {
       title: title,
 			content: content
     })
+  }
+
+  const NextClick = () => {
+    setContentVaild(true)
+  }
 
 	const ContentonFocusHandle = () => {
 		setSubmitVaild(true);
@@ -360,6 +365,7 @@ export default function AskQuestion() {
       })
       .catch((err) => console.error(err.message));
   }
+
 	return (
 		<Container>
 			<HeadTextBox>
