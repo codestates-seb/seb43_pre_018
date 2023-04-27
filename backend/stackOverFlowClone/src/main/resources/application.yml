@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sof?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: a123
+  jpa:
+    hibernate:
+      ddl-auto: create
+logging:
+  level:
+    com:
+      tutorial:
+        spring-boot: DEBUG
+  path: logs
+
+#JWT
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key: "c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK"
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420
