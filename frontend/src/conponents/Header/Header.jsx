@@ -1,16 +1,34 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-// import { RxHamburgerMenu } from "react-icons/rx";
-// import { useSelector, useDispatch } from "react-redux";
+// import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-// import LogoHomeButton from "./LogoHomeButton";
+import SearchPopUp from "./SearchPopup";
+// import useSearchPopUpStore from "../../store/store";
+// import { useDispatch } from 'react-redux';
+// import { setSearchTerm } from '../slices/searchSlice';
+// import { search } from '../api/search';
+
+// const SearchBar = () => {
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const dispatch = useDispatch();
+
+//   const handleInputChange = (event) => {
+//     setSearchTerm(event.target.value);
+//     dispatch(setSearchTerm(event.target.value));
+//   };
+
+//   const handleKeyPress = (event) => {
+//     if (event.key === 'Enter') {
+//       dispatch(search(searchTerm));
+//     }
+//   };
 
 // 전체 해더 컴포넌트 스타일 지정
 const HeaderComponent = styled.header`
   box-sizing: border-box;
   background-color: rgb(248, 249, 249);
-  border-top: 3px solid ${({ theme }) => theme.orange500};
+  border-top: 3px solid ${(props) => props.theme.orange500};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.05),
     0 2px 8px rgba(0, 0, 0, 0.05);
   position: fixed;
@@ -25,7 +43,7 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 // 왼쪽 상단 햄버거 아이콘 -> 리액트 아이콘 설치 후 import해옴
 // const RxHamburgerMenuIcon = styled(RxHamburgerMenu)`
@@ -93,6 +111,7 @@ const SearchBar = styled.div`
   width: 50%;
   margin-left: 7px;
   margin-right: 3px;
+  position: relative;
 `;
 
 // 검색 입력창 스타일 지정
@@ -149,17 +168,51 @@ const SignUpButton = styled(LoginButton)`
 `;
 
 function Header() {
+  const [isFocused, setIsFocused] = useState(false);
+  const handlePopUp = () => {
+    setIsFocused((prev) => !prev);
+  };
+
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const handlePopUp = useSearchPopUpStore((state) => state);
+  // console.log(handlePopUp);
+
   // 검색 입력 하려고 클릭 했을 경우에 입력창 쉐도우 지정 -> useState import
   const [inputFocused, setInputFocused] = useState(false);
   // 검색 입력 하려고 클릭 했을 경우에 입력창 보더라인 파란색 지정
   const [barFocused, setBarFocused] = useState(false);
 
-  // const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
-
   const handleInputFocus = () => setInputFocused(true);
   const handleInputBlur = () => setInputFocused(false);
   const handleBarFocus = () => setBarFocused(true);
   const handleBarBlur = () => setBarFocused(false);
+
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  // const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+  // const { pathname } = useLocation();
+  // const query = searchParams.get("q");
+  // const [searchInput, setSearchInput] = useState(query);
+  // const navigate = useNavigate();
+
+  let username = "";
+  let id = "";
+
+  if (JSON.parse(sessionStorage.getItem("userInfoStorage"))) {
+    username = JSON.parse(sessionStorage.getItem("userInfoStorage")).email;
+    id = JSON.parse(sessionStorage.getItem("userInfoStorage")).memberId;
+  }
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  // const searchBarInputKeyUpHandler = (e) => {
+  //   if (e.key === "Enter") {
+  //     if (pathname === "/search") {
+  //       navigate(`/search?q=${searchInput}`);
+  //       setSearchInput(searchInput);
+  //     } else {
+  //       navigate(`./search?q=${searchInput}`);
+  //       setSearchInput(searchInput);
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -181,6 +234,7 @@ function Header() {
             <span className={Information}>For Teams</span>
           </InformationContainer>
           <SearchBar
+            // className={showPopup ? "input-actived" : null}
             onFocus={() => {
               handleInputFocus();
               handleBarFocus();
@@ -209,7 +263,19 @@ function Header() {
                 style={{ fill: "gray" }}
               ></path>
             </svg>
-            <SearchInput type="text" placeholder="Search..." />
+            <SearchInput
+              type="text"
+              placeholder="Search..."
+              onFocus={handlePopUp}
+              onBlur={handlePopUp}
+              // value={searchTerm}
+              // onChange={handleInputChange}
+              // onKeyPress={handleKeyPress}
+              // value={searchInput || ""}
+              // onChange={(e) => setSearchInput(e.target.value)}
+              // onKeyUp={searchBarInputKeyUpHandler}
+            />
+            <SearchPopUp showPopUp={isFocused} handlePopUp={handlePopUp} />
           </SearchBar>
           <ProfileContainer>
             <LoginButton to="/login">Log in</LoginButton>

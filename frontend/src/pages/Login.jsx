@@ -2,10 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import GithubLogo from "../images/github.png";
 import FacebookLogo from "../images/facebook.png";
-// import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import axiosInstance from "../store/axiosConfig";
+import { useDispatch } from "react-redux";
+import { TbAlertCircleFilled } from "react-icons/tb";
 
-const NoScrollContainer = styled.div`
+const NoScrollContainer = styled.form`
   overflow: hidden;
 `;
 
@@ -201,6 +204,7 @@ const LoginInput = styled.input`
     border: 1px solid hsl(206, 90%, 69.5%);
     outline: 0;
   }
+  border: 1px solid ${(props) => props.error && "#d0390e"};
 `;
 
 const PassWordContainer = styled.div`
@@ -223,10 +227,83 @@ const LoginButton = styled.button`
   }
 `;
 
-function Login() {
+const Error = styled.span`
+  color: red;
+  margin-top: 10px;
+`;
+
+const InputContainer = styled.div`
+  position: relative;
+  > .input-icon {
+    position: absolute;
+    right: 3px;
+    top: 10px;
+    color: red;
+  }
+`;
+
+// 정규식
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+  });
+  const dispatch = useDispatch();
+
+  const validateEmail = (email) => {
+    return emailRegex.test(email);
+  };
+  const validatePassword = (password) => {
+    return passwordRegex.test(password);
+  };
+
+  const loginUser = async (email, password) => {
+    try {
+      const response = await axiosInstance.post("./login", {
+        email,
+        password,
+      });
+      if (response.data.token) {
+        localStorage.setItem("jwt", response.data.token);
+        dispatch(Login(response.data.user));
+      } else {
+      }
+    } catch (error) {}
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError({
+      email: "",
+      password: "",
+    });
+
+    if (!validateEmail(email)) {
+      setError((prev) => ({
+        ...prev,
+        email: "Email cannot be empty.",
+      }));
+      return null;
+    }
+    if (!validatePassword(password)) {
+      setError((prev) => ({
+        ...prev,
+        password: "Password cannot be empty.",
+      }));
+      return null;
+    }
+
+    await loginUser(email, password);
+  };
+
   return (
     <>
-      <NoScrollContainer>
+      <NoScrollContainer onSubmit={handleSubmit}>
         <Background>
           <Container>
             <img
@@ -258,15 +335,39 @@ function Login() {
             <LoginFormContainer>
               <LoginInputContainer>
                 <LoginLabel>Email</LoginLabel>
-                <LoginInput />
+                <InputContainer>
+                  <LoginInput
+                    error={error.email}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  {error.email ? (
+                    <TbAlertCircleFilled className="input-icon" />
+                  ) : null}
+                </InputContainer>
+                {error.email ? <Error>{error.email}</Error> : null}
+
                 <PassWordContainer>
                   <LoginLabel>
                     Password <Link to="/passwordPopup">Forgot password?</Link>
                   </LoginLabel>
-                  <LoginInput />
+                  <InputContainer>
+                    <LoginInput
+                      error={error.password}
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    {error.password ? (
+                      <TbAlertCircleFilled className="input-icon" />
+                    ) : null}
+                  </InputContainer>
+                  {error.password ? <Error>{error.password}</Error> : null}
                 </PassWordContainer>
               </LoginInputContainer>
-              <LoginButton>Log in</LoginButton>
+              <LoginButton type="submit">Log in</LoginButton>
             </LoginFormContainer>
             <div style={{ fontSize: "14px", marginTop: "30px" }}>
               Don’t have an account?{" "}
@@ -287,6 +388,5 @@ function Login() {
       </NoScrollContainer>
     </>
   );
-}
-
+};
 export default Login;
