@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+// import { useState } from "react";
+// import axiosInstance from "../store/axiosConfig";
 
 const Background = styled.div`
   background-color: #f6f6f6;
@@ -75,7 +77,49 @@ const SendButton = styled.button`
   }
 `;
 
+// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export default function PasswordPopup() {
+  // const [email, setEmail] = useState("");
+  // const [error, setError] = useState({
+  //   email: "",
+  // });
+  // const validateEmail = (email) => {
+  //   return emailRegex.test(email);
+  // };
+  // const loginUser = async (email) => {
+  //   try {
+  //     const response = await axiosInstance.post("./login", {
+  //       email,
+  //     });
+  //     if (response.data.token) {
+  //       localStorage.setItem("jwt", response.data.token);
+  //       dispatch(Login(response.data.user));
+  //     } else {
+  //       // setError("Invalid email or password");
+  //     }
+  //   } catch (error) {
+  //     // setError("Error fetching data");
+  //   }
+  // };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError({
+  //     email: "",
+  //   });
+
+  //   if (!validateEmail(email)) {
+  //     // setError("the email is not valid email address.");
+  //     setError((prev) => ({
+  //       ...prev,
+  //       email: "Email cannot be empty.",
+  //     }));
+  //     return null;
+  //   }
+
+  //   await loginUser(email);
+  // };
+
   return (
     <>
       <Background>
