@@ -4,10 +4,6 @@ import RightSidebar from "../conponents/RightSidebar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Comments from "../conponents/QuestionDetail/Comments";
-import {FiEdit3} from "react-icons/fi"
-import { IconContext } from "react-icons/lib";
-import {RiDeleteBin2Line} from "react-icons/ri"
 
 import Answers from "../conponents/QuestionDetail/Answers";
 
@@ -15,8 +11,9 @@ axios.defaults.withCredentials = true;
 
 const MainWrapper = styled.div`
   width: 1050px;
+  border-left: 1px solid #D7D9DC;
   margin-top: 25px;
-  margin-left: 24px;
+  padding-left: 24px;
   margin-right: auto;
 
   .header-title {
